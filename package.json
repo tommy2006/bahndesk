@@ -1,0 +1,15 @@
+{
+  "name": "bahn-control-room",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Car delivery control room with a dispatch-risk agent for Bahn (Prompt Operations Hackathon)",
+  "type": "module",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "start": "node --no-warnings server.mjs",
+    "dev": "node --no-warnings --watch server.mjs",
+    "build-db": "node --no-warnings scripts/build-db.mjs"
+  }
+}

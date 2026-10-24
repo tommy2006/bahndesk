@@ -1,0 +1,38 @@
+[
+  {
+    "id": "news-port-strike-1",
+    "kind": "STRIKE",
+    "status": "ANNOUNCED",
+    "title": {
+      "en": "Dockworkers announce a 24-hour strike at the South Finland vehicle terminal",
+      "fi": "Satamatyöntekijät ilmoittavat 24 tunnin lakosta Etelä-Suomen ajoneuvoterminaalissa"
+    },
+    "detail": {
+      "en": "Fictional union notice: no vehicle discharge from Thu 22 Oct 21:00 to Fri 23 Oct 21:00 (Helsinki time). Ferries may still sail; cars stay on board or in the port until the strike ends.",
+      "fi": "Kuvitteellinen liiton ilmoitus: ajoneuvoja ei pureta to 22.10. klo 21:00 – pe 23.10. klo 21:00 (Suomen aikaa). Laivat voivat kulkea, mutta autot jäävät alukseen tai satamaan lakon ajaksi."
+    },
+    "terminal_id": "terminal-south-finland",
+    "starts_at": "2026-10-22T18:00:00Z",
+    "ends_at": "2026-10-23T18:00:00Z",
+    "source": "Demo news feed (fictional)",
+    "published_at": "2026-10-21T06:30:00Z"
+  },
+  {
+    "id": "news-fuel-walkout-1",
+    "kind": "STRIKE",
+    "status": "RUMOURED",
+    "title": {
+      "en": "Possible walkout by fuel-delivery drivers next week",
+      "fi": "Polttoaineen kuljettajat saattavat lakkoilla ensi viikolla"
+    },
+    "detail": {
+      "en": "Fictional report, not confirmed. Could affect fuel at motorway stations in Southern Finland from Wed 28 Oct.",
+      "fi": "Kuvitteellinen, vahvistamaton tieto. Voi vaikuttaa moottoritieasemien polttoaineeseen Etelä-Suomessa ke 28.10. alkaen."
+    },
+    "region": "FI-south",
+    "starts_at": "2026-10-28T04:00:00Z",
+    "ends_at": "2026-10-29T04:00:00Z",
+    "source": "Demo news feed (fictional)",
+    "published_at": "2026-10-20T15:00:00Z"
+  }
+]

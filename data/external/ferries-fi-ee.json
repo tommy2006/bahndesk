@@ -1,0 +1,35 @@
+{
+  "source": "laevapiletid.ee timetable pages (Helsinki–Tallinn and Tallinn–Helsinki), service day Sun 25 Oct 2026, fetched 24 Oct 2026",
+  "source_urls": [
+    "https://laevapiletid.ee/timetables/eng/helsinki-tallinn.html",
+    "https://laevapiletid.ee/timetables/eng/tallinn-helsinki.html"
+  ],
+  "note": "Real published departure and arrival times (local time, Europe/Helsinki = Europe/Tallinn). The page does not state days of operation, so the app treats this as the daily pattern for the demo. Terminals are general knowledge, not from the page. Prices are indicative demo values, not fares. Nothing is booked with any operator.",
+  "timezone": "Europe/Helsinki",
+  "sailings": [
+    { "dir": "HEL-TLL", "operator": "Tallink", "ship": "Megastar", "dep": "07:30", "arr": "09:30", "from_terminal": "Helsinki West Harbour (T2)", "to_terminal": "Tallinn Old City Harbour (D)", "car_eur": 149 },
+    { "dir": "HEL-TLL", "operator": "Eckerö Line", "ship": "M/s Finlandia", "dep": "09:00", "arr": "11:15", "from_terminal": "Helsinki West Harbour (T2)", "to_terminal": "Tallinn Old City Harbour (A)", "car_eur": 129 },
+    { "dir": "HEL-TLL", "operator": "Tallink", "ship": "MyStar", "dep": "10:30", "arr": "12:30", "from_terminal": "Helsinki West Harbour (T2)", "to_terminal": "Tallinn Old City Harbour (D)", "car_eur": 149 },
+    { "dir": "HEL-TLL", "operator": "Viking Line", "ship": "Viking XPRS", "dep": "10:30", "arr": "13:10", "from_terminal": "Helsinki Katajanokka", "to_terminal": "Tallinn Old City Harbour (A)", "car_eur": 139 },
+    { "dir": "HEL-TLL", "operator": "Tallink", "ship": "Megastar", "dep": "13:30", "arr": "15:30", "from_terminal": "Helsinki West Harbour (T2)", "to_terminal": "Tallinn Old City Harbour (D)", "car_eur": 149 },
+    { "dir": "HEL-TLL", "operator": "Eckerö Line", "ship": "M/s Finlandia", "dep": "15:15", "arr": "17:30", "from_terminal": "Helsinki West Harbour (T2)", "to_terminal": "Tallinn Old City Harbour (A)", "car_eur": 129 },
+    { "dir": "HEL-TLL", "operator": "Tallink", "ship": "MyStar", "dep": "16:30", "arr": "18:30", "from_terminal": "Helsinki West Harbour (T2)", "to_terminal": "Tallinn Old City Harbour (D)", "car_eur": 149 },
+    { "dir": "HEL-TLL", "operator": "Tallink", "ship": "Victoria I", "dep": "18:35", "arr": "22:45", "from_terminal": "Helsinki South Harbour (Olympia)", "to_terminal": "Tallinn Old City Harbour (D)", "car_eur": 139 },
+    { "dir": "HEL-TLL", "operator": "Viking Line", "ship": "Viking XPRS", "dep": "19:00", "arr": "21:30", "from_terminal": "Helsinki Katajanokka", "to_terminal": "Tallinn Old City Harbour (A)", "car_eur": 139 },
+    { "dir": "HEL-TLL", "operator": "Tallink", "ship": "Megastar", "dep": "19:30", "arr": "21:30", "from_terminal": "Helsinki West Harbour (T2)", "to_terminal": "Tallinn Old City Harbour (D)", "car_eur": 149 },
+    { "dir": "HEL-TLL", "operator": "Eckerö Line", "ship": "M/s Finlandia", "dep": "21:40", "arr": "00:10", "from_terminal": "Helsinki West Harbour (T2)", "to_terminal": "Tallinn Old City Harbour (A)", "car_eur": 119 },
+    { "dir": "HEL-TLL", "operator": "Tallink", "ship": "MyStar", "dep": "22:30", "arr": "00:30", "from_terminal": "Helsinki West Harbour (T2)", "to_terminal": "Tallinn Old City Harbour (D)", "car_eur": 129 },
+
+    { "dir": "TLL-HEL", "operator": "Viking Line", "ship": "Viking XPRS", "dep": "07:00", "arr": "09:30", "from_terminal": "Tallinn Old City Harbour (A)", "to_terminal": "Helsinki Katajanokka", "car_eur": 139 },
+    { "dir": "TLL-HEL", "operator": "Tallink", "ship": "MyStar", "dep": "07:30", "arr": "09:30", "from_terminal": "Tallinn Old City Harbour (D)", "to_terminal": "Helsinki West Harbour (T2)", "car_eur": 149 },
+    { "dir": "TLL-HEL", "operator": "Tallink", "ship": "Megastar", "dep": "10:30", "arr": "12:30", "from_terminal": "Tallinn Old City Harbour (D)", "to_terminal": "Helsinki West Harbour (T2)", "car_eur": 149 },
+    { "dir": "TLL-HEL", "operator": "Eckerö Line", "ship": "M/s Finlandia", "dep": "12:00", "arr": "14:15", "from_terminal": "Tallinn Old City Harbour (A)", "to_terminal": "Helsinki West Harbour (T2)", "car_eur": 129 },
+    { "dir": "TLL-HEL", "operator": "Tallink", "ship": "MyStar", "dep": "13:30", "arr": "15:30", "from_terminal": "Tallinn Old City Harbour (D)", "to_terminal": "Helsinki West Harbour (T2)", "car_eur": 149 },
+    { "dir": "TLL-HEL", "operator": "Viking Line", "ship": "Viking XPRS", "dep": "15:30", "arr": "18:00", "from_terminal": "Tallinn Old City Harbour (A)", "to_terminal": "Helsinki Katajanokka", "car_eur": 139 },
+    { "dir": "TLL-HEL", "operator": "Tallink", "ship": "Megastar", "dep": "16:30", "arr": "18:30", "from_terminal": "Tallinn Old City Harbour (D)", "to_terminal": "Helsinki West Harbour (T2)", "car_eur": 149 },
+    { "dir": "TLL-HEL", "operator": "Eckerö Line", "ship": "M/s Finlandia", "dep": "18:30", "arr": "21:00", "from_terminal": "Tallinn Old City Harbour (A)", "to_terminal": "Helsinki West Harbour (T2)", "car_eur": 129 },
+    { "dir": "TLL-HEL", "operator": "Tallink", "ship": "MyStar", "dep": "19:30", "arr": "21:30", "from_terminal": "Tallinn Old City Harbour (D)", "to_terminal": "Helsinki West Harbour (T2)", "car_eur": 149 },
+    { "dir": "TLL-HEL", "operator": "Viking Line", "ship": "Viking XPRS", "dep": "22:15", "arr": "00:30", "from_terminal": "Tallinn Old City Harbour (A)", "to_terminal": "Helsinki Katajanokka", "car_eur": 119 },
+    { "dir": "TLL-HEL", "operator": "Tallink", "ship": "Megastar", "dep": "22:30", "arr": "00:30", "from_terminal": "Tallinn Old City Harbour (D)", "to_terminal": "Helsinki West Harbour (T2)", "car_eur": 129 }
+  ]
+}

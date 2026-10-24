@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bahn Control Room</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600;125,800;125,900&family=Geist:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="/" aria-label="Bahn control room">
+      <span class="mark">bahn</span>
+      <span class="product" data-i18n="product">Control room</span>
+    </a>
+    <nav class="tabs" id="tabs" aria-label="Order lanes"></nav>
+    <div class="top-right">
+      <span id="live" class="live"></span>
+      <div class="lang" role="group" aria-label="Language">
+        <button data-lang="en">EN</button><button data-lang="fi">FI</button>
+      </div>
+    </div>
+  </header>
+  <main class="layout">
+    <section class="queue" aria-label="Orders">
+      <h1 class="queue-title" id="queue-title"></h1>
+      <p class="queue-sub" id="queue-sub"></p>
+      <div id="groups"></div>
+      <ul id="list" class="list"></ul>
+    </section>
+    <section class="detail" id="detail" aria-live="polite"></section>
+  </main>
+  <div id="source" class="sheet" hidden></div>
+  <script src="/app.js" type="module"></script>
+</body>
+</html>

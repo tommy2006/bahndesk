@@ -1,0 +1,10 @@
+{"id":"point-ee1101p","plan_id":"plan-ee1101","address_id":"addr-ee1101p","site_id":null,"role":"PICKUP","order_boundary":"PICKUP","sequence":1}
+{"id":"point-ee1101d","plan_id":"plan-ee1101","address_id":"addr-ee1101d","site_id":null,"role":"DELIVERY","order_boundary":"DELIVERY","sequence":2}
+{"id":"point-ee1102p","plan_id":"plan-ee1102","address_id":"addr-ee1102p","site_id":null,"role":"PICKUP","order_boundary":"PICKUP","sequence":1}
+{"id":"point-ee1102d","plan_id":"plan-ee1102","address_id":"addr-ee1102d","site_id":null,"role":"DELIVERY","order_boundary":"DELIVERY","sequence":2}
+{"id":"point-ee1103p","plan_id":"plan-ee1103","address_id":"addr-ee1103p","site_id":null,"role":"PICKUP","order_boundary":"PICKUP","sequence":1}
+{"id":"point-ee1103d","plan_id":"plan-ee1103","address_id":"addr-ee1103d","site_id":null,"role":"DELIVERY","order_boundary":"DELIVERY","sequence":2}
+{"id":"point-ee1104p","plan_id":"plan-ee1104","address_id":"addr-ee1104p","site_id":null,"role":"PICKUP","order_boundary":"PICKUP","sequence":1}
+{"id":"point-ee1104d","plan_id":"plan-ee1104","address_id":"addr-ee1104d","site_id":null,"role":"DELIVERY","order_boundary":"DELIVERY","sequence":2}
+{"id":"point-ee1105p","plan_id":"plan-ee1105","address_id":"addr-ee1105p","site_id":null,"role":"PICKUP","order_boundary":"PICKUP","sequence":1}
+{"id":"point-ee1105d","plan_id":"plan-ee1105","address_id":"addr-ee1105d","site_id":null,"role":"DELIVERY","order_boundary":"DELIVERY","sequence":2}
