@@ -11,5 +11,8 @@
     "start": "node --no-warnings server.mjs",
     "dev": "node --no-warnings --watch server.mjs",
     "build-db": "node --no-warnings scripts/build-db.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.3.0"
   }
 }

@@ -17,7 +17,7 @@ try {
 const { db, rowsFor, findRecord } = await import('./lib/data.mjs');
 const { analyseAll, analyseOrder, rankDrivers } = await import('./lib/engine.mjs');
 const { live, refreshAll } = await import('./lib/live.mjs');
-const { runAgent, runs, publicRun, agentAvailable, decideOutcome } = await import('./lib/agent.mjs');
+const { runAgent, runs, publicRun, agentAvailable, decideOutcome, provider, agentModel } = await import('./lib/agent.mjs');
 const { strikes, savedRoute } = await import('./lib/external.mjs');
 
 const PORT = Number(process.env.PORT || 3000);
@@ -171,7 +171,7 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(PORT, () => {
   console.log(`Bahn Control Room → http://localhost:${PORT}`);
-  console.log(agentAvailable() ? `Agent: Groq (${process.env.GROQ_MODEL || 'openai/gpt-oss-120b'})` : 'Agent: off (add GROQ_API_KEY to .env)');
+  console.log(agentAvailable() ? `Agent: ${provider() === 'claude' ? 'Claude' : 'Groq'} (${agentModel()})` : 'Agent: off (add ANTHROPIC_API_KEY or GROQ_API_KEY to .env)');
 });
 
 // Live data now and every 10 minutes; the engine re-reads it on every request.

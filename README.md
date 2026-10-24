@@ -6,18 +6,19 @@ Prototype scope: gigs that start and end in Finland or Estonia. That is 36 order
 
 ## Run it
 
-You need Node.js 22.13 or newer (24 recommended). No database server, no Docker, no `npm install`. The database is one SQLite file that ships with the repo (Node has SQLite built in).
+You need Node.js 22.13 or newer (24 recommended). No database server and no Docker: the database is one SQLite file that ships with the repo (Node has SQLite built in). The only dependency is the official Anthropic SDK.
 
 ```sh
-git clone <this repo>
-cd <this repo>
-cp .env.example .env      # optional: add GROQ_API_KEY to turn the agent on
+git clone https://github.com/tommy2006/bahndesk
+cd bahndesk
+npm install
+cp .env.example .env      # optional: add ANTHROPIC_API_KEY to run the agent live
 npm start
 ```
 
 Open http://localhost:3000.
 
-Without a Groq key everything works except the agent's tool loop.
+Without a key everything works, including the agent proposals already saved in `data/runs.json`; only new agent runs and chat need a key. The agent uses Claude (`claude-opus-5-5`) when `ANTHROPIC_API_KEY` is set, and Groq when only `GROQ_API_KEY` is set.
 
 ## How it decides what needs a person
 

@@ -1976,38 +1976,222 @@
     },
     "summary": "Sent to a person for approval.",
     "at": "2026-10-24T17:03:54.968Z"
+   },
+   {
+    "type": "tool",
+    "name": "get_order_overview",
+    "args": {},
+    "summary": "Confidence 53 %, 3 signal(s)",
+    "at": "2026-10-24T17:29:05.604Z"
+   },
+   {
+    "type": "tool",
+    "name": "get_messages",
+    "args": {},
+    "summary": "6 message(s) read",
+    "at": "2026-10-24T17:29:07.552Z"
+   },
+   {
+    "type": "tool",
+    "name": "ask_driver",
+    "args": {
+     "question": "CD-420164 (BMW M4, Tampere to Kavornia Helsinki): at delivery, did someone at Kavornia Helsinki sign the handover record? Please answer yes or no, give the signer's name if you have it, and upload the signed document or a photo of it in the app now. If nobody signed, please tell us that."
+    },
+    "summary": "“Ok, understood. Nothing new from my side.”",
+    "at": "2026-10-24T17:29:10.711Z"
+   },
+   {
+    "type": "tool",
+    "name": "propose_decision",
+    "args": {
+     "what_happened": "CD-420164 (BMW M4, Tampere to Kavornia Helsinki) shows as delivered, but there is no signed handover record. The customer's accounting team has now asked for it three times (Mon 19 Oct 12:46, Mon 19 Oct 13:19 and Wed 21 Oct 11:08). The latest request has gone about 47 h without an answer.",
+     "what_i_found": [
+      "The order has delivery photos, but no signed handover record is attached (open task, Mon 19 Oct; operator note, Wed 21 Oct 11:19)",
+      "Operators have said the photos must not be passed off as the signed record (operator notes, Mon 19 Oct 13:12 and Wed 21 Oct 11:19)",
+      "I asked driver Oliver Bexford twice, the second time very directly (yes or no, who signed, upload it). Both times he only replied 'Ok, understood. Nothing new from my side.' So we still don't know if anyone signed at delivery (driver's replies)",
+      "An earlier check asked the Tampere pickup site. That was the wrong place: the handover is signed where the car is dropped off, in Helsinki. Tampere has only promised a reply and has not sent one (pickup site's reply)"
+     ],
+     "suggestion": "Have an ops person phone driver Oliver Bexford today. Ask whether anyone at Kavornia Helsinki signed at drop-off and get the document uploaded. If nobody signed, ops should arrange the signature with Kavornia Helsinki. Either way, a person should reply to the customer today with an honest status: the signed record is still being collected, and the photos are not that record.",
+     "changes": [
+      "No booking, cost or driver changes. This is a follow-up call and a customer reply."
+     ],
+     "cost_eur": null,
+     "customer_must_be_told": true,
+     "if_approved": "I'll write up the call notes and the customer reply text for ops. When the signed record is uploaded, I'll check it is complete and close the open handover task. If the driver can't produce it within 24 h, I'll flag it as a missing-proof case on his track record."
+    },
+    "summary": "Sent to a person for approval.",
+    "at": "2026-10-24T17:29:20.599Z"
    }
   ],
   "outcome": {
    "type": "proposal",
-   "changes": [],
-   "cost_eur": null,
-   "customer_must_be_told": false,
-   "if_approved": "Send the signed handover record to the customer and mark the order as complete.",
-   "suggestion": "Ask the pickup site to sign the handover record and provide the signed document to us immediately, then forward it to the customer.",
-   "what_happened": "The customer has repeatedly requested the signed handover record for CD-420164, but the record is missing. The driver has not signed it, and the pickup site has not yet confirmed completion.",
+   "what_happened": "CD-420164 (BMW M4, Tampere to Kavornia Helsinki) shows as delivered, but there is no signed handover record. The customer's accounting team has now asked for it three times (Mon 19 Oct 12:46, Mon 19 Oct 13:19 and Wed 21 Oct 11:08). The latest request has gone about 47 h without an answer.",
    "what_i_found": [
-    "(alert · proof review @ 2026-10-19T09:48:00Z)",
-    "(message from customer @ 2026-10-19T10:19:00Z)",
-    "(open task · signed handover followup @ 2026-10-19T09:49:00Z)",
-    "(driver's reply)",
-    "(pickup site's reply)"
+    "The order has delivery photos, but no signed handover record is attached (open task, Mon 19 Oct; operator note, Wed 21 Oct 11:19)",
+    "Operators have said the photos must not be passed off as the signed record (operator notes, Mon 19 Oct 13:12 and Wed 21 Oct 11:19)",
+    "I asked driver Oliver Bexford twice, the second time very directly (yes or no, who signed, upload it). Both times he only replied 'Ok, understood. Nothing new from my side.' So we still don't know if anyone signed at delivery (driver's replies)",
+    "An earlier check asked the Tampere pickup site. That was the wrong place: the handover is signed where the car is dropped off, in Helsinki. Tampere has only promised a reply and has not sent one (pickup site's reply)"
    ],
+   "suggestion": "Have an ops person phone driver Oliver Bexford today. Ask whether anyone at Kavornia Helsinki signed at drop-off and get the document uploaded. If nobody signed, ops should arrange the signature with Kavornia Helsinki. Either way, a person should reply to the customer today with an honest status: the signed record is still being collected, and the photos are not that record.",
+   "changes": [
+    "No booking, cost or driver changes. This is a follow-up call and a customer reply."
+   ],
+   "cost_eur": null,
+   "customer_must_be_told": true,
+   "if_approved": "I'll write up the call notes and the customer reply text for ops. When the signed record is uploaded, I'll check it is complete and close the open handover task. If the driver can't produce it within 24 h, I'll flag it as a missing-proof case on his track record.",
    "status": "PENDING_APPROVAL",
-   "at": "2026-10-24T17:03:54.968Z",
+   "at": "2026-10-24T17:29:20.599Z",
+   "model": "claude-opus-5-5",
    "fi": {
-    "what_happened": "Asiakas on toistuvasti pyytänyt allekirjoitettua toimittamisasiakirjaa CD-420164:lle, mutta asiakirja puuttuu. Kuljettaja ei ole allekirjoittanut sitä, eikä noutopaikka ole vielä vahvistanut valmistumista.",
+    "what_happened": "CD-420164 (BMW M4, Tampere → Kavornia Helsinki) näkyy toimitettuna, mutta allekirjoitettua luovutuspöytäkirjaa ei ole. Asiakkaan taloushallinto on pyytänyt sitä jo kolme kertaa (ma 19.10. klo 12.46, ma 19.10. klo 13.19 ja ke 21.10. klo 11.08). Viimeisimpään pyyntöön ei ole vastattu noin 47 tuntiin.",
     "what_i_found": [
-     "(hälytys · todisteen tarkistus @ 2026-10-19T09:48:00Z)",
-     "(asiakkaan viesti @ 2026-10-19T10:19:00Z)",
-     "(avoin tehtävä · allekirjoitetun toimittamisen seuranta @ 2026-10-19T09:49:00Z)",
-     "(kuljettajan vastaus)",
-     "(noutopaikan vastaus)"
+     "Tilaukseen on liitetty toimituskuvat, mutta allekirjoitettu luovutuspöytäkirja puuttuu (avoin tehtävä ma 19.10.; operaattorin merkintä ke 21.10. klo 11.19)",
+     "Operaattorit ovat todenneet, ettei kuvia saa esittää allekirjoitettuna pöytäkirjana (operaattorin merkinnät ma 19.10. klo 13.12 ja ke 21.10. klo 11.19)",
+     "Kysyin asiaa kuljettaja Oliver Bexfordilta kahdesti, toisella kerralla hyvin suoraan (kyllä vai ei, kuka allekirjoitti, lataa dokumentti). Molemmilla kerroilla hän vastasi vain 'Ok, understood. Nothing new from my side.' Emme siis vieläkään tiedä, allekirjoittiko kukaan luovutuksen yhteydessä (kuljettajan vastaukset)",
+     "Aiemmassa selvityksessä kysyttiin Tampereen noutopaikalta. Se oli väärä paikka: luovutuspöytäkirja allekirjoitetaan siellä, minne auto toimitetaan, eli Helsingissä. Tampere on luvannut vastata, mutta vastausta ei ole tullut (noutopaikan vastaus)"
     ],
-    "suggestion": "Pyydä noutopaikkaa allekirjoittamaan toimittamisasiakirja ja toimittamaan allekirjoitettu asiakirja meille välittömästi, sen jälkeen lähetä se asiakkaille.",
-    "if_approved": "Lähetä allekirjoitettu toimittamisasiakirja asiakkaille ja merkitse tilaus valmiiksi."
+    "suggestion": "Joku operatiivisesta tiimistä soittaa tänään kuljettaja Oliver Bexfordille. Kysytään, allekirjoittiko kukaan Kavornia Helsingissä luovutuksen yhteydessä, ja pyydetään dokumentti ladattavaksi. Jos kukaan ei allekirjoittanut, operatiivinen tiimi sopii allekirjoituksesta Kavornia Helsingin kanssa. Kummassakin tapauksessa jonkun tulee vastata asiakkaalle tänään ja kertoa tilanne rehellisesti: allekirjoitettua pöytäkirjaa hankitaan vielä, eivätkä kuvat korvaa sitä.",
+    "if_approved": "Laadin operatiiviselle tiimille muistiinpanopohjan puhelua varten sekä vastaustekstin asiakkaalle. Kun allekirjoitettu pöytäkirja on ladattu, tarkistan sen olevan täydellinen ja suljen avoimen luovutustehtävän. Jos kuljettaja ei toimita sitä 24 tunnin kuluessa, merkitsen tapauksen hänen historiaansa puuttuvana toimitustodisteena."
    }
-  }
+  },
+  "claude": [
+   {
+    "role": "user",
+    "content": "Earlier agent work on this order:\n- get_order_overview: Confidence 53 %, 3 signal(s)\n- get_messages: 6 message(s) read\n- ask_driver \"Did you sign the handover record for CD-420164?\": “Ok, understood. Nothing new from my side.”\n- contact_pickup_site \"Has the signed handover record for CD-420164 been completed and sent to the customer? If not, can you provide it or confirm when it will be available?\": “We received your question and will confirm before the pickup slot.”\n- propose_decision: Sent to a person for approval."
+   },
+   {
+    "role": "user",
+    "content": "Work on order CD-420164 (ord-00164). Start with get_order_overview."
+   },
+   {
+    "role": "assistant",
+    "content": [
+     {
+      "type": "tool_use",
+      "id": "toolu_01CfxyDjmm9cWjjg366VHJRq",
+      "name": "get_order_overview",
+      "input": {},
+      "caller": {
+       "type": "direct"
+      }
+     }
+    ]
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01CfxyDjmm9cWjjg366VHJRq",
+      "content": "{\"ref\":\"CD-420164\",\"status\":\"DELIVERED\",\"lane\":\"needs_you\",\"confidence\":53,\"car\":{\"make\":\"BMW\",\"model\":\"M4\",\"year\":2026,\"fuel\":\"petrol\",\"plate\":null},\"value_class\":\"high\",\"from\":{\"city\":\"Tampere\",\"country\":\"FI\",\"name\":\"Tervavio Tampere\",\"kind\":\"DEALERSHIP\"},\"to\":{\"city\":\"Helsinki\",\"country\":\"FI\",\"name\":\"Kavornia Helsinki\",\"kind\":\"DEALERSHIP\"},\"drive_km\":201,\"ferry\":null,\"pickup_slot\":{\"start\":\"Mon 12 Oct, 09:00\",\"end\":\"Mon 12 Oct, 12:00\"},\"customer_eta\":\"Mon 12 Oct, 10:00\",\"latest_arrival\":\"Mon 12 Oct, 16:00\",\"predicted_arrival\":null,\"buffer_hours\":null,\"driver\":{\"id\":\"drv-136\",\"name\":\"Oliver Bexford\"},\"driver_fee_eur\":134,\"reasons\":[{\"factor\":\"readiness\",\"risk\":0.25,\"text\":\"Signed delivery proof requested for CD-420164; inspect the actual document state.\",\"agent_can_handle\":false,\"source\":\"Alert · proof review @ 2026-10-19T09:48:00Z\"},{\"factor\":\"readiness\",\"risk\":0.2,\"text\":\"Unanswered customer message for 47 h\",\"agent_can_handle\":false,\"source\":\"Message from customer @ 2026-10-19T10:19:00Z\"},{\"factor\":\"readiness\",\"risk\":0.12,\"text\":\"The delivered vehicle has photos, but its signed handover record is missing.\",\"agent_can_handle\":false,\"source\":\"Open task · signed handover followup @ 2026-10-19T09:49:00Z\"}]}"
+     }
+    ]
+   },
+   {
+    "role": "assistant",
+    "content": [
+     {
+      "type": "thinking",
+      "thinking": "",
+      "signature": "CAQS5gUKEAgTGAI4AUIIdGhpbmtpbmcSDBSgWIwNfGD9LUCkZxoME/xO1GcO6dDNDJNeIjCMpxRLnlimf6aUDV+5WJ1yN+7mUKf2sODbeG9yDKI2YWp9H8mhhyNGYkVqg/QvpngqgwWS5goKwsRX/7IqpzZB9BqTU9lKe8DueRQ0NFuBk86P3r9Z71ozY22THdgpGtJ+auo7BqhxlqvD5EIpDJo+i6T2cH89g85D4kP2u/QcQQBdDaTFuGYm/+kzbh1ha4ciVTb7A+wdAXDns/sHTnZGjQc93y+jVlaasvBHfGkHIkD9HpSpmLMZUXOH8Uqzibdg5vEGOUjZLJKs+O80ffM+HP7ukYd+edJ/7kF5DHq6veVB8oRpFvAkByEogD98NZ3Gj81wrP/XEDj2VciBAm0PaZahxXwYkhoS6qRiG2IooBtiT/4gZx8KvNPU9qM8t2D64QXYajFVR/j3S2vJ/eRndGA2FGhdjvxFMdmvCOIDdEWnHdE13K1sF6O1hcvzBjD8/63US25qcogaVSYCJxnIspUGvnV1/dAKAEiviGvt3Xr92kcT+AaYNtiDMNgq58qDc7vaAvnN3IKyaODS1zotRXc6isT/k+tKxxoQyqnMmOhQxLm29TmYECkSoiz8plUM7CZ9P0wetVeQuCgw6YyZLoZqq76Hesx7XaPU04QV+ULwplP7ymn4Ez9aMqHL7XMTtUJQx0bLTfT/1fsUfYAWsz/8reaVkQgG8caTqky49wR6ufP02J2XcQk8qNvWVnOT1rorX2TJFHimlGEXoWs/alrGn62dFGtkPMubiZhMMHcZzJFo58K4tnWvMW3XghtvEil6eO2AVad+gs1THB7bkIYArqlRBDyIJ+PY3no7Ad+Bi/rhr5DvSpDHd17ZFQyZ5fRC82gOi1PQZqeXTw1C0uLDpAh9pPV9BcCaU7Ofn63ANfJtrOp+JJaYuYZ5OUEwn2xmMA3ORdmVZuSz02vpMyIbqi4QGAE="
+     },
+     {
+      "type": "tool_use",
+      "id": "toolu_01K5q8KAsRQjXBqsvvFdZR88",
+      "name": "get_messages",
+      "input": {},
+      "caller": {
+       "type": "direct"
+      }
+     }
+    ]
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01K5q8KAsRQjXBqsvvFdZR88",
+      "content": "[{\"at\":\"Mon 19 Oct, 12:46\",\"from\":\"customer\",\"body\":\"Can you send the signed delivery proof for CD-420164? The car reached the receiving address, but the handover file is not in our inbox.\"},{\"at\":\"Mon 19 Oct, 13:00\",\"from\":\"operator\",\"body\":\"I can see submitted delivery photos. I will check whether the signed document was captured before saying the file is complete.\"},{\"at\":\"Mon 19 Oct, 13:12\",\"from\":\"operator\",\"body\":\"Do not treat submitted photos as an approved signed handover. Verify the document requirement and recipient.\"},{\"at\":\"Mon 19 Oct, 13:19\",\"from\":\"customer\",\"body\":\"The photos help, but accounting specifically needs the signed handover record.\"},{\"at\":\"Wed 21 Oct, 11:08\",\"from\":\"customer\",\"body\":\"Our accounts team is asking again for the signed handover on CD-420164.\"},{\"at\":\"Wed 21 Oct, 11:19\",\"from\":\"operator\",\"body\":\"The signed record is still missing from the order. I will follow up without representing photos as the signed document.\"}]"
+     }
+    ]
+   },
+   {
+    "role": "assistant",
+    "content": [
+     {
+      "type": "thinking",
+      "thinking": "",
+      "signature": "CAQS3gYKEAgTGAI4AUIIdGhpbmtpbmcSDPu+N0fOZRHk8u0EfxoMEwO4IflLQ2Tt1ZqPIjD/gVrxyF8EzRK4Mx/aJHUGiLg/h8/sf9+qmEGifvdyVn/RSyOnXCWvjjW4lxdUewAq+wUAWAK3pjg9aC5SiKma5Jl4tN77Vb/K6X37kr8HmDHK3g0PFVJA8SZz4sLK1ZUzxyrjgKOKY5ZoP688FCAJTq/9MUilRdm/+MNaDc96giovmQbsnudldCSF415euW39/CMS0s0lG3Egxnf9hl7uwfn8yTJIXkfp71QsK74sVsS24Suj3W6sYkkqHJa9CVTl2gAs8iFsa2HhGuOKwNjOfPocjdJwYUJF4gR1LEEhB9rj9UDmr7ai+RO3iO3y7d438VyPWDTlEBvjRmKAZD+kbqOV/5B0t28VxG0SHWNoRqT86ZM3ZtVbAvTlmkusFpCVCVrNk4KyRWfV4AQ48EEMHbv8JffBrBPRtsMx9w3yDpx3XKaiuvbjSF8Hm/Q4mxiIBVYhLBIJ47SFxNQu7y3d23s164X7un90dRvg9Y6rMhhQgPH/01DFwqrL/0A4GtQVf2y2UrZ1Xoz47a1ExXWtUZw3g9ZSQZNPAjMPkkRhDt/V8m5XfmxS9GwP2qANWQHED0BfUjReNVPJ5r/wQfDCBZlTYnSYwzZ06ictaNriL3i5bPbEPMRuSa13lE6acrYgWIOvmO5/LGz5+oCtLrGVxFiD7pNQr548JJ400VgNKVSo3hmbGcqtZG1qzuZ3sQ4NlsKYLoXVdZBTQI5Rnp4v59EkWc5YpsiQUG+b3zJgjDMDGf7+sLzZXYqueNxjw4JTrZ42h5FKVqedErb0/BfpLlz5xHuiuy4UoKebHF0nKgMRpbNikbDocrWacHazV42hPoeNTzwExUxfNMrNdhjVBbJVc4m6nCyxTuRrbjaP8w4Jtd4h0rpnrK5jpJTiLrmXSuVWAcJ6Q/PtbKH29xGBUjAt6mvcmZ5ZMnBWSq7lxOTCczne7g3cB60vvvWjIDXq/VfecKa910qpm4NgMp+dUsBzjFRRRAa9VEB+M7n0Q+AY+ksKnuzvMWJ+iSZvoS9XZNAR6L348gruXwIA7oFSIUobIW+CMVz2N5v4MRaatosYCYhe1MWG/o+UviyMGAE="
+     },
+     {
+      "type": "tool_use",
+      "id": "toolu_01Jezia9uhKyhaj7AdCcAPJB",
+      "name": "ask_driver",
+      "input": {
+       "question": "CD-420164 (BMW M4, Tampere to Kavornia Helsinki): at delivery, did someone at Kavornia Helsinki sign the handover record? Please answer yes or no, give the signer's name if you have it, and upload the signed document or a photo of it in the app now. If nobody signed, please tell us that."
+      },
+      "caller": {
+       "type": "direct"
+      }
+     }
+    ]
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01Jezia9uhKyhaj7AdCcAPJB",
+      "content": "{\"reply\":\"Ok, understood. Nothing new from my side.\"}"
+     }
+    ]
+   },
+   {
+    "role": "assistant",
+    "content": [
+     {
+      "type": "thinking",
+      "thinking": "",
+      "signature": "CAQS1QcKEAgTGAI4AUIIdGhpbmtpbmcSDAciNpvXQTBoXhfLyRoMHh/KD/R3WVxscVniIjBb0f4QgjwKb67EJWXDt+X82o2/ekCZUhq/H+fAXmSkoQ4vC+iuAmBdo6wZSgIoHxoq8gbwJKZ2nB7KUoy81ZAxUoez1oql29oh7IBuc2vbKCguJFSKsN4Mn4RGO4hiLPDNLU/VWQ4GZd7Uq8hZucqhcCG8TTdO+Og8SyzpvoP3pMA3hSvv8xLCBv87jbLcqj3vlZptbQnVd8blgGzdoexkSmh5b6U+7y8+vJbcSfLI5Uv3x112GsQ69T4ZvxnXYLqRiIm1v5wsQK6W6D9sBLZuRZSmVvS7983aDUx51a6fZX7C1F6RNswh8/JvRWO0RNaUmURscwl2b49b4aJU8a2udu3q3QG3Q+K3puvrJ8w/2x0G6WAb9lP2QcFHo4iEasEUuyVg03Tn+/ASK9lZQOT+YtDZ579qkZMQX2osG656H8ppApYQS2UczHAxhNCNZTeJUanPiAGqd+D7wQAsrNuaLfFwvv21NCU0uGJMhtuDXp1uoE0hHPqImoqL96zKg9D0lHwRKte55Geyo1o2O1Dbdo5yeum/D1x0of2CM96P/rJjvVHM2bQMacUmKHHGTynz7eP8VGjlzbxNF3Jry5WOqYJPbPxia7tqipWGR5EO7Qf6u4ADljRN9aFUqQtMbuo1XHHNC2Z+khmBROPa7HjkhjYx6f3qOQaNSycgdLyJ5cXIHVasxdGT+auN2shgry15jTIHTj9KsWTh1ChhrZqg7jlKIaSA8icPJiYwGGJIVB2YD+/BNcl2FUz42sOSGzrqz/HDGOLpku4t6f6gYQBUnV/iC7NOmbcnApu6WSRpE/PcZLS3Zs6G/7oorT1s2dtItL7kU0rMqp5hWhlIGwxuLx2uOg8GOWWz9LEnML0kBs6mLMfdPax7lbiBeDlLPN85rHEU08CNaSNfPu475qT+DZcyCcgdkM5zGyQP8QRUjJEwqqtryt8iQNBWgUOfnrJQENQzucypxwuWNjMXJd39Swn7nYWTj6kHnGgemq04gDnvVWD9D/oFGXdGpigTkhOtWRQRRv4ahs6E98Xl4iRLMUXjk+trFp+sb+FxTDiG7ADvxBOW0UWgkwrFO/tR4pMQAluJ5oNQ7Wc69OgRl/xF5b7olceqZt/CiwYirCeibjcMLfZ5nwkrgn2ElQx/LPbMqmtzvCHl3B/smrhcdIaa7NkPVHIDnj9XuWpYQBIYFotmtj79shGxKxAvi7w5yCjBOcLPREchqnulA3KcskE9CGLYxPgYAQ=="
+     },
+     {
+      "type": "tool_use",
+      "id": "toolu_01Tcm1GEy3c4hRr5Dg8L12aN",
+      "name": "propose_decision",
+      "input": {
+       "what_happened": "CD-420164 (BMW M4, Tampere to Kavornia Helsinki) shows as delivered, but there is no signed handover record. The customer's accounting team has now asked for it three times (Mon 19 Oct 12:46, Mon 19 Oct 13:19 and Wed 21 Oct 11:08). The latest request has gone about 47 h without an answer.",
+       "what_i_found": [
+        "The order has delivery photos, but no signed handover record is attached (open task, Mon 19 Oct; operator note, Wed 21 Oct 11:19)",
+        "Operators have said the photos must not be passed off as the signed record (operator notes, Mon 19 Oct 13:12 and Wed 21 Oct 11:19)",
+        "I asked driver Oliver Bexford twice, the second time very directly (yes or no, who signed, upload it). Both times he only replied 'Ok, understood. Nothing new from my side.' So we still don't know if anyone signed at delivery (driver's replies)",
+        "An earlier check asked the Tampere pickup site. That was the wrong place: the handover is signed where the car is dropped off, in Helsinki. Tampere has only promised a reply and has not sent one (pickup site's reply)"
+       ],
+       "suggestion": "Have an ops person phone driver Oliver Bexford today. Ask whether anyone at Kavornia Helsinki signed at drop-off and get the document uploaded. If nobody signed, ops should arrange the signature with Kavornia Helsinki. Either way, a person should reply to the customer today with an honest status: the signed record is still being collected, and the photos are not that record.",
+       "changes": [
+        "No booking, cost or driver changes. This is a follow-up call and a customer reply."
+       ],
+       "cost_eur": null,
+       "customer_must_be_told": true,
+       "if_approved": "I'll write up the call notes and the customer reply text for ops. When the signed record is uploaded, I'll check it is complete and close the open handover task. If the driver can't produce it within 24 h, I'll flag it as a missing-proof case on his track record."
+      },
+      "caller": {
+       "type": "direct"
+      }
+     }
+    ]
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01Tcm1GEy3c4hRr5Dg8L12aN",
+      "content": "{\"ok\":true,\"note\":\"Sent to a person for approval.\"}"
+     }
+    ]
+   }
+  ]
  },
  "ord-00452": {
   "orderId": "ord-00452",
