@@ -3,3 +3,4 @@
 {"id":"veh-ee1103","make":"Mercedes-Benz","model":"S-Class","model_year":2021,"fuel":"hybrid","synthetic_vin":"SYNEE1103DEMO000","registration":"DEMO-EE-1103"}
 {"id":"veh-ee1104","make":"Ferrari","model":"Roma","model_year":2021,"fuel":"petrol","synthetic_vin":"SYNEE1104DEMO000","registration":"DEMO-EE-1104"}
 {"id":"veh-ee1105","make":"Volkswagen","model":"ID.4","model_year":2023,"fuel":"electric","synthetic_vin":"SYNEE1105DEMO000","registration":"DEMO-EE-1105"}
+{"id":"veh-ee1106","make":"BMW","model":"X5","model_year":2022,"fuel":"hybrid","synthetic_vin":"SYNEE1106DEMO000","registration":"DEMO-EE-1106"}

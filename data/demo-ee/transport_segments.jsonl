@@ -3,3 +3,4 @@
 {"id":"seg-ee1103","plan_id":"plan-ee1103","order_item_id":"item-ee1103","from_point_id":"point-ee1103p","to_point_id":"point-ee1103d","sequence":1,"distance_km":95,"transport_mode":"DRIVE_WITH_FERRY","status":"IN_PROGRESS"}
 {"id":"seg-ee1104","plan_id":"plan-ee1104","order_item_id":"item-ee1104","from_point_id":"point-ee1104p","to_point_id":"point-ee1104d","sequence":1,"distance_km":150,"transport_mode":"DRIVE_WITH_FERRY","status":"OFFERED"}
 {"id":"seg-ee1105","plan_id":"plan-ee1105","order_item_id":"item-ee1105","from_point_id":"point-ee1105p","to_point_id":"point-ee1105d","sequence":1,"distance_km":255,"transport_mode":"DRIVE_WITH_FERRY","status":"IN_PROGRESS"}
+{"id":"seg-ee1106","plan_id":"plan-ee1106","order_item_id":"item-ee1106","from_point_id":"point-ee1106p","to_point_id":"point-ee1106d","sequence":1,"distance_km":338,"transport_mode":"DRIVE","status":"IN_PROGRESS"}

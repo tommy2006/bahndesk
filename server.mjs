@@ -129,8 +129,8 @@ function orderMap(id) {
   const P = coordsOf(a.from.city), D = coordsOf(a.to.city);
   if (P) add(P[0], P[1], 'pickup', 'info', { en: `Pickup: ${a.from.name || a.from.city}`, fi: `Nouto: ${a.from.name || a.from.city}` });
   if (D) add(D[0], D[1], 'delivery', 'info', { en: `Delivery: ${a.to.name || a.to.city}`, fi: `Toimitus: ${a.to.name || a.to.city}` });
-  const live = a.reasons.filter((r) => r.kind === 'traffic' || r.kind === 'crossing');
-  for (const r of live) add(r.point?.[0], r.point?.[1], r.kind, r.kind === 'traffic' ? (r.r >= 0.1 ? 'risk' : 'warn') : 'info', r.text, r.source);
+  const live = a.reasons.filter((r) => ['traffic', 'crossing', 'travemunde'].includes(r.kind));
+  for (const r of live) add(r.point?.[0], r.point?.[1], r.kind, r.kind === 'traffic' ? (r.r >= 0.1 ? 'risk' : 'warn') : r.kind === 'travemunde' ? 'warn' : 'info', r.text, r.source);
   for (const r of a.reasons.filter((x) => x.kind === 'weather')) {
     const city = r.source.id.split(':')[1];
     const c = coordsOf(city);
@@ -179,6 +179,17 @@ function sourceRecord(table, id) {
       fast_chargers: r.stops.fastCharging, rest_areas: r.stops.rest, suggested_chargers: r.suggestedChargers.map((c) => `${c.name} (km ${c.kmAlong})`).join('; '),
       source: r.source + ' · stops: OpenStreetMap (© OpenStreetMap contributors)', saved_at: r.fetchedAt, stored_in: 'data/bahn.db' };
   }
+  if (table === 'bahn') return {
+    source: 'Bahn operations, answers to the team at the Prompt Operations Hackathon, 25 Oct 2026',
+    said: 'Trouble spots: Germany/Travemünde, and winter tyres once winter comes.',
+    used_as: 'A route risk on orders through the Travemünde port area.' };
+  if (table === 'rule' && id === 'winter-tyres') return {
+    rule: 'Winter tyres',
+    finland: 'Required 1 Dec – end of February (general knowledge, verify)',
+    estonia: 'Required 1 Dec – 1 March (general knowledge, verify)',
+    germany: 'Required in icy or snowy conditions (situational); checked against live weather',
+    denmark: 'No legal requirement',
+    why: 'Bahn named winter tyres as a trouble spot once winter comes (25 Oct 2026).' };
   if (table === 'crossing') return {
     crossing: { fehmarn: 'Puttgarden–Rødby ferry (Fehmarn Belt)', storebaelt: 'Great Belt bridge (Storebæltsbroen)', oresund: 'Øresund bridge' }[id] || id,
     detected_from: 'The saved OSRM road route passes through this crossing', operator_site: { fehmarn: 'scandlines.com', storebaelt: 'storebaelt.dk', oresund: 'oresundsbron.com' }[id],

@@ -32,7 +32,7 @@ function order(o) {
   add('transport_plans', { id: plan, order_id: id, status: o.status === 'NEW' ? 'DRAFT' : 'ACTIVE', source: 'OPS', version: 1, created_at: o.created, activated_at: o.status === 'NEW' ? null : o.created });
   add('transport_points', { id: pp, plan_id: plan, address_id: pa, site_id: null, role: 'PICKUP', order_boundary: 'PICKUP', sequence: 1 });
   add('transport_points', { id: dp, plan_id: plan, address_id: da, site_id: null, role: 'DELIVERY', order_boundary: 'DELIVERY', sequence: 2 });
-  add('transport_segments', { id: `seg-ee${o.n}`, plan_id: plan, order_item_id: item, from_point_id: pp, to_point_id: dp, sequence: 1, distance_km: o.km, transport_mode: 'DRIVE_WITH_FERRY', status: o.segStatus });
+  add('transport_segments', { id: `seg-ee${o.n}`, plan_id: plan, order_item_id: item, from_point_id: pp, to_point_id: dp, sequence: 1, distance_km: o.km, transport_mode: o.mode || 'DRIVE_WITH_FERRY', status: o.segStatus });
   if (o.pickupSlot) add('time_windows', { id: `win-ee${o.n}p`, order_id: id, point_id: pp, purpose: 'SELECTED_PICKUP_SLOT', source: 'OPS', is_selected: true, start_at: o.pickupSlot[0], end_at: o.pickupSlot[1], timezone: 'Europe/Tallinn' });
   add('time_windows', { id: `win-ee${o.n}r`, order_id: id, point_id: dp, purpose: 'REQUESTED_DELIVERY_SLOT', source: 'CUSTOMER', is_selected: false, start_at: o.eta[0], end_at: o.eta[1], timezone: 'Europe/Helsinki' });
   add('time_windows', { id: `win-ee${o.n}l`, order_id: id, point_id: dp, purpose: 'CUSTOMER_DELIVERY_PROMISE', source: 'CUSTOMER', is_selected: false, start_at: o.eta[0], end_at: o.lta, timezone: 'Europe/Helsinki' });
@@ -110,6 +110,17 @@ order({ n: '1105', customer: 'cus-001', status: 'IN_TRANSIT', segStatus: 'IN_PRO
   ferry: { operator: 'Tallink', ship: 'MyStar', dep: at('21', '13:30'), arr: at('21', '15:30'), cutoff: at('21', '12:45'), from: 'Tallinn Old City Harbour (D)', to: 'Helsinki West Harbour (T2)' },
   messages: [{ at: '2026-10-21T08:50:00Z', body: 'Still at the dealer in Tallinn, the export papers are not ready yet. They say 30–45 min more. I will not make the 12:45 check-in for the 13:30 MyStar.' }],
   alerts: [{ at: '2026-10-21T08:52:00Z', severity: 'high', signal: 'FERRY_CHECK_IN_RISK', summary: 'Driver reports the 12:45 check-in for the 13:30 MyStar will be missed; papers not ready at pickup.' }] });
+
+// 6. Bahn's worst case (answer 3): picked up in Hamburg yesterday, then silence. No app
+// position since 22:40 and no message, with delivery due in Aarhus today.
+add('customers', { id: 'cus-dk1', name: 'Jyllands Bilhus ApS', country: 'DK', account_tier: 'standard' });
+add('drivers', { id: 'drv-de1', display_name: 'Jonas Brekkel', home_city: 'Hamburg', home_country: 'DE', active: true });
+order({ n: '1106', customer: 'cus-dk1', status: 'IN_TRANSIT', segStatus: 'IN_PROGRESS', mode: 'DRIVE', created: '2026-10-18T09:00:00Z', accepted: '2026-10-19T07:40:00Z', started: '2026-10-20T14:05:00Z',
+  pickup: { city: 'Hamburg', country: 'DE', kind: 'DEALERSHIP', name: 'Elbufer Automobile Hamburg', line: 'Süderstraße 999' },
+  delivery: { city: 'Aarhus', country: 'DK', kind: 'DEALERSHIP', name: 'Jyllands Bilhus Aarhus', line: 'Søren Frichs Vej 999' },
+  car: { make: 'BMW', model: 'X5', model_year: 2022, fuel: 'hybrid' }, km: 338, driver: 'drv-de1', fee: 21000,
+  pickupSlot: ['2026-10-20T12:00:00Z', '2026-10-20T14:00:00Z'], eta: ['2026-10-21T08:00:00Z', '2026-10-21T10:00:00Z'], lta: '2026-10-21T13:00:00Z', pickupContact: 'Sales desk',
+  track: { at: '2026-10-20T19:40:00Z', progress: 0.62, left: 128, eta: '2026-10-20T21:30:00Z' } });
 
 fs.rmSync(OUT, { recursive: true, force: true });
 fs.mkdirSync(OUT, { recursive: true });

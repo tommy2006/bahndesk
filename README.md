@@ -20,6 +20,16 @@ Open http://localhost:3000.
 
 Without a key everything works, including the agent proposals already saved in `data/runs.json`; only new agent runs and chat need a key. The agent uses Claude (`claude-opus-5-5`) when `ANTHROPIC_API_KEY` is set, and Groq when only `GROQ_API_KEY` is set.
 
+## What Bahn told us, and how the engine follows it
+
+From Bahn's answers at the event (25 Oct 2026):
+- **Worst failure:** a car that could be delivered but isn't. A driver who picked up a car and has been silent for 12 h or more (no app position, no message) is the highest-weighted signal and always tops the queue. At 6 h the agent asks the driver first. A GPS gap alone weighs little, because GPS often drops out in the German countryside.
+- **The latest arrival is soft.** A first late car is handled by the agent; repeated lateness for the same customer escalates.
+- **Every driver is trained for every car,** and cars over €100k are rare. Car value does not change the threshold or the driver choice.
+- **Travemünde** is a known trouble spot, and **winter tyres** are checked once winter starts. There is no Bahn data on EV range in winter, so range figures are labelled as estimates.
+
+The demo set includes one fictional order, CD-421106, showing the silent-driver case.
+
 ## How it decides what needs a person
 
 Every order is scored on every request by a deterministic engine (`lib/engine.mjs`):
@@ -27,7 +37,7 @@ Every order is scored on every request by a deterministic engine (`lib/engine.mj
 1. Each signal becomes a **reason** with a risk `r` (0–1), a factor (readiness, schedule, route, car, driver, driver market, news) and **the record it came from**.
 2. **Confidence** that the order delivers on time without a person = Π(1 − r). Any reason can be clicked to open its source record.
 3. Reasons the agent can deal with alone (ask the driver for a position, send a weather briefing, plan charging) don't count toward escalation.
-4. An order goes to **Needs you** if a human reason blocks it, or its human-only confidence falls below a threshold. The threshold is stricter for expensive cars: 55 % standard, 60 % high value, 65 % exceptional.
+4. An order goes to **Needs you** if a human reason blocks it, or its human-only confidence falls below 55 %, the same for every car.
 5. Shared causes are grouped. One port strike affecting five ferries becomes **one** decision, not five alerts.
 
 It's cheap and explainable, so it can run on a million orders. The language model only works on the orders the engine flags.

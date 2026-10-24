@@ -8,3 +8,5 @@
 {"id":"point-ee1104d","plan_id":"plan-ee1104","address_id":"addr-ee1104d","site_id":null,"role":"DELIVERY","order_boundary":"DELIVERY","sequence":2}
 {"id":"point-ee1105p","plan_id":"plan-ee1105","address_id":"addr-ee1105p","site_id":null,"role":"PICKUP","order_boundary":"PICKUP","sequence":1}
 {"id":"point-ee1105d","plan_id":"plan-ee1105","address_id":"addr-ee1105d","site_id":null,"role":"DELIVERY","order_boundary":"DELIVERY","sequence":2}
+{"id":"point-ee1106p","plan_id":"plan-ee1106","address_id":"addr-ee1106p","site_id":null,"role":"PICKUP","order_boundary":"PICKUP","sequence":1}
+{"id":"point-ee1106d","plan_id":"plan-ee1106","address_id":"addr-ee1106d","site_id":null,"role":"DELIVERY","order_boundary":"DELIVERY","sequence":2}
