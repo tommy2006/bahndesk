@@ -20,12 +20,19 @@ const { live, refreshAll } = await import('./lib/live.mjs');
 const { runAgent, runs, publicRun, agentAvailable, decideOutcome, provider, agentModel } = await import('./lib/agent.mjs');
 const { strikes, savedRoute, coordsOf } = await import('./lib/external.mjs');
 const { fiOf, translateMissing, pendingCount } = await import('./lib/i18n.mjs');
+const { explain } = await import('./lib/explain.mjs');
+const SOURCE_TITLES = {
+  live: { en: 'Live conditions', fi: 'Reaaliaikaiset olosuhteet' }, news: { en: 'News item', fi: 'Uutinen' },
+  route: { en: 'Saved road route', fi: 'Tallennettu tiereitti' }, timetable: { en: 'Published ferry timetable', fi: 'Julkaistu lautta-aikataulu' },
+  crossing: { en: 'Crossing on the route', fi: 'Ylitys reitillä' }, bahn: { en: 'What Bahn told us', fi: 'Mitä Bahn kertoi' },
+  rule: { en: 'Rule', fi: 'Sääntö' }, demo: { en: 'Demo data', fi: 'Demodata' },
+};
 const { translateStrings } = await import('./lib/agent.mjs');
 
 const PORT = Number(process.env.PORT || 3000);
-const DECISIONS = path.join(ROOT, 'data', 'decisions.json');
-const decisions = (() => { try { return JSON.parse(fs.readFileSync(DECISIONS, 'utf8')); } catch { return {}; } })();
-const saveDecisions = () => fs.writeFileSync(DECISIONS, JSON.stringify(decisions, null, 1));
+const { readJsonState, writeJsonState, onVercel } = await import('./lib/state.mjs');
+const decisions = readJsonState('decisions.json', {});
+const saveDecisions = () => writeJsonState('decisions.json', decisions);
 
 // Overlay people's decisions on the engine's lanes: a decided order leaves the queue.
 function withDecisions(a) {
@@ -118,6 +125,8 @@ function orderDetail(id) {
 
 // Map of an order: route legs coloured by risk, plus markers for risks (red/amber),
 // opportunities (green) and info (crossings, ports). Lines and points are [lat, lon].
+// Show port areas, not the sample data's invented terminal names.
+const portName = (s) => s.replace('West Baltic terminal', 'Travemünde port').replace('South Finland terminal', 'Helsinki port');
 const RISK = '#b23a22', WARN = '#c8871b', OK = '#165038', SEA = '#2f6db5';
 function orderMap(id) {
   const order = db.orders[id];
@@ -138,10 +147,10 @@ function orderMap(id) {
   }
   const ferryRisk = a.reasons.some((r) => ['missed_checkin', 'ferry_unbooked', 'ferry_sold_out', 'strike'].includes(r.kind));
   const legs = a.legs.map((l) => {
-    if (l.mode === 'ferry') return { mode: 'ferry', line: l.line, color: ferryRisk ? RISK : SEA, label: fi({ en: `Ferry ${l.label}${a.ferry ? `: ${a.ferry.provider || 'booked'}` : ''}`, fi: `Lautta ${l.label}` }) };
+    if (l.mode === 'ferry') return { mode: 'ferry', line: l.line, color: ferryRisk ? RISK : SEA, label: fi({ en: `Ferry ${l.label}: ${a.ferry ? (a.ferry.provider || 'booked') : 'not booked yet'}`, fi: `Lautta ${l.label}: ${a.ferry ? (a.ferry.provider || 'varattu') : 'ei vielä varattu'}` }) };
     // Red where a live notice sits on this leg, otherwise green.
     const hit = live.some((r) => r.kind === 'traffic' && r.point && l.line.some((p) => Math.abs(p[0] - r.point[0]) < 0.05 && Math.abs(p[1] - r.point[1]) < 0.08));
-    return { mode: 'drive', line: l.line, color: hit ? RISK : OK, label: fi({ en: `${l.key.replace('|', ' → ')} · ${Math.round(l.route.km)} km`, fi: `${l.key.replace('|', ' → ')} · ${Math.round(l.route.km)} km` }) };
+    return { mode: 'drive', line: l.line, color: hit ? RISK : OK, label: fi({ en: `${portName(l.key).replace('|', ' → ')} · ${Math.round(l.route.km)} km`, fi: `${portName(l.key).replace('|', ' → ')} · ${Math.round(l.route.km)} km` }) };
   });
   // Opportunities: fast chargers for EVs, a few rest areas, and a nearby open job for a waiting driver.
   for (const l of a.legs.filter((x) => x.mode === 'drive')) {
@@ -205,9 +214,14 @@ const send = (res, code, body, type = 'application/json; charset=utf-8') => {
 const readBody = (req) => new Promise((ok) => { let b = ''; req.on('data', (c) => (b += c)); req.on('end', () => { try { ok(JSON.parse(b || '{}')); } catch { ok({}); } }); });
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml', '.webp': 'image/webp', '.png': 'image/png' };
 
-const server = http.createServer(async (req, res) => {
+// One request handler for both: the local server below and the Vercel function (api/index.mjs).
+let lastRefresh = 0;
+export async function handler(req, res) {
   const url = new URL(req.url, 'http://x');
-  const p = url.pathname;
+  // Vercel rewrites /api/* to /api/index?path=*; restore the original path.
+  const p = url.pathname === '/api/index' && url.searchParams.has('path') ? `/api/${url.searchParams.get('path')}` : url.pathname;
+  // On Vercel there is no background timer: refresh live data when it is older than 10 min.
+  if (onVercel && Date.now() - lastRefresh > 10 * 60e3) { lastRefresh = Date.now(); refreshAll().catch(() => {}); }
   try {
     if (p === '/api/overview') return send(res, 200, overview());
     let m;
@@ -219,10 +233,13 @@ const server = http.createServer(async (req, res) => {
     if ((m = p.match(/^\/api\/source\/(\w+)\/(.+)$/))) {
       const rec = sourceRecord(m[1], decodeURIComponent(m[2]));
       if (!rec) return send(res, 200, { error: 'Not found' });
-      // Field names get Finnish; values stay exactly as recorded (they are the evidence).
+      // Plain-language explanation first; the raw record (field names in Finnish, values as
+      // recorded) stays available as technical detail.
       const keysFi = Object.fromEntries(Object.keys(rec).map((k) => [k, fiOf(k.replace(/_/g, ' '))]));
+      const explained = explain(m[1], rec, fiOf);
+      if (explained && !explained.title) explained.title = SOURCE_TITLES[m[1]] || { en: 'Source', fi: 'Lähde' };
       translateSoon();
-      return send(res, 200, { record: rec, keysFi });
+      return send(res, 200, { record: rec, keysFi, explained });
     }
     if (p === '/api/i18n') return send(res, 200, { pending: pendingCount() });
     if (req.method === 'POST' && (m = p.match(/^\/api\/orders\/([\w-]+)\/agent$/))) {
@@ -260,23 +277,27 @@ const server = http.createServer(async (req, res) => {
     console.error(e);
     send(res, 500, { error: e.message });
   }
-});
+}
 
-server.listen(PORT, () => {
-  console.log(`Bahn Control Room → http://localhost:${PORT}`);
-  console.log(agentAvailable() ? `Agent: ${provider() === 'claude' ? 'Claude' : 'Groq'} (${agentModel()})` : 'Agent: off (add ANTHROPIC_API_KEY or GROQ_API_KEY to .env)');
-});
+// Local run (npm start): a long-running server with background timers. On Vercel only
+// the handler is used.
+if (!onVercel) {
+  http.createServer(handler).listen(PORT, () => {
+    console.log(`Bahn Control Room → http://localhost:${PORT}`);
+    console.log(agentAvailable() ? `Agent: ${provider() === 'claude' ? 'Claude' : 'Groq'} (${agentModel()})` : 'Agent: off (add ANTHROPIC_API_KEY or GROQ_API_KEY to .env)');
+  });
 
-// Live data now and every 10 minutes; the engine re-reads it on every request.
-refreshAll().then(() => console.log(`Live data: ${live.status}`));
-setInterval(refreshAll, 10 * 60e3);
+  // Live data now and every 10 minutes; the engine re-reads it on every request.
+  refreshAll().then(() => console.log(`Live data: ${live.status}`));
+  setInterval(refreshAll, 10 * 60e3);
 
-// Background pass: the agent works the flagged orders before a person opens them.
-if (agentAvailable() && process.env.AUTO_AGENT !== '0') {
-  setTimeout(async () => {
-    for (const o of analyseAll().orders.filter((x) => x.lane === 'needs_you' && !runs[x.id]?.outcome)) {
-      try { await runAgent(o.id); console.log(`Agent finished ${o.ref}`); } catch (e) { console.log(`Agent ${o.ref}: ${e.message}`); }
-      await new Promise((r) => setTimeout(r, 3000));
-    }
-  }, 5000);
+  // Background pass: the agent works the flagged orders before a person opens them.
+  if (agentAvailable() && process.env.AUTO_AGENT !== '0') {
+    setTimeout(async () => {
+      for (const o of analyseAll().orders.filter((x) => x.lane === 'needs_you' && !runs[x.id]?.outcome)) {
+        try { await runAgent(o.id); console.log(`Agent finished ${o.ref}`); } catch (e) { console.log(`Agent ${o.ref}: ${e.message}`); }
+        await new Promise((r) => setTimeout(r, 3000));
+      }
+    }, 5000);
+  }
 }

@@ -53,10 +53,7 @@ function order(o) {
       origin_terminal: f.from, destination_terminal: f.to, origin_terminal_id: null, destination_terminal_id: null, route_label: 'Gulf of Finland crossing',
       schedule_basis: { kind: 'PUBLISHED_TIMETABLE', note: 'Times follow the operator’s published timetable; the booking itself is fictional.', recorded_at: o.accepted } });
   }
-  for (const q of o.quotes || []) {
-    add('travel_options', { id: `travel-ee${o.n}-${q.ship.replace(/\W/g, '')}`, order_id: id, assignment_id: o.driver ? `asg-ee${o.n}` : null, kind: 'FERRY', provider: `${q.operator} · ${q.ship}`, from_city: q.from, to_city: q.to,
-      departure_at: q.dep, arrival_at: q.arr, check_in_cutoff_at: q.cutoff, status: q.status || 'AVAILABLE_QUOTE', quote_cents: q.eur * 100, currency: 'EUR', capacity_note: q.note, checked_at: q.checked, road_time_to_terminal_hours: q.road });
-  }
+  // No quoted travel options: prices and spare-capacity notes would be invented.
   if (o.track) add('tracking_observations', { id: `track-ee${o.n}`, order_id: id, assignment_id: `asg-ee${o.n}`, segment_id: `seg-ee${o.n}`, observed_at: o.track.at, received_at: o.track.at, source: 'driver_app', location_quality: 'COARSE', progress_fraction: o.track.progress, distance_remaining_km: o.track.left, estimated_delivery_at: o.track.eta });
   for (const m of o.messages || []) {
     add('conversations', { id: `conv-ee${o.n}`, order_id: id, assignment_id: `asg-ee${o.n}`, category: 'on_the_road', channel: 'driver_app', counterparty_type: 'driver', counterparty_id: o.driver, status: 'OPEN', started_at: m.at, updated_at: m.at });
@@ -78,11 +75,7 @@ order({ n: '1102', customer: 'cus-002', status: 'WAITING_FOR_PICKUP', segStatus:
   pickup: { city: 'Tartu', country: 'EE', kind: 'DEALERSHIP', name: 'Läänemere Premium Cars Tartu', line: 'Riia mnt 999' },
   delivery: { city: 'Tampere', country: 'FI', kind: 'DEALERSHIP', name: 'Mervikko Auto Tampere', line: 'Hatanpään valtatie 999' },
   car: { make: 'BMW', model: 'i4', model_year: 2023, fuel: 'electric' }, km: 365, driver: 'drv-ee2', fee: 41000,
-  pickupSlot: [at('22', '09:00'), at('22', '11:00')], eta: [at('23', '09:00'), at('23', '12:00')], lta: at('23', '15:00'), pickupContact: 'Siim Pärnaste',
-  quotes: [
-    { operator: 'Viking Line', ship: 'Viking XPRS', from: 'Tallinn Old City Harbour (A)', to: 'Helsinki Katajanokka', dep: at('22', '15:30'), arr: at('22', '18:00'), cutoff: at('22', '14:45'), eur: 59, note: 'Few car spaces left; quoted, not booked', checked: '2026-10-21T07:40:00Z', road: 2.5 },
-    { operator: 'Tallink', ship: 'Megastar', from: 'Tallinn Old City Harbour (D)', to: 'Helsinki West Harbour (T2)', dep: at('22', '16:30'), arr: at('22', '18:30'), cutoff: at('22', '15:45'), eur: 69, note: 'Quoted, not booked', checked: '2026-10-21T07:40:00Z', road: 2.5 },
-  ] });
+  pickupSlot: [at('22', '09:00'), at('22', '11:00')], eta: [at('23', '09:00'), at('23', '12:00')], lta: at('23', '15:00'), pickupContact: 'Siim Pärnaste', });
 
 // 3. Export in progress: Helsinki → Tallinn on the 10:30 Viking XPRS (already sailing).
 order({ n: '1103', customer: 'cus-ee1', status: 'IN_TRANSIT', segStatus: 'IN_PROGRESS', created: '2026-10-17T10:00:00Z', accepted: '2026-10-18T09:20:00Z', started: at('21', '08:40'),
@@ -98,8 +91,7 @@ order({ n: '1104', customer: 'cus-ee2', status: 'NEW', readiness: 'CONFIRMED', s
   pickup: { city: 'Pärnu', country: 'EE', kind: 'PRIVATE_HOME', name: 'Private seller', line: 'Rannametsa tee 999', access: 'Seller hands over the keys in person; second key with a relative, not yet confirmed.' },
   delivery: { city: 'Espoo', country: 'FI', kind: 'DEALERSHIP', name: 'Norvessia Autotalot Espoo', line: 'Tekniikantie 999' },
   car: { make: 'Ferrari', model: 'Roma', model_year: 2021, fuel: 'petrol' }, km: 150, fee: 69000, pickupAccess: 'NEEDS_VERIFICATION', pickupContact: 'Private seller',
-  pickupSlot: [at('23', '10:00'), at('23', '12:00')], eta: [at('24', '09:00'), at('24', '12:00')], lta: at('24', '16:00'),
-  quotes: [{ operator: 'Tallink', ship: 'Megastar', from: 'Tallinn Old City Harbour (D)', to: 'Helsinki West Harbour (T2)', dep: at('23', '16:30'), arr: at('23', '18:30'), cutoff: at('23', '15:45'), eur: 69, note: 'Quoted, not booked', checked: '2026-10-21T06:50:00Z', road: 2 }] });
+  pickupSlot: [at('23', '10:00'), at('23', '12:00')], eta: [at('24', '09:00'), at('24', '12:00')], lta: at('24', '16:00'), });
 
 // 5. Tallinn → Turku: driver will miss the 13:30 MyStar check-in (papers not ready).
 order({ n: '1105', customer: 'cus-001', status: 'IN_TRANSIT', segStatus: 'IN_PROGRESS', created: '2026-10-18T12:00:00Z', accepted: '2026-10-19T08:30:00Z', started: at('21', '10:30'),

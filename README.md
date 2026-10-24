@@ -44,7 +44,11 @@ It's cheap and explainable, so it can run on a million orders. The language mode
 
 ## The agent
 
-`lib/agent.mjs` is a Groq tool-calling loop. It reads first (order, messages, driver record, live conditions, ferries, alternative drivers). It may ask the driver or pickup site, which is simulated. Then it must either `propose_decision` (a person approves) or `resolve_without_person`. That second option is refused if anything needs a human. It never contacts customers and never changes a booking, date, cost or driver without approval. At startup it works through the flagged orders in the background, so the proposal is waiting when a person opens the order.
+`lib/agent.mjs` is a tool-calling loop on Claude (`claude-opus-5-5`), with Groq as a fallback. It reads first (order, messages, driver record, live conditions, booked ferries and real Helsinki–Tallinn sailings, alternative drivers). It may ask the driver or pickup site, which is simulated. Then it must either `propose_decision` (a person approves) or `resolve_without_person`. That second option is refused if anything needs a human. It never contacts customers and never changes a booking, date, cost or driver without approval. At startup it works through the flagged orders in the background, so the proposal is waiting when a person opens the order. Answers to a person are at most four short bullet points.
+
+## Evidence a dispatcher can read
+
+Every reason links to the record behind it. The drawer (`lib/explain.mjs`) explains that record in plain words: what it is, what it says, and when (in Helsinki time). Messages are quoted as written. IDs, codes and raw field names are hidden under "Show technical details".
 
 ## The database: `data/bahn.db`
 
@@ -56,7 +60,7 @@ Everything the app knows sits in one SQLite file. Open it in any SQLite viewer, 
 | `ref_routes` | Road route for every Finnish leg: distance, drive time, geometry (OSRM over OpenStreetMap) |
 | `ref_pois` | Every fuel station, EV charger (with socket types) and rest area in Finland, about 6,500 places (OpenStreetMap) |
 | `ref_route_pois` | Which of those lie within 2 km of each route, and at which km |
-| `ref_ferry_routes`, `ferry_terminals`, `travel_options`, `travel_reservations` | Ferry timetable, terminals, quotes and bookings |
+| `ref_ferry_sailings`, `ferry_terminals`, `travel_reservations` | Real Helsinki–Tallinn sailings, terminals, and the bookings in the snapshot |
 | `ref_news` | Strike and disruption notices |
 | `live_weather`, `live_traffic` | Every live fetch, appended, so there is a history |
 
@@ -86,10 +90,23 @@ Map data © OpenStreetMap contributors, available under the ODbL.
 | EV range | range model by car and temperature | demo data |
 | Helsinki–Tallinn sailings (Tallink, Viking Line, Eckerö Line) | published timetable via [laevapiletid.ee](https://laevapiletid.ee/timetables/eng/helsinki-tallinn.html), service day 25 Oct 2026, saved in `bahn.db` → `ref_ferry_sailings` | real times; terminals from general knowledge; prices indicative; nothing is booked |
 | Estonian routes, fuel, chargers, rest areas | OSRM / OpenStreetMap, saved in `bahn.db` | real, cached |
-| Strike news, Baltic/North Sea ferry timetable | `data/external/*.json` | fictional |
+| Strike news | `data/external/strikes.json` | fictional |
 | Customer price | driver fee × 1.38 | demo data |
 
+No invented operators or travel quotes: the snapshot's made-up ferry lines, airlines, hotels and quoted options are dropped when the data loads (`lib/data.mjs`). Bookings without a real operator say "operator not named in the booking". The Travemünde → Helsinki crossing has no loaded timetable, so the agent proposes that a person books it rather than inventing a sailing.
+
 Demo and live data are labelled in the UI. If live sources are unreachable the app uses the last saved fetch and says so.
+
+## Deploy to Vercel
+
+The same code runs as one Vercel function (`api/index.mjs` → `server.mjs`'s `handler`); `vercel.json` serves `public/` and rewrites `/api/*` to it.
+
+1. In Vercel: **Add New → Project**, import `tommy2006/bahndesk`. Framework preset: **Other**. Leave build and install commands as default.
+2. **Settings → Environment Variables:** add `ANTHROPIC_API_KEY` (optional; without it the saved proposals still show, but new runs and chat are off).
+3. **Settings → General → Node.js Version:** 22.x or newer (`node:sqlite` is needed).
+4. **Deploy**, then open `https://<project>.vercel.app/api/overview` to check it returns JSON.
+
+On Vercel, decisions, new agent runs and new translations are written to the function's `/tmp`. They last while that instance is warm and reset on a new deploy or cold start. Live data refreshes on the first request after 10 minutes instead of on a timer. Agent runs can take up to the 60 s function limit.
 
 ## Running the agent ahead of time
 

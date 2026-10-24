@@ -13,12 +13,12 @@ const T = {
     times: 'Arrival', eta_orig: "Customer's ETA (original)", lta: 'Latest acceptable', if_nothing: 'If nothing is done', if_approve: 'If you approve (new ETA)', predicted: 'Predicted arrival',
     unknown: 'Unknown', late_by: 'late {h}', on_time: 'in time', vs_orig: '{d} vs original',
     conditions: 'Route & road', leg_ee: 'Estonia', leg_fi: 'Finland', ferry: 'Ferry', booked: 'Booked', not_booked: 'Not booked yet', harbour: 'harbour', timetable: 'published timetable',
-    along: 'Along the Finnish leg', fuel: 'fuel', fast: 'fast chargers', rest: 'rest areas', energy: 'Energy, whole trip', stops: '{n} charging stop(s), {km} km per charge', fuel_ok: 'No fuel stop needed', fuel_stops: '{n} fuel stop(s)', charge_at: 'Charge at',
+    along: 'Along the route', fuel: 'fuel', fast: 'fast chargers', rest: 'rest areas', energy: 'Energy, whole trip', stops: '{n} charging stop(s), {km} km per charge', fuel_ok: 'No fuel stop needed', fuel_stops: '{n} fuel stop(s)', charge_at: 'Charge at',
     live_h: 'Weather and roads now', no_warn: 'No weather or road warnings on this route.', ee_roads: 'Estonian road notices are not connected yet (Tark Tee needs an API key). Weather is live.',
     driver: 'Driver', no_driver: 'No driver yet', on_time_rate: 'On time', deliveries: 'Deliveries (12 mo)', claims: 'Damage claims (12 mo)', demo: 'demo history',
     better: 'Better-matched drivers', offer_to: 'Offer job',
     agent_title: 'What the agent did', run_agent: 'Let the agent look into it', agent_off: 'The agent is off. Add ANTHROPIC_API_KEY to .env and restart.', working: 'The agent is working…', ask_ph: 'Ask the agent or tell it what to do instead…', send: 'Send', you: 'You',
-    timeline: 'What happened', show_all: 'Show all {n}', show_less: 'Show less', decided: 'Decided', decided_note: 'Decided at {time}: {choice}.', approved: 'Approved', changed: 'Changed', other_options: 'Other options', map_label: 'Route map', sec_evidence: 'Evidence and sources ({n})', agent_found: 'What the agent found', sec_arrival: 'Confidence {c}% and arrival times', sec_route: 'Route, stops and road conditions', sec_agent: 'What the agent did ({n} steps)', sec_driver: 'Driver: {name}', sec_history: 'History ({n})', overdue: 'Overdue {t}', left: '{t} left', if_approve_short: 'If you approve', lg_clear: 'Clear road', lg_risk: 'Risk', lg_warn: 'Caution', lg_good: 'Opportunity', lg_ferry: 'Ferry', urgent_first: 'Most urgent first.', next_up: 'Do this now', demo_data: 'demo data', live_tag: 'live', yrs: 'yrs', agent_label: 'Agent', who: { operator: 'Operator', driver: 'Driver', customer: 'Customer', agent: 'Agent', system: 'System', person: 'You', site_contact: 'Site', handoff_contact: 'Handover contact' },
+    timeline: 'What happened', show_all: 'Show all {n}', show_less: 'Show less', decided: 'Decided', decided_note: 'Decided at {time}: {choice}.', approved: 'Approved', changed: 'Changed', other_options: 'Other options', tech_details: 'Show technical details', map_label: 'Route map', sec_evidence: 'Evidence and sources ({n})', agent_found: 'What the agent found', sec_arrival: 'Confidence {c}% and arrival times', sec_route: 'Route, stops and road conditions', sec_agent: 'What the agent did ({n} steps)', sec_driver: 'Driver: {name}', sec_history: 'History ({n})', overdue: 'Overdue {t}', left: '{t} left', if_approve_short: 'If you approve', lg_clear: 'Clear road', lg_risk: 'Risk', lg_warn: 'Caution', lg_good: 'Opportunity', lg_ferry: 'Ferry', urgent_first: 'Most urgent first.', next_up: 'Do this now', demo_data: 'demo data', live_tag: 'live', yrs: 'yrs', agent_label: 'Agent', who: { operator: 'Operator', driver: 'Driver', customer: 'Customer', agent: 'Agent', system: 'System', person: 'You', site_contact: 'Site', handoff_contact: 'Handover contact' },
     undo: 'Undo', source: 'Source', close: 'Close', factor: { readiness: 'Readiness', schedule: 'Schedule', route: 'Route', car: 'Car', driver: 'Driver', market: 'Driver market', external: 'News' },
     group_affects: 'Affects {n} cars', group_decided: 'Decided: {choice}. The agent is carrying it out on each car.', reroute: 'Rebook all', keep_warn: 'Keep and warn dealers',
     nothing: 'No open signals.', resolved: 'The agent settled this without a person.', change_ph: 'What should happen instead?', confirm_change: 'Send to agent', approve: 'Approve', change: 'Change',
@@ -40,12 +40,12 @@ const T = {
     times: 'Saapuminen', eta_orig: 'Asiakkaan toive (alkuperäinen)', lta: 'Viimeistään', if_nothing: 'Jos mitään ei tehdä', if_approve: 'Jos hyväksyt (uusi arvio)', predicted: 'Ennuste',
     unknown: 'Tuntematon', late_by: 'myöhässä {h}', on_time: 'ajallaan', vs_orig: '{d} alkuperäiseen',
     conditions: 'Reitti ja tiet', leg_ee: 'Viro', leg_fi: 'Suomi', ferry: 'Lautta', booked: 'Varattu', not_booked: 'Ei vielä varattu', harbour: 'satama', timetable: 'julkaistu aikataulu',
-    along: 'Suomen osuuden varrella', fuel: 'asemaa', fast: 'pikalaturia', rest: 'levähdyspaikkaa', energy: 'Energia, koko matka', stops: '{n} latausta, {km} km / lataus', fuel_ok: 'Ei tankkausta', fuel_stops: '{n} tankkausta', charge_at: 'Lataa',
+    along: 'Reitin varrella', fuel: 'asemaa', fast: 'pikalaturia', rest: 'levähdyspaikkaa', energy: 'Energia, koko matka', stops: '{n} latausta, {km} km / lataus', fuel_ok: 'Ei tankkausta', fuel_stops: '{n} tankkausta', charge_at: 'Lataa',
     live_h: 'Sää ja tiet nyt', no_warn: 'Ei sää- tai tievaroituksia reitillä.', ee_roads: 'Viron tiedotteita ei ole vielä kytketty (Tark Tee vaatii API-avaimen). Sää on reaaliaikainen.',
     driver: 'Kuljettaja', no_driver: 'Ei vielä kuljettajaa', on_time_rate: 'Ajallaan', deliveries: 'Toimituksia (12 kk)', claims: 'Vahinkoja (12 kk)', demo: 'demohistoria',
     better: 'Paremmin sopivat kuljettajat', offer_to: 'Tarjoa',
     agent_title: 'Mitä agentti teki', run_agent: 'Anna agentin selvittää', agent_off: 'Agentti ei ole päällä. Lisää ANTHROPIC_API_KEY .env-tiedostoon.', working: 'Agentti työskentelee…', ask_ph: 'Kysy agentilta tai kerro mitä tehdä…', send: 'Lähetä', you: 'Sinä',
-    timeline: 'Tapahtumat', show_all: 'Näytä kaikki {n}', show_less: 'Näytä vähemmän', decided: 'Päätetty', decided_note: 'Päätetty klo {time}: {choice}.', approved: 'Hyväksytty', changed: 'Muutettu', other_options: 'Muut vaihtoehdot', map_label: 'Reittikartta', sec_evidence: 'Näytöt ja lähteet ({n})', agent_found: 'Mitä agentti löysi', sec_arrival: 'Luottamus {c} % ja saapumisajat', sec_route: 'Reitti, pysähdykset ja tieolosuhteet', sec_agent: 'Mitä agentti teki ({n} vaihetta)', sec_driver: 'Kuljettaja: {name}', sec_history: 'Tapahtumat ({n})', overdue: 'Myöhässä {t}', left: '{t} jäljellä', if_approve_short: 'Jos hyväksyt', lg_clear: 'Tie vapaa', lg_risk: 'Riski', lg_warn: 'Varoitus', lg_good: 'Mahdollisuus', lg_ferry: 'Lautta', urgent_first: 'Kiireellisin ensin.', next_up: 'Tee tämä nyt', demo_data: 'demodata', live_tag: 'reaaliaikainen', yrs: 'v', agent_label: 'Agentti', who: { operator: 'Operaattori', driver: 'Kuljettaja', customer: 'Asiakas', agent: 'Agentti', system: 'Järjestelmä', person: 'Sinä', site_contact: 'Noutopaikka', handoff_contact: 'Luovutusyhteyshenkilö' },
+    timeline: 'Tapahtumat', show_all: 'Näytä kaikki {n}', show_less: 'Näytä vähemmän', decided: 'Päätetty', decided_note: 'Päätetty klo {time}: {choice}.', approved: 'Hyväksytty', changed: 'Muutettu', other_options: 'Muut vaihtoehdot', tech_details: 'Näytä tekniset tiedot', map_label: 'Reittikartta', sec_evidence: 'Näytöt ja lähteet ({n})', agent_found: 'Mitä agentti löysi', sec_arrival: 'Luottamus {c} % ja saapumisajat', sec_route: 'Reitti, pysähdykset ja tieolosuhteet', sec_agent: 'Mitä agentti teki ({n} vaihetta)', sec_driver: 'Kuljettaja: {name}', sec_history: 'Tapahtumat ({n})', overdue: 'Myöhässä {t}', left: '{t} jäljellä', if_approve_short: 'Jos hyväksyt', lg_clear: 'Tie vapaa', lg_risk: 'Riski', lg_warn: 'Varoitus', lg_good: 'Mahdollisuus', lg_ferry: 'Lautta', urgent_first: 'Kiireellisin ensin.', next_up: 'Tee tämä nyt', demo_data: 'demodata', live_tag: 'reaaliaikainen', yrs: 'v', agent_label: 'Agentti', who: { operator: 'Operaattori', driver: 'Kuljettaja', customer: 'Asiakas', agent: 'Agentti', system: 'Järjestelmä', person: 'Sinä', site_contact: 'Noutopaikka', handoff_contact: 'Luovutusyhteyshenkilö' },
     undo: 'Kumoa', source: 'Lähde', close: 'Sulje', factor: { readiness: 'Valmius', schedule: 'Aikataulu', route: 'Reitti', car: 'Auto', driver: 'Kuljettaja', market: 'Kuljettajamarkkina', external: 'Uutiset' },
     group_affects: 'Koskee {n} autoa', group_decided: 'Päätetty: {choice}. Agentti toteuttaa sen jokaiselle autolle.', reroute: 'Varaa kaikki uudelleen', keep_warn: 'Pidä ja varoita',
     nothing: 'Ei avoimia signaaleja.', resolved: 'Agentti ratkaisi tämän ilman ihmistä.', change_ph: 'Mitä pitäisi tehdä?', confirm_change: 'Lähetä agentille', approve: 'Hyväksy', change: 'Muuta',
@@ -77,6 +77,14 @@ const agentText = (s) => esc(String(s ?? '')
 // Source labels and actor names in the current language (server sends cached Finnish).
 const srcLabel = (s) => (state.lang === 'fi' && s.labelFi) || s.label;
 const whoName = (w) => { const n = t('who.' + w); return n.startsWith('who.') ? w : n; };
+// Agent replies: lines starting with •, - or * become a real list.
+function bulleted(text) {
+  const lines = String(text ?? '').split(/\n+/).map((l) => l.trim()).filter(Boolean);
+  const items = lines.filter((l) => /^[•\-*]\s+/.test(l));
+  if (items.length < 2) return agentText(text);
+  const lead = lines.filter((l) => !/^[•\-*]\s+/.test(l));
+  return `${lead.length ? agentText(lead.join(' ')) : ''}<ul class="say-list">${items.map((l) => `<li>${agentText(l.replace(/^[•\-*]\s+/, ''))}</li>`).join('')}</ul>`;
+}
 // The agent's proposal in the current language (Finnish translation when available).
 const P = (p, key) => (state.lang === 'fi' && p.fi?.[key]) || p[key];
 function localGet(k) { try { return localStorage.getItem(k); } catch { return null; } }
@@ -377,22 +385,31 @@ function timesBlock(d) {
 function conditionsBlock(d) {
   const fi = state.lang === 'fi';
   // `port` is the end of the leg that is the ferry harbour (0 = start, 1 = end).
-  const legName = (key, port) => key.split('|').map((c, i) => (i === port ? `${c} ${t('harbour')}` : c)).join(' → ');
+  const PORTS = { 'West Baltic terminal': 'Travemünde', 'South Finland terminal': 'Helsinki' };
+  const legName = (key, port) => key.split('|').map((c, i) => { const n = PORTS[c] || c; return i === port || PORTS[c] ? `${n} ${t('harbour')}` : n; }).join(' → ');
   const leg = (icon, r, port) => `<li><span class="ic">${icon}</span><span><b>${esc(legName(r.key, port))}</b> · ${Math.round(r.km)} km · ${fmtH(r.minutes / 60)}
     <button class="src" data-src="route/${encodeURIComponent(r.key)}">OSM</button></span></li>`;
   const legs = [];
   const eeFirst = d.gulf === 'TLL-HEL';
   if (d.eeRoute && eeFirst) legs.push(leg('EE', d.eeRoute, 1));
   if (d.fiRoute && d.gulf === 'HEL-TLL') legs.push(leg('FI', d.fiRoute, 1));
+  const booked = d.ferry ? `${t('booked')}: ${d.ferry.provider ? `${esc(d.ferry.provider)} ` : ''}${fmt(d.ferry.departs, { weekday: 'short', hour: '2-digit', minute: '2-digit' })}` : `<span class="bad">${t('not_booked')}</span>`;
   if (d.gulf) {
-    legs.push(`<li><span class="ic">≈</span><span><b>${d.gulf === 'TLL-HEL' ? 'Tallinn → Helsinki' : 'Helsinki → Tallinn'}</b> · ${d.ferry ? `${t('booked')}: ${esc(d.ferry.provider)} ${fmt(d.ferry.departs, { hour: '2-digit', minute: '2-digit' })}` : `<span class="bad">${t('not_booked')}</span>`}
+    legs.push(`<li><span class="ic">≈</span><span><b>${d.gulf === 'TLL-HEL' ? 'Tallinn → Helsinki' : 'Helsinki → Tallinn'}</b> · ${booked}
       <button class="src" data-src="timetable/${d.gulf}">${t('timetable')}</button></span></li>`);
+  }
+  // Continent → Finland: drive to Travemünde, ferry to Helsinki.
+  const baltic = d.legs?.some((l) => l.mode === 'ferry' && l.key.startsWith('West Baltic'));
+  if (d.contRoute && baltic) {
+    legs.push(leg(d.from.country, d.contRoute, 1));
+    legs.push(`<li><span class="ic">≈</span><span><b>Travemünde → Helsinki</b> · ${booked}</span></li>`);
   }
   if (d.eeRoute && d.gulf === 'HEL-TLL') legs.push(leg('EE', d.eeRoute, 0));
   if (d.fiRoute && d.gulf !== 'HEL-TLL') legs.push(leg('FI', d.fiRoute, d.gulf ? 0 : -1));
+  if (d.contRoute && !baltic) legs.push(leg(d.from.country, d.contRoute, -1));
   if (!legs.length) legs.push(`<li><span class="ic">→</span><span>${d.driveKm} km</span></li>`);
 
-  const r = d.fiRoute;
+  const r = d.fiRoute || d.contRoute;
   const e = d.energy;
   const energy = !e ? '' : e.kind === 'electric' ? t('stops', { n: e.stops, km: e.rangeKm }) : e.stops ? t('fuel_stops', { n: e.stops }) : t('fuel_ok');
   const live = d.reasons.filter((x) => x.source.table === 'live');
@@ -410,7 +427,7 @@ function agentCard(d) {
   const icon = { tool: '✓', say: '›', person: '›' };
   const label = (s) => {
     if (s.type === 'person') return `<b>${t('you')}:</b> ${esc(s.text)}`;
-    if (s.type === 'say') return `<b>${t('agent_label')}:</b> ${agentText(s.text)}`;
+    if (s.type === 'say') return `<b>${t('agent_label')}:</b> ${bulleted(s.text)}`;
     const q = s.args?.question ? ` “${esc(s.args.question)}”` : '';
     return `<b>${esc(t('step.' + s.name).startsWith('step.') ? s.name.replace(/_/g, ' ') : t('step.' + s.name))}</b>${q}${s.summary && s.name !== 'propose_decision' ? ` — ${agentText((state.lang === 'fi' && s.summaryFi) || s.summary)}` : ''}`;
   };
@@ -455,9 +472,17 @@ async function openSource(key) {
   const keyName = (k) => (state.lang === 'fi' && res.keysFi?.[k]) || k.replace(/_/g, ' ');
   const rows = Object.entries(rec || {}).filter(([, v]) => v !== null && v !== '' && !(Array.isArray(v) && !v.length));
   const val = (v) => (typeof v === 'object' ? esc(JSON.stringify(v, null, 1)) : esc(String(v)));
+  const ex = res.explained;
+  // Plain language for the dispatcher; the raw record only on request.
+  const plain = ex ? `<h3>${esc(L(ex.title))}</h3>
+    ${ex.intro ? `<blockquote class="ev-quote">${esc(L(ex.intro))}</blockquote>` : ''}
+    <dl class="kv ev">${ex.facts.map((f) => `<dt>${esc(L(f.label))}</dt><dd>${esc(L(f.value))}</dd>`).join('')}</dl>` : `<h3>${t('source')}</h3>`;
   sheet.innerHTML = `<div class="panel" role="dialog" aria-label="${t('source')}">
-    <div style="display:flex;justify-content:space-between;align-items:start;gap:12px"><div><h3>${t('source')}</h3><div class="meta">${esc(table.replace(/_/g, ' '))} · ${esc(id)}</div></div><button class="btn small" data-close>${t('close')}</button></div>
-    <dl class="kv">${rows.map(([k, v]) => `<dt>${esc(keyName(k))}</dt><dd>${val(v)}</dd>`).join('')}</dl></div>`;
+    <div class="ev-head"><div class="meta">${t('source')}</div><button class="btn small" data-close>${t('close')}</button></div>
+    ${plain}
+    <details class="raw"><summary>${t('tech_details')}</summary>
+      <div class="meta">${esc(table.replace(/_/g, ' '))} · ${esc(id)}</div>
+      <dl class="kv">${rows.map(([k, v]) => `<dt>${esc(keyName(k))}</dt><dd>${val(v)}</dd>`).join('')}</dl></details></div>`;
 }
 
 // ---------- Actions ----------

@@ -1,8 +1,0 @@
-{
-  "source": "Demo ferry timetable (fictional operators)",
-  "routes": [
-    { "from": "West Baltic terminal", "to": "South Finland terminal", "operator": "Vela Coast Lines", "departs_local": ["02:00", "12:00", "22:00"], "hours": 28, "vehicle_price_eur": 387 },
-    { "from": "East Nordic terminal", "to": "South Finland terminal", "operator": "Nordhavn Ferries", "departs_local": ["10:00", "17:30"], "hours": 21, "vehicle_price_eur": 312 },
-    { "from": "West Baltic terminal", "to": "Southwest Finland terminal", "operator": "Vela Coast Lines", "departs_local": ["08:00"], "hours": 30, "vehicle_price_eur": 402, "note": "Arrives at a different Finnish port, outside the strike notice" }
-  ]
-}

@@ -1,0 +1,14 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "outputDirectory": "public",
+  "functions": {
+    "api/index.mjs": {
+      "maxDuration": 60,
+      "includeFiles": "{server.mjs,lib/**,data/bahn.db,data/runs.json,data/i18n-fi.json,data/bahn/**,data/demo-ee/**,data/external/ferries-fi-ee.json,data/external/strikes.json}"
+    }
+  },
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "/api/index?path=:path*" }
+  ]
+}

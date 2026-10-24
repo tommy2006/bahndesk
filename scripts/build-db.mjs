@@ -24,11 +24,8 @@ const { CITY } = await import('../lib/external.mjs');
 const { kmFromSegment, refreshAll } = await import('../lib/live.mjs');
 const db = sql();
 
-// 2. Ferries and news (fictional, as the challenge rules require)
-const ferries = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/external/ferries.json'), 'utf8'));
-db.exec('DELETE FROM ref_ferry_routes');
-const fins = db.prepare('INSERT INTO ref_ferry_routes (operator, from_terminal, to_terminal, departs_local, hours, vehicle_price_eur, note, source) VALUES (?,?,?,?,?,?,?,?)');
-for (const r of ferries.routes) fins.run(r.operator, r.from, r.to, r.departs_local.join(','), r.hours, r.vehicle_price_eur, r.note || null, ferries.source);
+// 2. Ferries and news. Only the real published Helsinki–Tallinn timetable; no invented operators.
+db.exec('DROP TABLE IF EXISTS ref_ferry_routes');
 // Real Helsinki–Tallinn timetable (published times; prices indicative)
 const ee = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/external/ferries-fi-ee.json'), 'utf8'));
 db.exec('DELETE FROM ref_ferry_sailings');
@@ -39,7 +36,7 @@ const news = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/external/strikes.j
 db.exec('DELETE FROM ref_news');
 const nins = db.prepare('INSERT INTO ref_news VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)');
 for (const s of news) nins.run(s.id, s.kind, s.status, s.title.en, s.title.fi, s.detail.en, s.detail.fi, s.terminal_id || null, s.region || null, s.starts_at, s.ends_at, s.source, s.published_at);
-log(`Ferry timetable (${ferries.routes.length} routes) and news (${news.length}) saved`);
+log(`News saved (${news.length})`);
 
 // 3. Fuel, EV charging and rest stops in Finland (OpenStreetMap, © OpenStreetMap contributors, ODbL)
 const ALL = (bbox) => `[out:json][timeout:270][bbox:${bbox}];(node[amenity~"^(fuel|charging_station)$"];way[amenity=fuel];node[highway~"^(rest_area|services)$"];way[highway~"^(rest_area|services)$"];);out center tags;`;
