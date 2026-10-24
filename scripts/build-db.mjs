@@ -42,21 +42,33 @@ for (const s of news) nins.run(s.id, s.kind, s.status, s.title.en, s.title.fi, s
 log(`Ferry timetable (${ferries.routes.length} routes) and news (${news.length}) saved`);
 
 // 3. Fuel, EV charging and rest stops in Finland (OpenStreetMap, © OpenStreetMap contributors, ODbL)
-const POI_SETS = [['fi', '59.6,19.4,70.1,31.6', 'Finland'], ['ee', '57.5,21.7,59.8,28.3', 'Estonia']];
+const ALL = (bbox) => `[out:json][timeout:270][bbox:${bbox}];(node[amenity~"^(fuel|charging_station)$"];way[amenity=fuel];node[highway~"^(rest_area|services)$"];way[highway~"^(rest_area|services)$"];);out center tags;`;
+// Germany has ~100k chargers; keep fuel, rest areas and fast (CCS/Tesla) chargers only, in four bands.
+const DE = (bbox) => `[out:json][timeout:270][bbox:${bbox}];(nwr[amenity=fuel];node[amenity=charging_station]["socket:type2_combo"];node[amenity=charging_station]["socket:tesla_supercharger"];nwr[highway~"^(rest_area|services)$"];);out center tags;`;
+const POI_SETS = [
+  ['fi', ALL('59.6,19.4,70.1,31.6'), 'Finland'], ['ee', ALL('57.5,21.7,59.8,28.3'), 'Estonia'], ['dk', ALL('54.5,8.0,57.8,15.3'), 'Denmark'],
+  ['de1', DE('53.2,5.8,55.1,15.1'), 'Germany (north)'], ['de2', DE('51.5,5.8,53.2,15.1'), 'Germany (north-central)'],
+  ['de3', DE('49.5,5.8,51.5,15.1'), 'Germany (south-central)'], ['de4', DE('47.2,5.8,49.5,15.1'), 'Germany (south)'],
+];
 const havePois = db.prepare('SELECT COUNT(*) n FROM ref_pois').get().n;
 const missingFile = POI_SETS.some(([c]) => !fs.existsSync(path.join(ROOT, `data/external/osm-pois-${c}.json`)));
 if (!havePois || missingFile || REFRESH) {
   db.exec('DELETE FROM ref_pois');
-  for (const [cc, bbox, country] of POI_SETS) {
+  for (const [cc, query, country] of POI_SETS) {
   const poiFile = path.join(ROOT, `data/external/osm-pois-${cc}.json`);
   if (!fs.existsSync(poiFile) || REFRESH) {
     log(`Downloading ${country} fuel/charging/rest stops from OpenStreetMap (can take ~2 min)…`);
-    const q = `[out:json][timeout:270][bbox:${bbox}];(node[amenity~"^(fuel|charging_station)$"];way[amenity=fuel];node[highway~"^(rest_area|services)$"];way[highway~"^(rest_area|services)$"];);out center tags;`;
-    const res = await fetch('https://overpass-api.de/api/interpreter', { method: 'POST', headers: { ...UA, 'Content-Type': 'application/x-www-form-urlencoded' }, body: 'data=' + encodeURIComponent(q), signal: AbortSignal.timeout(300000) });
-    if (!res.ok) throw new Error(`Overpass ${res.status}`);
-    fs.writeFileSync(poiFile, await res.text());
+    // The public Overpass server throttles big back-to-back queries: retry after a pause.
+    for (let attempt = 1; ; attempt++) {
+      const res = await fetch('https://overpass-api.de/api/interpreter', { method: 'POST', headers: { ...UA, 'Content-Type': 'application/x-www-form-urlencoded' }, body: 'data=' + encodeURIComponent(query), signal: AbortSignal.timeout(300000) }).catch((e) => ({ ok: false, status: e.message }));
+      if (res.ok) { fs.writeFileSync(poiFile, await res.text()); break; }
+      if (attempt >= 4) { log(`Overpass kept failing for ${country}; skipping its stops this run`); break; }
+      log(`Overpass ${res.status} for ${country}; retrying in 45 s`);
+      await new Promise((ok) => setTimeout(ok, 45000));
+    }
   }
-  const osm = JSON.parse(fs.readFileSync(poiFile, 'utf8'));
+  if (!fs.existsSync(poiFile)) continue;
+  let osm; try { osm = JSON.parse(fs.readFileSync(poiFile, "utf8")); } catch { log(`Bad stops file for ${country}; skipped`); continue; }
   const fetchedAt = osm.osm3s?.timestamp_osm_base || now();
   const pins = db.prepare('INSERT OR REPLACE INTO ref_pois VALUES (?,?,?,?,?,?,?,?,?,?,?)');
   db.exec('BEGIN');
@@ -78,9 +90,16 @@ log(`${db.prepare('SELECT COUNT(*) n FROM ref_pois').get().n} stops saved`);
 const orders = db.prepare('SELECT * FROM orders').all();
 const addr = Object.fromEntries(db.prepare('SELECT id, city, country FROM addresses').all().map((a) => [a.id, a]));
 const legs = new Set();
+const NORDIC = ['FI', 'EE'], MAIN = ['DE', 'DK'];
 for (const o of orders) {
   const p = addr[o.pickup_address_id], d = addr[o.delivery_address_id];
   if (!p || !d) continue;
+  const inScope = (NORDIC.includes(p.country) && NORDIC.includes(d.country)) || MAIN.includes(p.country) || MAIN.includes(d.country);
+  if (!inScope) continue;
+  // Into Finland from the continent: drive to the West Baltic terminal, ferry to Helsinki.
+  if (d.country === 'FI' && !NORDIC.includes(p.country)) legs.add(`${p.city}|West Baltic terminal`);
+  // Neither end in Finland/Estonia: one road route end to end.
+  if (!NORDIC.includes(p.country) && !NORDIC.includes(d.country)) legs.add(`${p.city}|${d.city}`);
   if (d.country === 'FI') legs.add(`${p.country === 'FI' ? p.city : 'Helsinki'}|${d.city}`);
   // Estonian legs: to / from Tallinn harbour
   if (p.country === 'EE') legs.add(`${p.city}|Tallinn`);

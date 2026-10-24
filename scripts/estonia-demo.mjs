@@ -80,8 +80,8 @@ order({ n: '1102', customer: 'cus-002', status: 'WAITING_FOR_PICKUP', segStatus:
   car: { make: 'BMW', model: 'i4', model_year: 2023, fuel: 'electric' }, km: 365, driver: 'drv-ee2', fee: 41000,
   pickupSlot: [at('22', '09:00'), at('22', '11:00')], eta: [at('23', '09:00'), at('23', '12:00')], lta: at('23', '15:00'), pickupContact: 'Siim Pärnaste',
   quotes: [
-    { operator: 'Viking Line', ship: 'Viking XPRS', from: 'Tallinn Old City Harbour (A)', to: 'Helsinki Katajanokka', dep: at('22', '15:30'), arr: at('22', '18:00'), cutoff: at('22', '14:45'), eur: 139, note: 'Few car spaces left; quoted, not booked', checked: '2026-10-21T07:40:00Z', road: 2.5 },
-    { operator: 'Tallink', ship: 'Megastar', from: 'Tallinn Old City Harbour (D)', to: 'Helsinki West Harbour (T2)', dep: at('22', '16:30'), arr: at('22', '18:30'), cutoff: at('22', '15:45'), eur: 149, note: 'Quoted, not booked', checked: '2026-10-21T07:40:00Z', road: 2.5 },
+    { operator: 'Viking Line', ship: 'Viking XPRS', from: 'Tallinn Old City Harbour (A)', to: 'Helsinki Katajanokka', dep: at('22', '15:30'), arr: at('22', '18:00'), cutoff: at('22', '14:45'), eur: 59, note: 'Few car spaces left; quoted, not booked', checked: '2026-10-21T07:40:00Z', road: 2.5 },
+    { operator: 'Tallink', ship: 'Megastar', from: 'Tallinn Old City Harbour (D)', to: 'Helsinki West Harbour (T2)', dep: at('22', '16:30'), arr: at('22', '18:30'), cutoff: at('22', '15:45'), eur: 69, note: 'Quoted, not booked', checked: '2026-10-21T07:40:00Z', road: 2.5 },
   ] });
 
 // 3. Export in progress: Helsinki → Tallinn on the 10:30 Viking XPRS (already sailing).
@@ -99,7 +99,7 @@ order({ n: '1104', customer: 'cus-ee2', status: 'NEW', readiness: 'CONFIRMED', s
   delivery: { city: 'Espoo', country: 'FI', kind: 'DEALERSHIP', name: 'Norvessia Autotalot Espoo', line: 'Tekniikantie 999' },
   car: { make: 'Ferrari', model: 'Roma', model_year: 2021, fuel: 'petrol' }, km: 150, fee: 69000, pickupAccess: 'NEEDS_VERIFICATION', pickupContact: 'Private seller',
   pickupSlot: [at('23', '10:00'), at('23', '12:00')], eta: [at('24', '09:00'), at('24', '12:00')], lta: at('24', '16:00'),
-  quotes: [{ operator: 'Tallink', ship: 'Megastar', from: 'Tallinn Old City Harbour (D)', to: 'Helsinki West Harbour (T2)', dep: at('23', '16:30'), arr: at('23', '18:30'), cutoff: at('23', '15:45'), eur: 149, note: 'Quoted, not booked', checked: '2026-10-21T06:50:00Z', road: 2 }] });
+  quotes: [{ operator: 'Tallink', ship: 'Megastar', from: 'Tallinn Old City Harbour (D)', to: 'Helsinki West Harbour (T2)', dep: at('23', '16:30'), arr: at('23', '18:30'), cutoff: at('23', '15:45'), eur: 69, note: 'Quoted, not booked', checked: '2026-10-21T06:50:00Z', road: 2 }] });
 
 // 5. Tallinn → Turku: driver will miss the 13:30 MyStar check-in (papers not ready).
 order({ n: '1105', customer: 'cus-001', status: 'IN_TRANSIT', segStatus: 'IN_PROGRESS', created: '2026-10-18T12:00:00Z', accepted: '2026-10-19T08:30:00Z', started: at('21', '10:30'),

@@ -3,7 +3,7 @@ const T = {
   en: {
     product: 'Control room', needs_you: 'Needs you', agent: 'Agent handling', clear: 'On track', done: 'Delivered',
     title_needs: '{n} orders need you', title_needs_one: '1 order needs you', title_agent: 'Agent is handling {n}', title_clear: '{n} on track', title_done: '{n} delivered',
-    sub_needs: 'Finland and Estonia. The agent did the legwork; each one needs a judgement call.', sub_agent: 'The agent is on these and will bring you anything it cannot settle.', sub_clear: 'Nothing to do. Shown for reference.', sub_done: 'Handed over.',
+    sub_needs: 'Most urgent first. The agent did the legwork; each one needs your call.', sub_agent: 'The agent is on these and will bring you anything it cannot settle.', sub_clear: 'Nothing to do. Shown for reference.', sub_done: 'Handed over.',
     live: 'Live conditions', offline: 'Live data offline · last saved', snapshot: 'Clock',
     empty_needs: 'Nothing needs you right now', empty_needs_sub: 'The agent is handling {n} orders and will bring you anything it cannot settle.',
     empty_other: 'No orders here', pick: 'Pick an order', pick_sub: 'Orders that need a decision are on the left. Everything else is handled or on track.',
@@ -18,7 +18,7 @@ const T = {
     driver: 'Driver', no_driver: 'No driver yet', on_time_rate: 'On time', deliveries: 'Deliveries (12 mo)', claims: 'Damage claims (12 mo)', demo: 'demo history',
     better: 'Better-matched drivers', offer_to: 'Offer job',
     agent_title: 'What the agent did', run_agent: 'Let the agent look into it', agent_off: 'The agent is off. Add ANTHROPIC_API_KEY to .env and restart.', working: 'The agent is working…', ask_ph: 'Ask the agent or tell it what to do instead…', send: 'Send', you: 'You',
-    timeline: 'What happened', show_all: 'Show all {n}', show_less: 'Show less', decided: 'Decided', decided_note: 'Decided at {time}: {choice}.', approved: 'Approved', changed: 'Changed', other_options: 'Other options', demo_data: 'demo data', live_tag: 'live', yrs: 'yrs', agent_label: 'Agent', who: { operator: 'Operator', driver: 'Driver', customer: 'Customer', agent: 'Agent', system: 'System', person: 'You', site_contact: 'Site', handoff_contact: 'Handover contact' },
+    timeline: 'What happened', show_all: 'Show all {n}', show_less: 'Show less', decided: 'Decided', decided_note: 'Decided at {time}: {choice}.', approved: 'Approved', changed: 'Changed', other_options: 'Other options', map_label: 'Route map', sec_evidence: 'Evidence and sources ({n})', agent_found: 'What the agent found', sec_arrival: 'Confidence {c}% and arrival times', sec_route: 'Route, stops and road conditions', sec_agent: 'What the agent did ({n} steps)', sec_driver: 'Driver: {name}', sec_history: 'History ({n})', overdue: 'Overdue {t}', left: '{t} left', if_approve_short: 'If you approve', lg_clear: 'Clear road', lg_risk: 'Risk', lg_warn: 'Caution', lg_good: 'Opportunity', lg_ferry: 'Ferry', urgent_first: 'Most urgent first.', next_up: 'Do this now', demo_data: 'demo data', live_tag: 'live', yrs: 'yrs', agent_label: 'Agent', who: { operator: 'Operator', driver: 'Driver', customer: 'Customer', agent: 'Agent', system: 'System', person: 'You', site_contact: 'Site', handoff_contact: 'Handover contact' },
     undo: 'Undo', source: 'Source', close: 'Close', factor: { readiness: 'Readiness', schedule: 'Schedule', route: 'Route', car: 'Car', driver: 'Driver', market: 'Driver market', external: 'News' },
     group_affects: 'Affects {n} cars', group_decided: 'Decided: {choice}. The agent is carrying it out on each car.', reroute: 'Rebook all', keep_warn: 'Keep and warn dealers',
     nothing: 'No open signals.', resolved: 'The agent settled this without a person.', change_ph: 'What should happen instead?', confirm_change: 'Send to agent', approve: 'Approve', change: 'Change',
@@ -30,7 +30,7 @@ const T = {
   fi: {
     product: 'Ohjaamo', needs_you: 'Tarvitsee sinua', agent: 'Agentti hoitaa', clear: 'Aikataulussa', done: 'Toimitettu',
     title_needs: '{n} tilausta tarvitsee sinua', title_needs_one: '1 tilaus tarvitsee sinua', title_agent: 'Agentti hoitaa {n}', title_clear: '{n} aikataulussa', title_done: '{n} toimitettu',
-    sub_needs: 'Suomi ja Viro. Agentti teki selvitystyön; jokainen vaatii harkintaa.', sub_agent: 'Agentti hoitaa nämä ja tuo sinulle vain sen, mitä se ei voi ratkaista.', sub_clear: 'Ei tehtävää. Näytetään tiedoksi.', sub_done: 'Luovutettu.',
+    sub_needs: 'Kiireellisin ensin. Agentti teki selvitystyön; jokainen vaatii päätöksesi.', sub_agent: 'Agentti hoitaa nämä ja tuo sinulle vain sen, mitä se ei voi ratkaista.', sub_clear: 'Ei tehtävää. Näytetään tiedoksi.', sub_done: 'Luovutettu.',
     live: 'Reaaliaikaiset olosuhteet', offline: 'Reaaliaikadata ei saatavilla · viimeisin tallennettu', snapshot: 'Kello',
     empty_needs: 'Mikään ei tarvitse sinua juuri nyt', empty_needs_sub: 'Agentti hoitaa {n} tilausta ja tuo sinulle vain sen, mitä se ei voi ratkaista.',
     empty_other: 'Ei tilauksia', pick: 'Valitse tilaus', pick_sub: 'Päätöstä vaativat tilaukset ovat vasemmalla. Kaikki muu on hoidossa.',
@@ -45,7 +45,7 @@ const T = {
     driver: 'Kuljettaja', no_driver: 'Ei vielä kuljettajaa', on_time_rate: 'Ajallaan', deliveries: 'Toimituksia (12 kk)', claims: 'Vahinkoja (12 kk)', demo: 'demohistoria',
     better: 'Paremmin sopivat kuljettajat', offer_to: 'Tarjoa',
     agent_title: 'Mitä agentti teki', run_agent: 'Anna agentin selvittää', agent_off: 'Agentti ei ole päällä. Lisää ANTHROPIC_API_KEY .env-tiedostoon.', working: 'Agentti työskentelee…', ask_ph: 'Kysy agentilta tai kerro mitä tehdä…', send: 'Lähetä', you: 'Sinä',
-    timeline: 'Tapahtumat', show_all: 'Näytä kaikki {n}', show_less: 'Näytä vähemmän', decided: 'Päätetty', decided_note: 'Päätetty klo {time}: {choice}.', approved: 'Hyväksytty', changed: 'Muutettu', other_options: 'Muut vaihtoehdot', demo_data: 'demodata', live_tag: 'reaaliaikainen', yrs: 'v', agent_label: 'Agentti', who: { operator: 'Operaattori', driver: 'Kuljettaja', customer: 'Asiakas', agent: 'Agentti', system: 'Järjestelmä', person: 'Sinä', site_contact: 'Noutopaikka', handoff_contact: 'Luovutusyhteyshenkilö' },
+    timeline: 'Tapahtumat', show_all: 'Näytä kaikki {n}', show_less: 'Näytä vähemmän', decided: 'Päätetty', decided_note: 'Päätetty klo {time}: {choice}.', approved: 'Hyväksytty', changed: 'Muutettu', other_options: 'Muut vaihtoehdot', map_label: 'Reittikartta', sec_evidence: 'Näytöt ja lähteet ({n})', agent_found: 'Mitä agentti löysi', sec_arrival: 'Luottamus {c} % ja saapumisajat', sec_route: 'Reitti, pysähdykset ja tieolosuhteet', sec_agent: 'Mitä agentti teki ({n} vaihetta)', sec_driver: 'Kuljettaja: {name}', sec_history: 'Tapahtumat ({n})', overdue: 'Myöhässä {t}', left: '{t} jäljellä', if_approve_short: 'Jos hyväksyt', lg_clear: 'Tie vapaa', lg_risk: 'Riski', lg_warn: 'Varoitus', lg_good: 'Mahdollisuus', lg_ferry: 'Lautta', urgent_first: 'Kiireellisin ensin.', next_up: 'Tee tämä nyt', demo_data: 'demodata', live_tag: 'reaaliaikainen', yrs: 'v', agent_label: 'Agentti', who: { operator: 'Operaattori', driver: 'Kuljettaja', customer: 'Asiakas', agent: 'Agentti', system: 'Järjestelmä', person: 'Sinä', site_contact: 'Noutopaikka', handoff_contact: 'Luovutusyhteyshenkilö' },
     undo: 'Kumoa', source: 'Lähde', close: 'Sulje', factor: { readiness: 'Valmius', schedule: 'Aikataulu', route: 'Reitti', car: 'Auto', driver: 'Kuljettaja', market: 'Kuljettajamarkkina', external: 'Uutiset' },
     group_affects: 'Koskee {n} autoa', group_decided: 'Päätetty: {choice}. Agentti toteuttaa sen jokaiselle autolle.', reroute: 'Varaa kaikki uudelleen', keep_warn: 'Pidä ja varoita',
     nothing: 'Ei avoimia signaaleja.', resolved: 'Agentti ratkaisi tämän ilman ihmistä.', change_ph: 'Mitä pitäisi tehdä?', confirm_change: 'Lähetä agentille', approve: 'Hyväksy', change: 'Muuta',
@@ -56,7 +56,7 @@ const T = {
   },
 };
 
-const state = { lang: localGet('lang') || 'en', tab: 'needs_you', data: null, sel: null, detail: null, showAll: false, busy: false };
+const state = { lang: localGet('lang') || 'en', tab: 'needs_you', data: null, sel: null, detail: null, showAll: false, busy: false, open: new Set() };
 const $ = (s) => document.querySelector(s);
 const t = (k, vars = {}) => String(k.split('.').reduce((o, p) => o?.[p], T[state.lang]) ?? k).replace(/\{(\w+)\}/g, (_, v) => vars[v] ?? '');
 const L = (obj) => (obj && typeof obj === 'object' ? obj[state.lang] || obj.en : obj || '');
@@ -144,16 +144,18 @@ function renderQueue() {
       : `<li class="empty">${t('empty_other')}</li>`;
     return;
   }
-  $('#list').innerHTML = list.map((o) => {
+  // Needs-you rows: deadline first, then what to do. The most urgent one is called out.
+  $('#list').innerHTML = list.map((o, i) => {
     const needs = state.tab === 'needs_you';
-    const why = needs ? L(o.whyYou?.text || o.headline) : L(o.agentWork?.[0] || o.headline) || t('nothing');
-    return `<li><button class="row ${o.id === state.sel ? 'sel' : ''}" data-id="${o.id}">
+    const action = needs ? L(o.decision?.text || o.whyYou?.text || o.headline) : L(o.agentWork?.[0] || o.headline) || t('nothing');
+    return `<li><button class="row ${o.id === state.sel ? 'sel' : ''} ${needs && i === 0 ? 'first' : ''}" data-id="${o.id}">
+      ${needs && i === 0 ? `<div class="row-flag">${t('next_up')}</div>` : ''}
       <div class="row-top">
         <div class="route-line">${esc(o.from.city)} ${cc(o.from.country)}<span class="arrow">→</span>${esc(o.to.city)} ${cc(o.to.country)}</div>
-        <span class="conf ${confClass(o.confidence)}" title="${t('confidence')}">${o.confidence}%</span>
+        ${needs ? deadlineChip(o.deadline) : `<span class="conf ${confClass(o.confidence)}" title="${t('confidence')}">${o.confidence}%</span>`}
       </div>
-      <div class="meta-line">${esc(carName(o.vehicle))} · ${o.ref}${o.driver ? ` · ${esc(o.driver.name)}` : ''}</div>
-      ${why ? `<div class="why-line ${needs ? '' : 'calm'}"><span>${esc(why)}</span></div>` : ''}
+      ${action ? `<div class="why-line ${needs ? '' : 'calm'}"><span>${esc(action.replace(/^(Agent|Agentti): /, ''))}</span></div>` : ''}
+      <div class="meta-line">${o.ref} · ${esc(carName(o.vehicle))}${o.driver ? ` · ${esc(o.driver.name)}` : ''}</div>
     </button></li>`;
   }).join('');
 }
@@ -183,80 +185,132 @@ function renderDetail() {
   }
   const human = d.reasons.filter((r) => !r.agentCan && !r.group);
   const watch = d.reasons.filter((r) => r.agentCan || r.group);
+  const p = pendingProposal(d);
+  const found = p ? P(p, 'what_i_found') || [] : [];
+  const steps = d.run?.steps?.length || 0;
+  // One action panel and the map; everything else is one click away.
   $('#detail').innerHTML = `
     <button class="back" data-back>← ${t(state.tab)}</button>
-    ${heroBlock(d)}
-    ${whyYouBlock(d)}
-    <div class="facts">
-      <div class="card">${confidenceBlock(d)}</div>
-      <div class="card"><h2>${t('times')}</h2>${timesBlock(d)}</div>
-      <div class="card"><h2>${t('conditions')}</h2>${conditionsBlock(d)}</div>
-    </div>
-    ${decisionCard(d)}
-    ${human.length > 1 || human.some((r) => r.superseded) ? `<div class="card"><h2>${t('why_more')}</h2>${reasonList(human.filter((r) => r.text !== d.whyYou?.text))}</div>` : ''}
-    ${watch.length ? `<div class="card"><h2>${t('why_watch')}</h2>${reasonList(watch)}</div>` : ''}
-    ${agentCard(d)}
-    <div class="grid2">
-      <div class="card"><h2>${t('driver')}</h2>${driverBlock(d)}</div>
-      <div class="card"><h2>${t('timeline')}</h2>${timelineBlock(d)}</div>
+    ${actionPanel(d)}
+    <div class="mapcard"><div id="map" class="map" role="img" aria-label="${t('map_label')}"></div>${mapLegend()}</div>
+    <div class="details">
+      ${section('evidence', t('sec_evidence', { n: human.length + watch.length + found.length }),
+        `${found.length ? `<div class="subhead">${t('agent_found')}</div><ul class="found">${found.map((f) => `<li>${agentText(f)}</li>`).join('')}</ul>` : ''}
+         ${human.length ? `<div class="subhead">${t('why_more')}</div>${reasonList(human)}` : ''}
+         ${watch.length ? `<div class="subhead">${t('why_watch')}</div>${reasonList(watch)}` : ''}`)}
+      ${section('arrival', t('sec_arrival', { c: d.confidence }), `<div class="grid2"><div>${confidenceBlock(d)}</div><div><h2>${t('times')}</h2>${timesBlock(d)}</div></div>`)}
+      ${section('route', t('sec_route'), conditionsBlock(d))}
+      ${section('agent', t('sec_agent', { n: steps }), agentCard(d))}
+      ${section('driver', t('sec_driver', { name: d.driver?.name || t('no_driver') }), driverBlock(d))}
+      ${section('history', t('sec_history', { n: d.timeline.length }), timelineBlock(d))}
     </div>`;
+  drawMap(d.id);
 }
 
-function heroBlock(d) {
-  const end = (lbl, e) => `<div class="endpoint">
-    <div class="lbl">${t(lbl)}</div>
-    <div class="city">${esc(e.city)} ${cc(e.country)}</div>
-    <div class="place">${esc((state.lang === 'fi' && e.nameFi) || e.name || '')}</div>
-    <div class="kind">${esc(t('kind.' + e.kind) === 'kind.' + e.kind ? '' : t('kind.' + e.kind))}${e.kind ? ' · ' : ''}${esc(t('country.' + e.country))}</div>
-  </div>`;
-  return `<div class="hero">
-      ${end('from', d.from)}
-      <div class="hero-mid"><span class="big">→</span>${d.driveKm} km${d.gulf || d.ferry ? `<br>+ ${t('ferry').toLowerCase()}` : ''}</div>
-      ${end('to', d.to)}
-    </div>
-    <div class="carline">
-      ${d.vehicle ? `<img src="${carImg(d.vehicle)}" alt="" onerror="this.remove()">` : ''}
-      <div><div class="name">${esc(carName(d.vehicle))}${d.value !== 'standard' ? `<span class="pill">${d.value === 'exceptional' ? '€€€' : '€€'}</span>` : ''}</div>
-      <div class="sub">${d.ref} · ${esc(d.customer || '')}${d.driver ? ` · ${esc(d.driver.name)}` : ''}</div></div>
-    </div>`;
+const pendingProposal = (d) => (d.run?.outcome?.type === 'proposal' && d.run.outcome.status === 'PENDING_APPROVAL' ? d.run.outcome : null);
+
+// Collapsible section; which ones are open is remembered across re-renders.
+function section(id, title, body) {
+  return `<details class="sec" data-sec="${id}" ${state.open.has(id) ? 'open' : ''}><summary>${title}</summary><div class="sec-body">${body}</div></details>`;
 }
 
-function whyYouBlock(d) {
-  if (!d.whyYou || d.decided) return '';
-  const s = d.whyYou.source;
-  return `<div class="whyyou">
-    <span class="icon">!</span>
-    <span class="lbl">${t('why_you')}</span>
-    <span class="txt">${esc(L(d.whyYou.text))}</span>
-    ${s ? `<button class="src" data-src="${s.table}/${encodeURIComponent(s.id || '')}">${esc(srcLabel(s))}${s.at ? ` · ${fmt(s.at)}` : ''}</button>` : ''}
-  </div>`;
+// Minutes from the data's clock (the snapshot is fixed in time) to a deadline.
+const minsLeft = (iso) => Math.round((Date.parse(iso) - Date.parse(state.data.snapshotAt)) / 60000);
+function fmtDur(m) {
+  const a = Math.abs(m);
+  if (a < 60) return `${a} min`;
+  if (a < 48 * 60) return `${Math.floor(a / 60)} h${a % 60 ? ` ${a % 60} min` : ''}`;
+  return `${Math.round(a / 1440)} d`;
+}
+function deadlineChip(dl, big = false) {
+  if (!dl) return '';
+  const m = minsLeft(dl.at);
+  const cls = m < 0 ? 'over' : m < 180 ? 'urgent' : m < 1440 ? 'soon' : 'calm';
+  const left = m < 0 ? t('overdue', { t: fmtDur(m) }) : t('left', { t: fmtDur(m) });
+  if (!big) return `<span class="dl ${cls}">${left}</span>`;
+  return `<div class="ap-deadline ${cls}"><b>${left}</b><span>${esc(L(dl.text))} · ${fmt(dl.at, { weekday: 'short', hour: '2-digit', minute: '2-digit' })}</span></div>`;
 }
 
-function decisionCard(d) {
+// The top of the order: deadline, why, the one decision, and what it does to arrival.
+function actionPanel(d) {
+  const head = `<div class="ap-route">${esc(d.from.city)} ${cc(d.from.country)} <span class="arrow">→</span> ${esc(d.to.city)} ${cc(d.to.country)}
+    <span class="ap-meta">${esc(carName(d.vehicle))}${d.value !== 'standard' ? ` <span class="pill">${d.value === 'exceptional' ? '€€€' : '€€'}</span>` : ''} · ${d.ref}${d.driver ? ` · ${esc(d.driver.name)}` : ''} · ${esc(d.customer || '')}</span></div>`;
   if (d.decided) {
     const choice = d.decided.label ? `“${L(d.decided.label)}”` : t(d.decided.choice === 'approve' ? 'approved' : 'changed');
-    return `<div class="card"><h2>${t('decided')}</h2><div class="done-note">${t('decided_note', { choice: esc(choice), time: fmt(d.decided.at, { hour: '2-digit', minute: '2-digit' }) })}
+    return `<section class="ap">${head}<div class="done-note">${t('decided_note', { choice: esc(choice), time: fmt(d.decided.at, { hour: '2-digit', minute: '2-digit' }) })}
       ${d.decided.note ? `<br>“${esc(d.decided.note)}”` : ''}${d.decided.effect ? `<br><span>${agentText(d.decided.effect)}</span>` : ''}</div>
-      <div class="actions" style="margin-top:12px"><button class="btn small" data-undo>${t('undo')}</button></div></div>`;
+      <div class="actions" style="margin-top:12px"><button class="btn small" data-undo>${t('undo')}</button></div>${arrivalLine(d)}</section>`;
   }
-  const p = d.run?.outcome?.type === 'proposal' && d.run.outcome.status === 'PENDING_APPROVAL' ? d.run.outcome : null;
-  if (p) {
-    const found = P(p, 'what_i_found') || [];
-    return `<div class="card decision"><h2>${t('agent_suggests')}</h2>
-      <p class="text">${agentText(P(p, 'suggestion'))}</p>
-      <p class="who">${agentText(P(p, 'what_happened'))}</p>
-      ${found.length ? `<ul class="found">${found.map((f) => `<li>${agentText(f)}</li>`).join('')}</ul>` : ''}
-      ${decisionButtons({ en: t('approve'), fi: t('approve') }, { en: t('change'), fi: t('change') })}
-      <div class="next"><b>${t('what_next')}</b> ${agentText(P(p, 'if_approved'))}${p.cost_eur ? ` · €${p.cost_eur}` : ''}${p.customer_must_be_told ? ` · ${t('customer_draft')}` : ''}</div></div>`;
+  const p = pendingProposal(d);
+  const why = d.whyYou ? `<p class="ap-why">${esc(L(d.whyYou.text))}
+    ${d.whyYou.source ? `<button class="src" data-src="${d.whyYou.source.table}/${encodeURIComponent(d.whyYou.source.id || '')}">${esc(srcLabel(d.whyYou.source))}</button>` : ''}</p>` : '';
+  if (!p && !d.decision) {
+    // Not a person's call: say what the agent is doing.
+    return `<section class="ap calm">${head}<p class="ap-why calm">${esc(L(d.agentWork?.[0]) || t('nothing'))}</p>${arrivalLine(d)}</section>`;
   }
-  if (d.run?.outcome?.type === 'resolved') {
-    return `<div class="card"><h2>${t('agent_title')}</h2><div class="done-note">${t('resolved')} ${agentText(P(d.run.outcome, 'note'))}</div></div>`;
+  // Headline = first sentence; the rest reads as normal text.
+  const full = p ? P(p, 'suggestion') : L(d.decision.text);
+  const cut = full.search(/[.!?](\s|$)/);
+  const headline = cut > 0 ? full.slice(0, cut + 1) : full;
+  const restText = cut > 0 ? full.slice(cut + 1).trim() : '';
+  const text = `${p ? agentText(headline) : esc(headline)}${restText ? `</p><p class="ap-rest">${p ? agentText(restText) : esc(restText)}` : ''}`;
+  const next = p ? `${agentText(P(p, 'if_approved'))}${p.cost_eur ? ` · €${p.cost_eur}` : ''}${p.customer_must_be_told ? ` · ${t('customer_draft')}` : ''}` : esc(L(d.decision.effect));
+  return `<section class="ap urgent">
+    ${deadlineChip(d.deadline, true)}
+    ${head}
+    ${why}
+    <div class="ap-label">${p ? t('agent_suggests') : t('decision')}</div>
+    <p class="ap-decision">${text}</p>
+    ${p ? decisionButtons({ en: t('approve'), fi: t('approve') }, { en: t('change'), fi: t('change') }) : decisionButtons(d.decision.approve, d.decision.change)}
+    <div class="next"><span><b>${t('what_next')}</b> ${next}</span></div>
+    ${arrivalLine(d)}
+  </section>`;
+}
+
+// One line: arrival if nobody acts vs. if you approve, against the latest acceptable time.
+function arrivalLine(d) {
+  const plan = d.etaPlan;
+  const tag = (at) => {
+    if (!at) return `<b class="bad">${t('unknown')}</b>`;
+    const late = d.lta && Date.parse(at) > Date.parse(d.lta);
+    return `<b class="${late ? 'bad' : 'good'}">${fmt(at, { weekday: 'short', hour: '2-digit', minute: '2-digit' })}</b> <span class="chip ${late ? 'late' : 'ok'}">${late ? t('late_by', { h: fmtH((Date.parse(d.lta) - Date.parse(at)) / 3600e3) }) : t('on_time')}</span>`;
+  };
+  const latest = d.lta ? `<span class="muted">${t('lta')}: ${fmt(d.lta, { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</span>` : '';
+  if (d.lane === 'needs_you' && !d.decided && plan?.ifNothing) {
+    return `<div class="ap-arrival"><span>${t('if_nothing')}: ${tag(plan.ifNothing.at)}</span>${plan.ifApproved ? `<span class="arrow">→</span><span>${t('if_approve_short')}: ${tag(plan.ifApproved.at)}</span>` : ''}${latest}</div>`;
   }
-  if (!d.decision) return '';
-  return `<div class="card decision"><h2>${t('decision')}</h2>
-    <p class="text">${esc(L(d.decision.text))}</p>
-    ${decisionButtons(d.decision.approve, d.decision.change)}
-    <div class="next"><b>${t('what_next')}</b> ${esc(L(d.decision.effect))}</div></div>`;
+  return d.predicted ? `<div class="ap-arrival"><span>${t('predicted')}: ${tag(d.predicted)}</span>${latest}</div>` : '';
+}
+
+// ---------- Map: route legs coloured by risk on OpenStreetMap ----------
+let map;
+async function drawMap(id) {
+  const el = $('#map');
+  const Lf = window.L;
+  if (!el || !Lf) return;
+  if (map) { map.remove(); map = null; }
+  map = Lf.map(el, { scrollWheelZoom: false, attributionControl: true });
+  Lf.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors · routes: OSRM' }).addTo(map);
+  const data = await api(`/api/orders/${id}/map`).catch(() => null);
+  if (!data || state.sel !== id) return;
+  const bounds = [];
+  for (const l of data.legs) {
+    if (!l.line?.length) continue;
+    Lf.polyline(l.line, { color: l.color, weight: l.mode === 'ferry' ? 3 : 5, opacity: 0.9, dashArray: l.mode === 'ferry' ? '8 8' : null }).addTo(map).bindTooltip(esc(L2(l.label)));
+    bounds.push(...l.line);
+  }
+  const COLORS = { risk: '#b23a22', warn: '#c8871b', good: '#1f7a4d', info: '#12110e' };
+  for (const m of data.markers) {
+    const big = m.kind === 'pickup' || m.kind === 'delivery';
+    const marker = Lf.circleMarker([m.lat, m.lon], { radius: big ? 8 : m.level === 'risk' ? 8 : 6, color: '#fff', weight: 2, fillColor: COLORS[m.level] || '#12110e', fillOpacity: 1 }).addTo(map);
+    marker.bindTooltip(`${big ? `<b>${m.kind === 'pickup' ? 'A' : 'B'}</b> ` : ''}${esc(L2(m.text))}`);
+    if (big || m.level === 'risk') bounds.push([m.lat, m.lon]);
+  }
+  if (bounds.length) map.fitBounds(bounds, { padding: [24, 24], maxZoom: 11 });
+}
+const L2 = (x) => (x && typeof x === 'object' ? x[state.lang] || x.en : x || '');
+function mapLegend() {
+  return `<div class="legend"><span><i class="k ok"></i>${t('lg_clear')}</span><span><i class="k risk"></i>${t('lg_risk')}</span><span><i class="k warn"></i>${t('lg_warn')}</span><span><i class="k good"></i>${t('lg_good')}</span><span><i class="k ferry"></i>${t('lg_ferry')}</span></div>`;
 }
 
 function decisionButtons(approve, change) {
@@ -269,10 +323,9 @@ function decisionButtons(approve, change) {
 // Other ways out (e.g. the dealer has no matching car): each one says what happens.
 function optionsBlock(d) {
   if (!d?.options?.length) return '';
-  return `<div class="options"><div class="subhead">${t('other_options')}</div>
-    ${d.options.map((o, i) => `<div class="option ${o.danger ? 'danger' : ''}">
-      <button class="btn small ${o.danger ? 'danger' : ''}" data-option="${i}">${esc(L(o.label))}</button>
-      <span>${esc(L(o.effect))}</span></div>`).join('')}</div>`;
+  // One row of buttons; what each does shows on hover and in the confirmation.
+  return `<div class="options"><span class="subhead">${t('other_options')}</span>
+    ${d.options.map((o, i) => `<button class="btn small ${o.danger ? 'danger' : ''}" data-option="${i}" title="${esc(L(o.effect))}">${esc(L(o.label))}</button>`).join('')}</div>`;
 }
 
 function reasonList(list) {
@@ -367,7 +420,7 @@ function agentCard(d) {
   else if (state.busy) body = `${list}<div class="working">${t('working')}</div>`;
   else body = `${list || `<div class="actions" style="margin-bottom:12px"><button class="btn soft" data-run>${t('run_agent')}</button></div>`}
     <form class="ask" data-ask><input name="m" placeholder="${t('ask_ph')}" autocomplete="off"><button class="btn primary">${t('send')}</button></form>`;
-  return `<div class="card"><h2>${t('agent_title')}</h2>${body}</div>`;
+  return body;
 }
 
 function driverBlock(d) {
@@ -427,6 +480,8 @@ async function runAgent(message) {
 document.addEventListener('click', async (e) => {
   const el = e.target.closest('button, [data-close]');
   if (e.target.id === 'source') { $('#source').hidden = true; return; }
+  const nx = e.target.closest('.ap .next');
+  if (nx && !el) { nx.classList.toggle('open'); return; }
   if (!el) return;
   if (el.dataset.tab) { state.tab = el.dataset.tab; renderQueue(); return; }
   if (el.dataset.lang) { state.lang = el.dataset.lang; localSet('lang', state.lang); renderTop(); renderQueue(); renderDetail(); return; }
@@ -448,7 +503,7 @@ document.addEventListener('click', async (e) => {
   }
   if (el.dataset.option) {
     const o = state.detail.options[Number(el.dataset.option)];
-    if (o.danger && !confirm(`${L(o.label)}?`)) return;
+    if (!confirm(`${L(o.label)}\n\n${L(o.effect)}`)) return;
     decide(o.id, null, L(o.effect), o.label);
     return;
   }
@@ -473,6 +528,11 @@ document.addEventListener('submit', async (e) => {
 });
 
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') $('#source').hidden = true; });
+// Remember which detail sections are open while the page re-renders.
+document.addEventListener('toggle', (e) => {
+  const id = e.target?.dataset?.sec;
+  if (id) e.target.open ? state.open.add(id) : state.open.delete(id);
+}, true);
 
 // Links like /#CD-421105 open that order directly.
 function openFromHash() {

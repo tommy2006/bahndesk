@@ -18,7 +18,7 @@ const { db, rowsFor, findRecord } = await import('./lib/data.mjs');
 const { analyseAll, analyseOrder, rankDrivers } = await import('./lib/engine.mjs');
 const { live, refreshAll } = await import('./lib/live.mjs');
 const { runAgent, runs, publicRun, agentAvailable, decideOutcome, provider, agentModel } = await import('./lib/agent.mjs');
-const { strikes, savedRoute } = await import('./lib/external.mjs');
+const { strikes, savedRoute, coordsOf } = await import('./lib/external.mjs');
 const { fiOf, translateMissing, pendingCount } = await import('./lib/i18n.mjs');
 const { translateStrings } = await import('./lib/agent.mjs');
 
@@ -78,7 +78,7 @@ function overview() {
       id: o.id, ref: o.ref, status: o.status, lane: o.lane, confidence: o.confidence, value: o.value,
       vehicle: o.vehicle, from: o.from, to: o.to, customer: o.customer, driver: o.driver && { name: o.driver.name },
       headline: fiText(o.reasons.find((r) => !r.agentCan && !r.group)?.text || o.reasons[0]?.text || null),
-      whyYou: whyYou(o) && { text: fiText(whyYou(o).text) }, etaPlan: o.etaPlan, eta: o.eta,
+      whyYou: whyYou(o) && { text: fiText(whyYou(o).text) }, etaPlan: o.etaPlan, eta: o.eta, deadline: o.deadline,
       // The agent's own suggestion replaces the engine's generic decision text in the list.
       decision: runs[o.id]?.outcome?.status === 'PENDING_APPROVAL'
         ? { text: { en: `Agent: ${runs[o.id].outcome.suggestion}`, fi: `Agentti: ${runs[o.id].outcome.fi?.suggestion || runs[o.id].outcome.suggestion}` } }
@@ -116,6 +116,50 @@ function orderDetail(id) {
   });
 }
 
+// Map of an order: route legs coloured by risk, plus markers for risks (red/amber),
+// opportunities (green) and info (crossings, ports). Lines and points are [lat, lon].
+const RISK = '#b23a22', WARN = '#c8871b', OK = '#165038', SEA = '#2f6db5';
+function orderMap(id) {
+  const order = db.orders[id];
+  if (!order) return null;
+  const a = analyseOrder(order);
+  const fi = (t) => fiText(t);
+  const markers = [];
+  const add = (lat, lon, kind, level, text, source) => lat != null && markers.push({ lat, lon, kind, level, text: fi(text), source: source && fiSource(source) });
+  const P = coordsOf(a.from.city), D = coordsOf(a.to.city);
+  if (P) add(P[0], P[1], 'pickup', 'info', { en: `Pickup: ${a.from.name || a.from.city}`, fi: `Nouto: ${a.from.name || a.from.city}` });
+  if (D) add(D[0], D[1], 'delivery', 'info', { en: `Delivery: ${a.to.name || a.to.city}`, fi: `Toimitus: ${a.to.name || a.to.city}` });
+  const live = a.reasons.filter((r) => r.kind === 'traffic' || r.kind === 'crossing');
+  for (const r of live) add(r.point?.[0], r.point?.[1], r.kind, r.kind === 'traffic' ? (r.r >= 0.1 ? 'risk' : 'warn') : 'info', r.text, r.source);
+  for (const r of a.reasons.filter((x) => x.kind === 'weather')) {
+    const city = r.source.id.split(':')[1];
+    const c = coordsOf(city);
+    if (c) add(c[0], c[1], 'weather', 'warn', r.text, r.source);
+  }
+  const ferryRisk = a.reasons.some((r) => ['missed_checkin', 'ferry_unbooked', 'ferry_sold_out', 'strike'].includes(r.kind));
+  const legs = a.legs.map((l) => {
+    if (l.mode === 'ferry') return { mode: 'ferry', line: l.line, color: ferryRisk ? RISK : SEA, label: fi({ en: `Ferry ${l.label}${a.ferry ? `: ${a.ferry.provider || 'booked'}` : ''}`, fi: `Lautta ${l.label}` }) };
+    // Red where a live notice sits on this leg, otherwise green.
+    const hit = live.some((r) => r.kind === 'traffic' && r.point && l.line.some((p) => Math.abs(p[0] - r.point[0]) < 0.05 && Math.abs(p[1] - r.point[1]) < 0.08));
+    return { mode: 'drive', line: l.line, color: hit ? RISK : OK, label: fi({ en: `${l.key.replace('|', ' → ')} · ${Math.round(l.route.km)} km`, fi: `${l.key.replace('|', ' → ')} · ${Math.round(l.route.km)} km` }) };
+  });
+  // Opportunities: fast chargers for EVs, a few rest areas, and a nearby open job for a waiting driver.
+  for (const l of a.legs.filter((x) => x.mode === 'drive')) {
+    const stops = l.route.stopsList || [];
+    if (a.vehicle?.fuel === 'electric') for (const s of stops.filter((x) => x.kind === 'charging').slice(0, 6)) add(s.lat, s.lon, 'charger', 'good', { en: `Fast charger: ${s.name || 'charger'} (km ${s.kmAlong})`, fi: `Pikalaturi: ${s.name || 'laturi'} (km ${s.kmAlong})` });
+    const rest = stops.filter((x) => x.kind === 'rest');
+    for (const s of rest.filter((_, i) => i % Math.max(1, Math.ceil(rest.length / 3)) === 0).slice(0, 3)) add(s.lat, s.lon, 'rest', 'good', { en: `Rest area: ${s.name || 'rest area'} (km ${s.kmAlong})`, fi: `Levähdyspaikka: ${s.name || ''} (km ${s.kmAlong})` });
+  }
+  const job = a.options?.find((o) => o.kind === 'reassign');
+  if (job) {
+    const ref = job.label.en.match(/CD-\d+/)?.[0];
+    const o = Object.values(db.orders).find((x) => x.reference === ref);
+    const c = o && coordsOf(db.addresses[o.pickup_address_id]?.city);
+    if (c) add(c[0] + 0.01, c[1] + 0.01, 'job', 'good', { en: `Open job nearby: ${ref}`, fi: `Avoin keikka lähellä: ${ref}` });
+  }
+  return { legs, markers };
+}
+
 function sourceRecord(table, id) {
   if (table === 'live') {
     const [kind, key] = id.split(':');
@@ -135,6 +179,10 @@ function sourceRecord(table, id) {
       fast_chargers: r.stops.fastCharging, rest_areas: r.stops.rest, suggested_chargers: r.suggestedChargers.map((c) => `${c.name} (km ${c.kmAlong})`).join('; '),
       source: r.source + ' · stops: OpenStreetMap (© OpenStreetMap contributors)', saved_at: r.fetchedAt, stored_in: 'data/bahn.db' };
   }
+  if (table === 'crossing') return {
+    crossing: { fehmarn: 'Puttgarden–Rødby ferry (Fehmarn Belt)', storebaelt: 'Great Belt bridge (Storebæltsbroen)', oresund: 'Øresund bridge' }[id] || id,
+    detected_from: 'The saved OSRM road route passes through this crossing', operator_site: { fehmarn: 'scandlines.com', storebaelt: 'storebaelt.dk', oresund: 'oresundsbron.com' }[id],
+    note: 'Prices change by date and vehicle; check the operator before quoting a cost.' };
   if (table === 'demo') return { note: 'Demo data generated for the prototype. In production this comes from Bahn’s driver history and charger APIs.', id };
   return findRecord(table, id);
 }
@@ -152,6 +200,7 @@ const server = http.createServer(async (req, res) => {
   try {
     if (p === '/api/overview') return send(res, 200, overview());
     let m;
+    if ((m = p.match(/^\/api\/orders\/([\w-]+)\/map$/))) return send(res, 200, orderMap(m[1]) || { error: 'Not found' });
     if ((m = p.match(/^\/api\/orders\/([\w-]+)$/))) {
       const d = orderDetail(m[1]);
       return d ? send(res, 200, d) : send(res, 404, { error: 'Not found' });
