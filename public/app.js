@@ -18,7 +18,7 @@ const T = {
     driver: 'Driver', no_driver: 'No driver yet', on_time_rate: 'On time', deliveries: 'Deliveries (12 mo)', claims: 'Damage claims (12 mo)', demo: 'demo history',
     better: 'Better-matched drivers', offer_to: 'Offer job',
     agent_title: 'What the agent did', run_agent: 'Let the agent look into it', agent_off: 'The agent is off. Add ANTHROPIC_API_KEY to .env and restart.', working: 'The agent is working…', ask_ph: 'Ask the agent or tell it what to do instead…', send: 'Send', you: 'You',
-    timeline: 'What happened', show_all: 'Show all {n}', show_less: 'Show less', decided: 'Decided', decided_note: 'You {choice} this at {time}.', approved: 'approved', changed: 'changed',
+    timeline: 'What happened', show_all: 'Show all {n}', show_less: 'Show less', decided: 'Decided', decided_note: 'Decided at {time}: {choice}.', approved: 'Approved', changed: 'Changed', other_options: 'Other options', demo_data: 'demo data', live_tag: 'live', yrs: 'yrs', agent_label: 'Agent', who: { operator: 'Operator', driver: 'Driver', customer: 'Customer', agent: 'Agent', system: 'System', person: 'You', site_contact: 'Site', handoff_contact: 'Handover contact' },
     undo: 'Undo', source: 'Source', close: 'Close', factor: { readiness: 'Readiness', schedule: 'Schedule', route: 'Route', car: 'Car', driver: 'Driver', market: 'Driver market', external: 'News' },
     group_affects: 'Affects {n} cars', group_decided: 'Decided: {choice}. The agent is carrying it out on each car.', reroute: 'Rebook all', keep_warn: 'Keep and warn dealers',
     nothing: 'No open signals.', resolved: 'The agent settled this without a person.', change_ph: 'What should happen instead?', confirm_change: 'Send to agent', approve: 'Approve', change: 'Change',
@@ -45,7 +45,7 @@ const T = {
     driver: 'Kuljettaja', no_driver: 'Ei vielä kuljettajaa', on_time_rate: 'Ajallaan', deliveries: 'Toimituksia (12 kk)', claims: 'Vahinkoja (12 kk)', demo: 'demohistoria',
     better: 'Paremmin sopivat kuljettajat', offer_to: 'Tarjoa',
     agent_title: 'Mitä agentti teki', run_agent: 'Anna agentin selvittää', agent_off: 'Agentti ei ole päällä. Lisää ANTHROPIC_API_KEY .env-tiedostoon.', working: 'Agentti työskentelee…', ask_ph: 'Kysy agentilta tai kerro mitä tehdä…', send: 'Lähetä', you: 'Sinä',
-    timeline: 'Tapahtumat', show_all: 'Näytä kaikki {n}', show_less: 'Näytä vähemmän', decided: 'Päätetty', decided_note: 'Päätös ({choice}) klo {time}.', approved: 'hyväksytty', changed: 'muutettu',
+    timeline: 'Tapahtumat', show_all: 'Näytä kaikki {n}', show_less: 'Näytä vähemmän', decided: 'Päätetty', decided_note: 'Päätetty klo {time}: {choice}.', approved: 'Hyväksytty', changed: 'Muutettu', other_options: 'Muut vaihtoehdot', demo_data: 'demodata', live_tag: 'reaaliaikainen', yrs: 'v', agent_label: 'Agentti', who: { operator: 'Operaattori', driver: 'Kuljettaja', customer: 'Asiakas', agent: 'Agentti', system: 'Järjestelmä', person: 'Sinä', site_contact: 'Noutopaikka', handoff_contact: 'Luovutusyhteyshenkilö' },
     undo: 'Kumoa', source: 'Lähde', close: 'Sulje', factor: { readiness: 'Valmius', schedule: 'Aikataulu', route: 'Reitti', car: 'Auto', driver: 'Kuljettaja', market: 'Kuljettajamarkkina', external: 'Uutiset' },
     group_affects: 'Koskee {n} autoa', group_decided: 'Päätetty: {choice}. Agentti toteuttaa sen jokaiselle autolle.', reroute: 'Varaa kaikki uudelleen', keep_warn: 'Pidä ja varoita',
     nothing: 'Ei avoimia signaaleja.', resolved: 'Agentti ratkaisi tämän ilman ihmistä.', change_ph: 'Mitä pitäisi tehdä?', confirm_change: 'Lähetä agentille', approve: 'Hyväksy', change: 'Muuta',
@@ -74,6 +74,9 @@ const agentText = (s) => esc(String(s ?? '')
   .replace(/\b[a-z]+(?:_[a-z]+)+\b/g, (w) => SOURCE_NAMES[w] || w.replace(/_/g, ' '))
   .replace(/,\s*source\)/gi, ')'))
   .replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/[*`]/g, '');
+// Source labels and actor names in the current language (server sends cached Finnish).
+const srcLabel = (s) => (state.lang === 'fi' && s.labelFi) || s.label;
+const whoName = (w) => { const n = t('who.' + w); return n.startsWith('who.') ? w : n; };
 // The agent's proposal in the current language (Finnish translation when available).
 const P = (p, key) => (state.lang === 'fi' && p.fi?.[key]) || p[key];
 function localGet(k) { try { return localStorage.getItem(k); } catch { return null; } }
@@ -203,7 +206,7 @@ function heroBlock(d) {
   const end = (lbl, e) => `<div class="endpoint">
     <div class="lbl">${t(lbl)}</div>
     <div class="city">${esc(e.city)} ${cc(e.country)}</div>
-    <div class="place">${esc(e.name || '')}</div>
+    <div class="place">${esc((state.lang === 'fi' && e.nameFi) || e.name || '')}</div>
     <div class="kind">${esc(t('kind.' + e.kind) === 'kind.' + e.kind ? '' : t('kind.' + e.kind))}${e.kind ? ' · ' : ''}${esc(t('country.' + e.country))}</div>
   </div>`;
   return `<div class="hero">
@@ -225,13 +228,14 @@ function whyYouBlock(d) {
     <span class="icon">!</span>
     <span class="lbl">${t('why_you')}</span>
     <span class="txt">${esc(L(d.whyYou.text))}</span>
-    ${s ? `<button class="src" data-src="${s.table}/${encodeURIComponent(s.id || '')}">${esc(s.label)}${s.at ? ` · ${fmt(s.at)}` : ''}</button>` : ''}
+    ${s ? `<button class="src" data-src="${s.table}/${encodeURIComponent(s.id || '')}">${esc(srcLabel(s))}${s.at ? ` · ${fmt(s.at)}` : ''}</button>` : ''}
   </div>`;
 }
 
 function decisionCard(d) {
   if (d.decided) {
-    return `<div class="card"><h2>${t('decided')}</h2><div class="done-note">${t('decided_note', { choice: t(d.decided.choice === 'approve' ? 'approved' : 'changed'), time: fmt(d.decided.at, { hour: '2-digit', minute: '2-digit' }) })}
+    const choice = d.decided.label ? `“${L(d.decided.label)}”` : t(d.decided.choice === 'approve' ? 'approved' : 'changed');
+    return `<div class="card"><h2>${t('decided')}</h2><div class="done-note">${t('decided_note', { choice: esc(choice), time: fmt(d.decided.at, { hour: '2-digit', minute: '2-digit' }) })}
       ${d.decided.note ? `<br>“${esc(d.decided.note)}”` : ''}${d.decided.effect ? `<br><span>${agentText(d.decided.effect)}</span>` : ''}</div>
       <div class="actions" style="margin-top:12px"><button class="btn small" data-undo>${t('undo')}</button></div></div>`;
   }
@@ -259,16 +263,25 @@ function decisionButtons(approve, change) {
   return `<div class="actions" id="decide">
     <button class="btn primary" data-decide="approve">${esc(L(approve))}</button>
     <button class="btn" data-change>${esc(L(change))}</button>
-  </div>`;
+  </div>${optionsBlock(state.detail)}`;
+}
+
+// Other ways out (e.g. the dealer has no matching car): each one says what happens.
+function optionsBlock(d) {
+  if (!d?.options?.length) return '';
+  return `<div class="options"><div class="subhead">${t('other_options')}</div>
+    ${d.options.map((o, i) => `<div class="option ${o.danger ? 'danger' : ''}">
+      <button class="btn small ${o.danger ? 'danger' : ''}" data-option="${i}">${esc(L(o.label))}</button>
+      <span>${esc(L(o.effect))}</span></div>`).join('')}</div>`;
 }
 
 function reasonList(list) {
   return `<ul class="reasons">${list.map((r) => `<li class="${r.superseded ? 'superseded' : ''}">
     <span class="dot ${r.superseded ? '' : r.r >= 0.3 ? 'hi' : r.r >= 0.12 ? 'md' : ''}"></span>
     <div>${r.superseded ? `<span class="tag">${t('superseded')}</span><br>` : ''}${esc(L(r.text))}<br>
-      <button class="src" data-src="${r.source.table}/${encodeURIComponent(r.source.id || '')}">${esc(r.source.label)}${r.source.at ? ` · ${fmt(r.source.at)}` : ''}</button>
-      ${r.source.table === 'demo' || r.source.table === 'news' ? '<span class="tag">demo data</span>' : ''}
-      ${r.source.table === 'live' ? '<span class="tag live">live</span>' : ''}
+      <button class="src" data-src="${r.source.table}/${encodeURIComponent(r.source.id || '')}">${esc(srcLabel(r.source))}${r.source.at ? ` · ${fmt(r.source.at)}` : ''}</button>
+      ${r.source.table === 'demo' || r.source.table === 'news' ? `<span class="tag">${t('demo_data')}</span>` : ''}
+      ${r.source.table === 'live' ? `<span class="tag live">${t('live_tag')}</span>` : ''}
     </div></li>`).join('')}</ul>`;
 }
 
@@ -344,9 +357,9 @@ function agentCard(d) {
   const icon = { tool: '✓', say: '›', person: '›' };
   const label = (s) => {
     if (s.type === 'person') return `<b>${t('you')}:</b> ${esc(s.text)}`;
-    if (s.type === 'say') return `<b>Agent:</b> ${agentText(s.text)}`;
+    if (s.type === 'say') return `<b>${t('agent_label')}:</b> ${agentText(s.text)}`;
     const q = s.args?.question ? ` “${esc(s.args.question)}”` : '';
-    return `<b>${esc(t('step.' + s.name).startsWith('step.') ? s.name.replace(/_/g, ' ') : t('step.' + s.name))}</b>${q}${s.summary && s.name !== 'propose_decision' ? ` — ${agentText(s.summary)}` : ''}`;
+    return `<b>${esc(t('step.' + s.name).startsWith('step.') ? s.name.replace(/_/g, ' ') : t('step.' + s.name))}</b>${q}${s.summary && s.name !== 'propose_decision' ? ` — ${agentText((state.lang === 'fi' && s.summaryFi) || s.summary)}` : ''}`;
   };
   const list = steps.length ? `<ul class="steps">${steps.map((s) => `<li class="${s.type}"><span class="ic">${icon[s.type]}</span><span class="t">${label(s)}</span></li>`).join('')}</ul>` : '';
   let body;
@@ -358,11 +371,11 @@ function agentCard(d) {
 }
 
 function driverBlock(d) {
-  const alts = d.alternatives?.length ? `<p class="hint" style="margin-top:14px">${t('better')}</p><ul class="alts">${d.alternatives.map((a) => `<li><span>${esc(a.name)} · ${esc(a.homeCity)}<small>${esc(a.why.join(' · '))}</small></span><button class="btn small" data-offer="${a.id}" data-name="${esc(a.name)}">${t('offer_to')}</button></li>`).join('')}</ul>` : '';
+  const alts = d.alternatives?.length ? `<p class="hint" style="margin-top:14px">${t('better')}</p><ul class="alts">${d.alternatives.map((a) => `<li><span>${esc(a.name)} · ${esc(a.homeCity)}<small>${esc(((state.lang === 'fi' && a.whyFi) || a.why).join(' · '))}</small></span><button class="btn small" data-offer="${a.id}" data-name="${esc(a.name)}">${t('offer_to')}</button></li>`).join('')}</ul>` : '';
   if (!d.driver) return `<p class="muted" style="margin:0">${t('no_driver')}</p>${alts}`;
   const r = d.driver;
   return `<div style="font-weight:600">${esc(r.name)} <span class="tag">${t('demo')}</span></div>
-    <div class="muted" style="font-size:13px;margin-bottom:10px">${esc(r.homeCity)} · ${r.years} yrs</div>
+    <div class="muted" style="font-size:13px;margin-bottom:10px">${esc(r.homeCity)} · ${r.years} ${t('yrs')}</div>
     <dl class="kv">
       <dt>${t('on_time_rate')}</dt><dd class="${r.onTimeRate < 0.88 ? 'bad' : ''}">${Math.round(r.onTimeRate * 100)} %</dd>
       <dt>${t('deliveries')}</dt><dd>${r.deliveries12m}</dd>
@@ -373,7 +386,7 @@ function driverBlock(d) {
 function timelineBlock(d) {
   const items = state.showAll ? d.timeline : d.timeline.slice(0, 5);
   return `<ul class="timeline">${items.map((e) => `<li><span class="when">${fmt(e.at, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</span>
-    <span><span class="who">${esc(e.who)}</span>${esc(e.text)}${e.source ? ` <button class="src" data-src="${e.source.table}/${e.source.id}">${t('source')}</button>` : ''}</span></li>`).join('')}</ul>
+    <span><span class="who">${esc(whoName(e.who))}</span>${esc(e.kind === 'message' ? e.text : (state.lang === 'fi' && e.textFi) || e.text)}${e.source ? ` <button class="src" data-src="${e.source.table}/${e.source.id}">${t('source')}</button>` : ''}</span></li>`).join('')}</ul>
     ${d.timeline.length > 5 ? `<button class="linkbtn" data-more>${state.showAll ? t('show_less') : t('show_all', { n: d.timeline.length })}</button>` : ''}`;
 }
 
@@ -384,17 +397,19 @@ async function openSource(key) {
   const sheet = $('#source');
   sheet.hidden = false;
   sheet.innerHTML = `<div class="panel"><div class="skel" style="height:200px"></div></div>`;
-  const rec = await api(`/api/source/${table}/${encodeURIComponent(id)}`).catch((e) => ({ error: e.message }));
+  const res = await api(`/api/source/${table}/${encodeURIComponent(id)}`).catch((e) => ({ error: e.message }));
+  const rec = res.record || res;
+  const keyName = (k) => (state.lang === 'fi' && res.keysFi?.[k]) || k.replace(/_/g, ' ');
   const rows = Object.entries(rec || {}).filter(([, v]) => v !== null && v !== '' && !(Array.isArray(v) && !v.length));
   const val = (v) => (typeof v === 'object' ? esc(JSON.stringify(v, null, 1)) : esc(String(v)));
   sheet.innerHTML = `<div class="panel" role="dialog" aria-label="${t('source')}">
     <div style="display:flex;justify-content:space-between;align-items:start;gap:12px"><div><h3>${t('source')}</h3><div class="meta">${esc(table.replace(/_/g, ' '))} · ${esc(id)}</div></div><button class="btn small" data-close>${t('close')}</button></div>
-    <dl class="kv">${rows.map(([k, v]) => `<dt>${esc(k.replace(/_/g, ' '))}</dt><dd>${val(v)}</dd>`).join('')}</dl></div>`;
+    <dl class="kv">${rows.map(([k, v]) => `<dt>${esc(keyName(k))}</dt><dd>${val(v)}</dd>`).join('')}</dl></div>`;
 }
 
 // ---------- Actions ----------
-async function decide(choice, note, effect) {
-  await api(`/api/orders/${state.sel}/decide`, { choice, note, effect });
+async function decide(choice, note, effect, label = null) {
+  await api(`/api/orders/${state.sel}/decide`, { choice, note, effect, label });
   await loadOverview();
   await openOrder(state.sel, { quiet: true });
 }
@@ -429,6 +444,12 @@ document.addEventListener('click', async (e) => {
   if (el.hasAttribute('data-change')) {
     $('#decide').innerHTML = `<form class="ask" data-change-form style="flex:1"><input name="m" placeholder="${t('change_ph')}" autocomplete="off" autofocus><button class="btn primary">${t('confirm_change')}</button></form>`;
     $('#decide input').focus();
+    return;
+  }
+  if (el.dataset.option) {
+    const o = state.detail.options[Number(el.dataset.option)];
+    if (o.danger && !confirm(`${L(o.label)}?`)) return;
+    decide(o.id, null, L(o.effect), o.label);
     return;
   }
   if (el.hasAttribute('data-undo')) { await api(`/api/orders/${state.sel}/decide`, { choice: null }); await loadOverview(); openOrder(state.sel, { quiet: true }); return; }

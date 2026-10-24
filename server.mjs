@@ -19,6 +19,8 @@ const { analyseAll, analyseOrder, rankDrivers } = await import('./lib/engine.mjs
 const { live, refreshAll } = await import('./lib/live.mjs');
 const { runAgent, runs, publicRun, agentAvailable, decideOutcome, provider, agentModel } = await import('./lib/agent.mjs');
 const { strikes, savedRoute } = await import('./lib/external.mjs');
+const { fiOf, translateMissing, pendingCount } = await import('./lib/i18n.mjs');
+const { translateStrings } = await import('./lib/agent.mjs');
 
 const PORT = Number(process.env.PORT || 3000);
 const DECISIONS = path.join(ROOT, 'data', 'decisions.json');
@@ -43,8 +45,30 @@ function whyYou(o) {
   return next ? { text: next.text, kind: next.kind, source: next.source } : o.whyYou;
 }
 
+// ---------- Finnish for English source text (cached translations, see lib/i18n.mjs) ----------
+const fiText = (t) => (t && t.en && (!t.fi || t.fi === t.en) ? { en: t.en, fi: fiOf(t.en) || t.en } : t);
+const fiSource = (s) => s && { ...s, labelFi: fiOf(s.label) };
+const fiReason = (r) => ({ ...r, text: fiText(r.text), source: fiSource(r.source) });
+// Translations are filled in the background once Claude is available; until then English shows.
+const translateSoon = () => { if (provider() === 'claude') translateMissing(translateStrings); };
+
+function localizeDetail(d) {
+  d.reasons = d.reasons.map(fiReason);
+  for (const e of [d.from, d.to]) e.nameFi = fiOf(e.name);
+  if (d.whyYou) d.whyYou = { ...d.whyYou, text: fiText(d.whyYou.text), source: fiSource(d.whyYou.source) };
+  if (d.decision) d.decision = { ...d.decision, text: fiText(d.decision.text) };
+  d.agentWork = d.agentWork.map((w) => ({ ...w, source: fiSource(w.source) }));
+  // Messages stay as written; everything else gets Finnish.
+  d.timeline = d.timeline.map((e) => (e.kind === 'message' ? e : { ...e, textFi: fiOf(e.text) }));
+  if (d.run) d.run = { ...d.run, steps: d.run.steps.map((s) => (s.type === 'tool' && s.summary && !s.summary.startsWith('“') ? { ...s, summaryFi: fiOf(s.summary) } : s)) };
+  d.alternatives = d.alternatives.map((a) => ({ ...a, whyFi: a.why.map((w) => fiOf(w) || w) }));
+  translateSoon();
+  return d;
+}
+
 function overview() {
   const all = analyseAll();
+  setImmediate(translateSoon);
   return {
     snapshotAt: all.snapshotAt,
     live: { status: live.status, weatherAt: live.weatherAt, trafficAt: live.trafficAt, trafficCount: live.traffic.length },
@@ -53,12 +77,12 @@ function overview() {
     orders: all.orders.map(withDecisions).map((o) => ({
       id: o.id, ref: o.ref, status: o.status, lane: o.lane, confidence: o.confidence, value: o.value,
       vehicle: o.vehicle, from: o.from, to: o.to, customer: o.customer, driver: o.driver && { name: o.driver.name },
-      headline: o.reasons.find((r) => !r.agentCan && !r.group)?.text || o.reasons[0]?.text || null,
-      whyYou: whyYou(o) && { text: whyYou(o).text }, etaPlan: o.etaPlan, eta: o.eta,
+      headline: fiText(o.reasons.find((r) => !r.agentCan && !r.group)?.text || o.reasons[0]?.text || null),
+      whyYou: whyYou(o) && { text: fiText(whyYou(o).text) }, etaPlan: o.etaPlan, eta: o.eta,
       // The agent's own suggestion replaces the engine's generic decision text in the list.
       decision: runs[o.id]?.outcome?.status === 'PENDING_APPROVAL'
-        ? { text: { en: `Agent: ${runs[o.id].outcome.suggestion}`, fi: `Agentti: ${runs[o.id].outcome.suggestion}` } }
-        : o.decision && { text: o.decision.text },
+        ? { text: { en: `Agent: ${runs[o.id].outcome.suggestion}`, fi: `Agentti: ${runs[o.id].outcome.fi?.suggestion || runs[o.id].outcome.suggestion}` } }
+        : o.decision && { text: fiText(o.decision.text) },
       agentWork: o.agentWork.slice(0, 1),
       decided: o.decided, groupDecided: o.groupDecided || null, agent: o.agent, lta: o.lta, predicted: o.predicted, slackH: o.slackH,
     })),
@@ -72,7 +96,7 @@ function timeline(orderId) {
   for (const a of rowsFor('alerts', orderId)) ev.push({ at: a.triggered_at, who: 'system', kind: 'alert', text: a.summary, source: { table: 'alerts', id: a.id } });
   for (const p of rowsFor('agent_proposals', orderId)) ev.push({ at: p.created_at, who: 'agent', whoId: p.proposed_by_agent_id, kind: 'proposal', text: `${p.summary} (${p.status.toLowerCase().replace(/_/g, ' ')})`, source: { table: 'agent_proposals', id: p.id } });
   const d = decisions[orderId];
-  if (d) ev.push({ at: d.at, who: 'person', whoId: d.by, kind: 'decision', text: `${d.choice === 'approve' ? 'Approved' : 'Changed'}${d.note ? `: ${d.note}` : ''}` });
+  if (d) ev.push({ at: d.at, who: 'person', whoId: d.by, kind: 'decision', text: `${d.label?.en || (d.choice === 'approve' ? 'Approved' : 'Changed')}${d.note ? `: ${d.note}` : ''}` });
   return ev.sort((a, b) => b.at.localeCompare(a.at));
 }
 
@@ -82,14 +106,14 @@ function orderDetail(id) {
   const a = withDecisions(analyseOrder(order));
   if (runs[id]?.outcome?.status === 'PENDING_APPROVAL') a.reasons = a.reasons.map((r) => (r.kind === 'proposal' ? { ...r, superseded: true } : r));
   a.whyYou = whyYou(a);
-  return {
+  return localizeDetail({
     ...a,
     alternatives: ['driver', 'offer'].includes(a.decision?.kind) || !a.driver ? rankDrivers(id, 3) : [],
     timeline: timeline(id),
     run: publicRun(runs[id]),
     agentAvailable: agentAvailable(),
     live: { status: live.status, weatherAt: live.weatherAt },
-  };
+  });
 }
 
 function sourceRecord(table, id) {
@@ -132,7 +156,15 @@ const server = http.createServer(async (req, res) => {
       const d = orderDetail(m[1]);
       return d ? send(res, 200, d) : send(res, 404, { error: 'Not found' });
     }
-    if ((m = p.match(/^\/api\/source\/(\w+)\/(.+)$/))) return send(res, 200, sourceRecord(m[1], decodeURIComponent(m[2])) || { error: 'Not found' });
+    if ((m = p.match(/^\/api\/source\/(\w+)\/(.+)$/))) {
+      const rec = sourceRecord(m[1], decodeURIComponent(m[2]));
+      if (!rec) return send(res, 200, { error: 'Not found' });
+      // Field names get Finnish; values stay exactly as recorded (they are the evidence).
+      const keysFi = Object.fromEntries(Object.keys(rec).map((k) => [k, fiOf(k.replace(/_/g, ' '))]));
+      translateSoon();
+      return send(res, 200, { record: rec, keysFi });
+    }
+    if (p === '/api/i18n') return send(res, 200, { pending: pendingCount() });
     if (req.method === 'POST' && (m = p.match(/^\/api\/orders\/([\w-]+)\/agent$/))) {
       const body = await readBody(req);
       try { return send(res, 200, await runAgent(m[1], body.message || null)); }
@@ -140,9 +172,10 @@ const server = http.createServer(async (req, res) => {
     }
     if (req.method === 'POST' && (m = p.match(/^\/api\/orders\/([\w-]+)\/decide$/))) {
       const body = await readBody(req);
-      if (!body.choice) delete decisions[m[1]]; // undo
+      if (!body.choice) { delete decisions[m[1]]; decideOutcome(m[1], null); } // undo
       else {
-        decisions[m[1]] = { choice: body.choice, note: body.note || null, effect: body.effect || null, by: 'ops', at: new Date().toISOString() };
+        // `choice` is approve / change, or an option id (wait, reschedule, reassign, cancel).
+        decisions[m[1]] = { choice: body.choice, label: body.label || null, note: body.note || null, effect: body.effect || null, by: 'ops', at: new Date().toISOString() };
         decideOutcome(m[1], body.choice, body.note);
       }
       saveDecisions();

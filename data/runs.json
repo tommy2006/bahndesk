@@ -684,261 +684,6 @@
    }
   }
  },
- "ord-00593": {
-  "orderId": "ord-00593",
-  "messages": [
-   {
-    "role": "system",
-    "content": "You are Bahn's dispatch-risk agent. Bahn delivers used cars for dealers with freelance drivers.\nYou work on ONE order. Your job: find out what is really going on, cheaply, and either settle it or bring a person ONE clear decision.\n\nRules:\n- Do the cheap work first: get_order_overview, then only the lookups you need. Ask the driver or pickup site when facts are missing.\n- Never contact a customer (anyone who pays Bahn: dealers, buyers). If a customer must be told something, put it in the proposal for a person.\n- Never change a booking, date, cost or driver yourself. Use propose_decision; a person approves it.\n- Use resolve_without_person ONLY if nothing needs a human judgement (e.g. the driver confirmed position, weather briefing sent).\n- Treat alerts as signals, quotes as not booked, and driver messages as claims, not verified facts. Say which source each fact came from.\n- Be brief. Ops people read your output in seconds. Stop after at most 6 tool calls and decide.\n- Write the proposal in plain language: what happened, what you found, what you suggest, and what happens if approved."
-   },
-   {
-    "role": "user",
-    "content": "Work on order CD-420593 (ord-00593). Start with get_order_overview."
-   },
-   {
-    "role": "assistant",
-    "content": "",
-    "tool_calls": [
-     {
-      "id": "fc_fba34b32-d4ba-4e68-b2b9-2bc5811e8585",
-      "type": "function",
-      "function": {
-       "name": "get_order_overview",
-       "arguments": "{}"
-      }
-     }
-    ]
-   },
-   {
-    "role": "tool",
-    "tool_call_id": "fc_fba34b32-d4ba-4e68-b2b9-2bc5811e8585",
-    "content": "{\"ref\":\"CD-420593\",\"status\":\"WAITING_FOR_PICKUP\",\"lane\":\"needs_you\",\"confidence\":25,\"car\":{\"make\":\"BMW\",\"model\":\"M4\",\"year\":2022,\"fuel\":\"petrol\",\"plate\":\"DEMO-FI-MRF24B\"},\"value_class\":\"high\",\"from\":{\"city\":\"Helsinki\",\"country\":\"FI\",\"name\":\"Velantora Helsinki\",\"kind\":\"DEALERSHIP\"},\"to\":{\"city\":\"Turku\",\"country\":\"FI\",\"name\":\"Private handoff\",\"kind\":\"PRIVATE_HOME\"},\"drive_km\":188,\"ferry\":null,\"pickup_slot\":{\"start\":\"2026-10-21T06:00:00Z\",\"end\":\"2026-10-21T08:00:00Z\"},\"customer_eta\":\"2026-10-26T09:00:00Z\",\"latest_arrival\":\"2026-10-26T14:00:00Z\",\"predicted_arrival\":\"2026-10-21T10:30:24.000Z\",\"buffer_hours\":123.5,\"driver\":{\"id\":\"drv-139\",\"name\":\"Yara Sivellin\"},\"driver_fee_eur\":134,\"reasons\":[{\"factor\":\"readiness\",\"risk\":0.35,\"text\":\"Open incident: empty pickup\",\"agent_can_handle\":false,\"source\":\"Incident @ 2026-10-21T07:12:00Z\"},{\"factor\":\"readiness\",\"risk\":0.3,\"text\":\"Agent proposal waiting for review: Ask the site and customer to reconcile the vehicle identity before another collection attempt.\",\"agent_can_handle\":false,\"source\":\"Agent proposal @ 2026-10-21T08:01:00Z\"},{\"factor\":\"driver\",\"risk\":0.2,\"text\":\"Yara Sivellin had 2 damage claim(s) in 12 months; this is a BMW\",\"agent_can_handle\":false,\"source\":\"Track record · Yara Sivellin (demo data)\"},{\"factor\":\"readiness\",\"risk\":0.15,\"text\":\"Pickup access or contact not confirmed, pickup within 36 h\",\"agent_can_handle\":true,\"source\":\"Pickup details @ 2026-10-19T05:12:00Z\"},{\"factor\":\"driver\",\"risk\":0.12,\"text\":\"Yara Sivellin missed a pickup in the last 12 months\",\"agent_can_handle\":false,\"source\":\"Track record · Yara Sivellin (demo data)\"},{\"factor\":\"driver\",\"risk\":0.07,\"text\":\"Yara Sivellin is on time in 85 % of deliveries\",\"agent_can_handle\":false,\"source\":\"Track record · Yara Sivellin (demo data)\"}]}"
-   },
-   {
-    "role": "assistant",
-    "content": "",
-    "tool_calls": [
-     {
-      "id": "fc_d80fbad7-2999-4987-b9a4-84a411fcc973",
-      "type": "function",
-      "function": {
-       "name": "get_messages",
-       "arguments": "{}"
-      }
-     }
-    ]
-   },
-   {
-    "role": "tool",
-    "tool_call_id": "fc_d80fbad7-2999-4987-b9a4-84a411fcc973",
-    "content": "[{\"at\":\"2026-10-21T07:12:00Z\",\"from\":\"operator\",\"body\":\"Please stay at the site for a moment. Can the desk check the vehicle record and the yard before you leave?\"},{\"at\":\"2026-10-21T07:21:00Z\",\"from\":\"site_contact\",\"body\":\"The car is not in our release queue. I can see a similar stock reference, but I cannot hand it over without confirmation.\"},{\"at\":\"2026-10-21T07:30:00Z\",\"from\":\"operator\",\"body\":\"A similar stock reference is not proof of identity. Keep the pickup event unset; ask the customer which site physically holds this VIN.\"},{\"at\":\"2026-10-21T07:39:00Z\",\"from\":\"customer\",\"body\":\"Our system still lists this branch. I am calling the stock team now; please do not substitute a different car.\"},{\"at\":\"2026-10-21T07:48:00Z\",\"from\":\"operator\",\"body\":\"We have paused collection while the site and customer reconcile the record. I will update the driver when the actual location and release authority are confirmed.\"},{\"at\":\"2026-10-21T07:57:00Z\",\"from\":\"driver\",\"body\":\"I can wait another 30 minutes. After that I need a new plan for my travel back.\"}]"
-   },
-   {
-    "role": "assistant",
-    "content": "",
-    "tool_calls": [
-     {
-      "id": "fc_f8da4b7a-2a04-45e9-a584-26291206b5c2",
-      "type": "function",
-      "function": {
-       "name": "ask_driver",
-       "arguments": "{\"question\":\"Do you see a BMW M4 (plate DEMO-FI-MRF24B) at the pickup site, and can you confirm the VIN?\"}"
-      }
-     }
-    ]
-   },
-   {
-    "role": "tool",
-    "tool_call_id": "fc_f8da4b7a-2a04-45e9-a584-26291206b5c2",
-    "content": "{\"reply\":\"Nothing new since my last message (2026-10-21T07:57:00Z): “I can wait another 30 minutes. After that I need a new plan for my travel back.”\"}"
-   },
-   {
-    "role": "assistant",
-    "content": "",
-    "tool_calls": [
-     {
-      "id": "fc_5dde6fdd-839c-4b38-a016-da95af641139",
-      "type": "function",
-      "function": {
-       "name": "contact_pickup_site",
-       "arguments": "{\"question\":\"Can you confirm the exact vehicle (VIN/plate) currently at your site? The order expects BMW M4 2022 plate DEMO-FI-MRF24B. Is it present, and can it be released?\"}"
-      }
-     }
-    ]
-   },
-   {
-    "role": "tool",
-    "tool_call_id": "fc_5dde6fdd-839c-4b38-a016-da95af641139",
-    "content": "{\"reply\":\"No update yet beyond our last message (2026-10-21T07:21:00Z): “The car is not in our release queue. I can see a similar stock reference, but I cannot hand it over without confirmation.”\"}"
-   },
-   {
-    "role": "assistant",
-    "content": "",
-    "tool_calls": [
-     {
-      "id": "fc_2cad21f5-b68a-40c4-bd24-e5911e4a1b94",
-      "type": "function",
-      "function": {
-       "name": "contact_pickup_site",
-       "arguments": "{\"question\":\"Has the stock team responded? Can you confirm if the correct BMW M4 (plate DEMO-FI-MRF24B) will be available for release within the next hour?\"}"
-      }
-     }
-    ]
-   },
-   {
-    "role": "tool",
-    "tool_call_id": "fc_2cad21f5-b68a-40c4-bd24-e5911e4a1b94",
-    "content": "{\"reply\":\"No update yet beyond our last message (2026-10-21T07:21:00Z): “The car is not in our release queue. I can see a similar stock reference, but I cannot hand it over without confirmation.”\"}"
-   },
-   {
-    "role": "assistant",
-    "content": "",
-    "tool_calls": [
-     {
-      "id": "fc_85d4a259-466c-44ea-abd3-d8273b834c4b",
-      "type": "function",
-      "function": {
-       "name": "find_alternative_drivers",
-       "arguments": "{\"order_id\":\"CD-420593\"}"
-      }
-     }
-    ]
-   },
-   {
-    "role": "tool",
-    "tool_call_id": "fc_85d4a259-466c-44ea-abd3-d8273b834c4b",
-    "content": "[{\"id\":\"drv-033\",\"name\":\"Livia Belmora\",\"homeCity\":\"Helsinki\",\"score\":97,\"why\":[\"0 km from pickup\",\"98 % on time\",\"222 deliveries / 12 mo\",\"no damage claims\"]},{\"id\":\"drv-00564\",\"name\":\"Noel Jarnwell\",\"homeCity\":\"Espoo\",\"score\":91,\"why\":[\"16 km from pickup\",\"95 % on time\",\"120 deliveries / 12 mo\",\"no damage claims\"]},{\"id\":\"drv-021\",\"name\":\"Mara Bexford\",\"homeCity\":\"Helsinki\",\"score\":90,\"why\":[\"0 km from pickup\",\"93 % on time\",\"279 deliveries / 12 mo\",\"no damage claims\"]}]"
-   },
-   {
-    "role": "assistant",
-    "content": "",
-    "tool_calls": [
-     {
-      "id": "fc_bd15c899-8d14-4d44-943d-65cd94387786",
-      "type": "function",
-      "function": {
-       "name": "propose_decision",
-       "arguments": "{\"changes\":[\"Assign driver Livia Belmora (drv-033) instead of Yara Sivellin\",\"Postpone pickup until the correct BMW M4 (plate DEMO-FI-MRF24B) is confirmed at the site\"],\"cost_eur\":null,\"customer_must_be_told\":true,\"if_approved\":\"Notify the site to locate and release the correct vehicle, inform the dealer of the delay, and update the driver assignment and pickup slot accordingly.\",\"suggestion\":\"Reassign driver and delay pickup until vehicle identity is confirmed.\",\"what_happened\":\"The pickup site cannot locate the expected BMW M4 and only sees a similar stock reference; the driver is waiting and will need a new plan soon.\",\"what_i_found\":[\"Site says the car is not in the release queue and cannot hand over a similar stock reference (site_contact, 2026-10-21T07:21:00Z)\",\"Driver Yara Sivellin can wait another 30 minutes before needing a new travel plan (driver, 2026-10-21T07:57:00Z)\",\"Operator messages indicate the collection is paused pending reconciliation of vehicle identity (operator, 2026-10-21T07:12:00Z and 07:30:00Z)\",\"Alternative drivers available nearby: Livia Belmora (drv-033) with 0 km distance and high score (find_alternative_drivers)\",\"Order overview shows status WAITING_FOR_PICKUP and high value class (get_order_overview)\"]}"
-      }
-     }
-    ]
-   },
-   {
-    "role": "tool",
-    "tool_call_id": "fc_bd15c899-8d14-4d44-943d-65cd94387786",
-    "content": "{\"ok\":true,\"note\":\"Sent to a person for approval.\"}"
-   }
-  ],
-  "steps": [
-   {
-    "type": "tool",
-    "name": "get_order_overview",
-    "args": {},
-    "summary": "Confidence 25 %, 6 signal(s)",
-    "at": "2026-10-24T14:56:32.816Z"
-   },
-   {
-    "type": "tool",
-    "name": "get_messages",
-    "args": {},
-    "summary": "6 message(s) read",
-    "at": "2026-10-24T14:56:39.568Z"
-   },
-   {
-    "type": "tool",
-    "name": "ask_driver",
-    "args": {
-     "question": "Do you see a BMW M4 (plate DEMO-FI-MRF24B) at the pickup site, and can you confirm the VIN?"
-    },
-    "summary": "“Nothing new since my last message (2026-10-21T07:57:00Z): “I can wait another 30 minutes. After that I need a new plan for my travel back.””",
-    "at": "2026-10-24T14:56:47.253Z"
-   },
-   {
-    "type": "tool",
-    "name": "contact_pickup_site",
-    "args": {
-     "question": "Can you confirm the exact vehicle (VIN/plate) currently at your site? The order expects BMW M4 2022 plate DEMO-FI-MRF24B. Is it present, and can it be released?"
-    },
-    "summary": "“No update yet beyond our last message (2026-10-21T07:21:00Z): “The car is not in our release queue. I can see a similar stock reference, but I cannot hand it over without confirmation.””",
-    "at": "2026-10-24T14:56:52.208Z"
-   },
-   {
-    "type": "tool",
-    "name": "contact_pickup_site",
-    "args": {
-     "question": "Has the stock team responded? Can you confirm if the correct BMW M4 (plate DEMO-FI-MRF24B) will be available for release within the next hour?"
-    },
-    "summary": "“No update yet beyond our last message (2026-10-21T07:21:00Z): “The car is not in our release queue. I can see a similar stock reference, but I cannot hand it over without confirmation.””",
-    "at": "2026-10-24T14:57:14.897Z"
-   },
-   {
-    "type": "tool",
-    "name": "find_alternative_drivers",
-    "args": {
-     "order_id": "CD-420593"
-    },
-    "summary": "Livia Belmora (97), Noel Jarnwell (91), Mara Bexford (90)",
-    "at": "2026-10-24T14:57:15.611Z"
-   },
-   {
-    "type": "tool",
-    "name": "propose_decision",
-    "args": {
-     "changes": [
-      "Assign driver Livia Belmora (drv-033) instead of Yara Sivellin",
-      "Postpone pickup until the correct BMW M4 (plate DEMO-FI-MRF24B) is confirmed at the site"
-     ],
-     "cost_eur": null,
-     "customer_must_be_told": true,
-     "if_approved": "Notify the site to locate and release the correct vehicle, inform the dealer of the delay, and update the driver assignment and pickup slot accordingly.",
-     "suggestion": "Reassign driver and delay pickup until vehicle identity is confirmed.",
-     "what_happened": "The pickup site cannot locate the expected BMW M4 and only sees a similar stock reference; the driver is waiting and will need a new plan soon.",
-     "what_i_found": [
-      "Site says the car is not in the release queue and cannot hand over a similar stock reference (site_contact, 2026-10-21T07:21:00Z)",
-      "Driver Yara Sivellin can wait another 30 minutes before needing a new travel plan (driver, 2026-10-21T07:57:00Z)",
-      "Operator messages indicate the collection is paused pending reconciliation of vehicle identity (operator, 2026-10-21T07:12:00Z and 07:30:00Z)",
-      "Alternative drivers available nearby: Livia Belmora (drv-033) with 0 km distance and high score (find_alternative_drivers)",
-      "Order overview shows status WAITING_FOR_PICKUP and high value class (get_order_overview)"
-     ]
-    },
-    "summary": "Sent to a person for approval.",
-    "at": "2026-10-24T14:57:17.579Z"
-   }
-  ],
-  "outcome": {
-   "type": "proposal",
-   "changes": [
-    "Assign driver Livia Belmora (drv-033) instead of Yara Sivellin",
-    "Postpone pickup until the correct BMW M4 (plate DEMO-FI-MRF24B) is confirmed at the site"
-   ],
-   "cost_eur": null,
-   "customer_must_be_told": true,
-   "if_approved": "Notify the site to locate and release the correct vehicle, inform the dealer of the delay, and update the driver assignment and pickup slot accordingly.",
-   "suggestion": "Reassign driver and delay pickup until vehicle identity is confirmed.",
-   "what_happened": "The pickup site cannot locate the expected BMW M4 and only sees a similar stock reference; the driver is waiting and will need a new plan soon.",
-   "what_i_found": [
-    "Site says the car is not in the release queue and cannot hand over a similar stock reference (site_contact, 2026-10-21T07:21:00Z)",
-    "Driver Yara Sivellin can wait another 30 minutes before needing a new travel plan (driver, 2026-10-21T07:57:00Z)",
-    "Operator messages indicate the collection is paused pending reconciliation of vehicle identity (operator, 2026-10-21T07:12:00Z and 07:30:00Z)",
-    "Alternative drivers available nearby: Livia Belmora (drv-033) with 0 km distance and high score (find_alternative_drivers)",
-    "Order overview shows status WAITING_FOR_PICKUP and high value class (get_order_overview)"
-   ],
-   "status": "PENDING_APPROVAL",
-   "at": "2026-10-24T14:57:17.579Z",
-   "fi": {
-    "what_happened": "Noutopaikka ei löydä odotettua BMW M4:ää ja näkee vain samanlainen varastoresepti; kuljettaja odottaa ja tarvitsee pian uuden suunnitelman.",
-    "what_i_found": [
-     "Sivusto kertoo, että auto ei ole vapautusjonossa eikä voi toimittaa samanlaista varastoreseptiä (site_contact, 2026-10-21T07:21:00Z)",
-     "Kuljettaja Yara Sivellin voi odottaa vielä 30 minuuttia ennen kuin tarvitsee uuden matkasuunnitelman (driver, 2026-10-21T07:57:00Z)",
-     "Operaattorin viestit osoittavat, että keräys on pysäytetty ajoneuvon tunnistuksen sovittamista odottaessa (operator, 2026-10-21T07:12:00Z ja 07:30:00Z)",
-     "Vaihtoehtoiset kuljettajat ovat saatavilla lähellä: Livia Belmora (drv-033) 0 km etäisyydellä ja korkea pisteytys (find_alternative_drivers)",
-     "Tilausnäkymä näyttää tilan WAITING_FOR_PICKUP ja korkean arvoklassin (get_order_overview)"
-    ],
-    "suggestion": "Kohdista kuljettaja uudelleen ja viivästä noutoa, kunnes ajoneuvon tunnistus on vahvistettu.",
-    "if_approved": "Ilmoita sivustolle, että oikea ajoneuvo löydetään ja vapautetaan, tiedota myyjää viivästymisestä ja päivitä kuljettajan määritys ja noutoaika vastaavasti."
-   }
-  }
- },
  "ord-00516": {
   "orderId": "ord-00516",
   "messages": [
@@ -2561,5 +2306,295 @@
     "if_approved": "Lähetä varauspyyntö Viking Lineille ja päivitä tilaus laivakohteilla"
    }
   }
+ },
+ "ord-00593": {
+  "orderId": "ord-00593",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You are Bahn's dispatch-risk agent. Bahn delivers used cars for dealers with freelance drivers.\nYou work on ONE order. Your job: find out what is really going on, cheaply, and either settle it or bring a person ONE clear decision.\n\nRules:\n- Do the cheap work first: get_order_overview, then only the lookups you need. Ask the driver or pickup site when facts are missing.\n- Never contact a customer (anyone who pays Bahn: dealers, buyers). If a customer must be told something, put it in the proposal for a person.\n- Never change a booking, date, cost or driver yourself. Use propose_decision; a person approves it.\n- Use resolve_without_person ONLY if nothing needs a human judgement (e.g. the driver confirmed position, weather briefing sent).\n- Treat alerts as signals, quotes as not booked, and driver messages as claims, not verified facts. Say which source each fact came from.\n- Be brief. Ops people read your output in seconds. Stop after at most 6 tool calls and decide.\n- Write the proposal in plain language: what happened, what you found, what you suggest, and what happens if approved.\n- Name sources the way an ops person would, e.g. (ferry quote, 21 Oct 10:00) or (driver's reply). Never write tool names.\n- Plain text only: no Markdown, no asterisks, ordinary spaces and hyphens.\n- If the pickup site cannot find or release the right car, finding it can take days. Do not only propose waiting: say how long waiting is reasonable, and weigh releasing the driver, giving the driver another nearby job, or cancelling the delivery.\n- All times you see are Helsinki local time (Tallinn is the same). Write them that way, e.g. \"Wed 15:30\". Never convert to UTC."
+   }
+  ],
+  "steps": [
+   {
+    "type": "tool",
+    "name": "get_order_overview",
+    "args": {},
+    "summary": "Confidence 25 %, 6 signal(s)",
+    "at": "2026-10-24T18:13:37.254Z"
+   },
+   {
+    "type": "tool",
+    "name": "get_messages",
+    "args": {},
+    "summary": "6 message(s) read",
+    "at": "2026-10-24T18:13:38.452Z"
+   },
+   {
+    "type": "tool",
+    "name": "contact_pickup_site",
+    "args": {
+     "question": "For BMW M4 2022, plate DEMO-FI-MRF24B (Bahn order CD-420593): does the similar stock reference you see carry this exact plate and VIN? Is the car physically on your yard, or was it moved to another branch? Who at your site can authorise release, and by when could you confirm?"
+    },
+    "summary": "“No update yet beyond our last message (Wed 21 Oct, 10:21): “The car is not in our release queue. I can see a similar stock reference, but I cannot hand it over without confirmation.””",
+    "at": "2026-10-24T18:13:41.538Z"
+   },
+   {
+    "type": "tool",
+    "name": "ask_driver",
+    "args": {
+     "question": "Thanks for waiting. The site still cannot confirm the car. If we release you at 11:27, what are your travel plans back, and are you available for another job in the Helsinki area today or tomorrow?"
+    },
+    "summary": "“Nothing new since my last message (Wed 21 Oct, 10:57): “I can wait another 30 minutes. After that I need a new plan for my travel back.””",
+    "at": "2026-10-24T18:13:43.783Z"
+   },
+   {
+    "type": "tool",
+    "name": "find_alternative_drivers",
+    "args": {},
+    "summary": "Livia Belmora (97), Noel Jarnwell (91), Mara Bexford (90)",
+    "at": "2026-10-24T18:13:43.785Z"
+   },
+   {
+    "type": "tool",
+    "name": "propose_decision",
+    "args": {
+     "what_happened": "The driver reached Velantora Helsinki for the BMW M4 pickup, but the car is not in the site's release queue, so the site will not hand it over. The customer is checking with its stock team. The driver will wait only until about Wed 11:27.",
+     "what_i_found": [
+      "The site sees a similar stock reference but will not release it without confirmation. They had nothing new when I asked again just now (site message Wed 10:21, site reply now)",
+      "The customer says its system still lists this branch, is calling its stock team, and asks us not to substitute a different car (customer message Wed 10:39)",
+      "The driver will wait until about Wed 11:27 and then needs a plan to get home. They gave no new answer about taking another job (driver messages Wed 10:57 and now)",
+      "There is a lot of time left: the latest allowed arrival is Mon 26 Oct 16:00 and the drive is only 188 km, about 3.5 h (order overview)",
+      "Yara has had 2 damage claims and 1 missed pickup in the last 12 months, and this is a high-value BMW (track record)",
+      "Livia Belmora is based in Helsinki, 98 % on time, has no damage claims and is cleared for exceptional-value cars. Mara Bexford is a backup with the same clearance (alternative driver ranking)"
+     ],
+     "suggestion": "Release Yara at Wed 11:27 and pay her a failed-pickup fee. Keep the order on hold until the site and customer confirm which car it is and who can release it. Give them until Thu 22 Oct 12:00. If they confirm by then, book a new pickup for Thu or Fri with Livia Belmora, who is local and cleared for high-value cars. If nothing is confirmed by Fri 23 Oct 12:00, ask the customer to choose a new delivery date or cancel. Do not accept the similar stock reference unless the VIN and plate are confirmed.",
+     "if_approved": "I will tell Yara she is released and her fee will be handled. I will ask the site twice a day for the car's location and who can authorise release. Once that is confirmed, I will prepare a proposal to assign Livia Belmora with a new pickup slot. A person needs to tell the customer that collection is paused, that we need the VIN, the site holding the car and a release contact by Thu 22 Oct 12:00, and that after Fri 23 Oct 12:00 the Mon 26 Oct delivery can no longer be guaranteed.",
+     "changes": [
+      "Release driver Yara Sivellin from this pickup",
+      "Failed-pickup fee for Yara, amount for ops to set (her full fee is EUR 134)",
+      "Pickup moves from Wed 21 Oct to Thu or Fri once the car is confirmed",
+      "Planned new driver: Livia Belmora (needs approval when the pickup is rebooked)"
+     ],
+     "cost_eur": null,
+     "customer_must_be_told": true
+    },
+    "summary": "Sent to a person for approval.",
+    "at": "2026-10-24T18:13:57.868Z"
+   }
+  ],
+  "outcome": {
+   "type": "proposal",
+   "what_happened": "The driver reached Velantora Helsinki for the BMW M4 pickup, but the car is not in the site's release queue, so the site will not hand it over. The customer is checking with its stock team. The driver will wait only until about Wed 11:27.",
+   "what_i_found": [
+    "The site sees a similar stock reference but will not release it without confirmation. They had nothing new when I asked again just now (site message Wed 10:21, site reply now)",
+    "The customer says its system still lists this branch, is calling its stock team, and asks us not to substitute a different car (customer message Wed 10:39)",
+    "The driver will wait until about Wed 11:27 and then needs a plan to get home. They gave no new answer about taking another job (driver messages Wed 10:57 and now)",
+    "There is a lot of time left: the latest allowed arrival is Mon 26 Oct 16:00 and the drive is only 188 km, about 3.5 h (order overview)",
+    "Yara has had 2 damage claims and 1 missed pickup in the last 12 months, and this is a high-value BMW (track record)",
+    "Livia Belmora is based in Helsinki, 98 % on time, has no damage claims and is cleared for exceptional-value cars. Mara Bexford is a backup with the same clearance (alternative driver ranking)"
+   ],
+   "suggestion": "Release Yara at Wed 11:27 and pay her a failed-pickup fee. Keep the order on hold until the site and customer confirm which car it is and who can release it. Give them until Thu 22 Oct 12:00. If they confirm by then, book a new pickup for Thu or Fri with Livia Belmora, who is local and cleared for high-value cars. If nothing is confirmed by Fri 23 Oct 12:00, ask the customer to choose a new delivery date or cancel. Do not accept the similar stock reference unless the VIN and plate are confirmed.",
+   "if_approved": "I will tell Yara she is released and her fee will be handled. I will ask the site twice a day for the car's location and who can authorise release. Once that is confirmed, I will prepare a proposal to assign Livia Belmora with a new pickup slot. A person needs to tell the customer that collection is paused, that we need the VIN, the site holding the car and a release contact by Thu 22 Oct 12:00, and that after Fri 23 Oct 12:00 the Mon 26 Oct delivery can no longer be guaranteed.",
+   "changes": [
+    "Release driver Yara Sivellin from this pickup",
+    "Failed-pickup fee for Yara, amount for ops to set (her full fee is EUR 134)",
+    "Pickup moves from Wed 21 Oct to Thu or Fri once the car is confirmed",
+    "Planned new driver: Livia Belmora (needs approval when the pickup is rebooked)"
+   ],
+   "cost_eur": null,
+   "customer_must_be_told": true,
+   "status": "PENDING_APPROVAL",
+   "at": "2026-10-24T18:13:57.868Z",
+   "model": "claude-opus-5-5",
+   "fi": {
+    "what_happened": "Kuljettaja saapui Velantora Helsinkiin noutamaan BMW M4:ää, mutta autoa ei ole toimipisteen luovutusjonossa, joten toimipiste ei luovuta sitä. Asiakas selvittää asiaa varastotiiminsä kanssa. Kuljettaja odottaa enintään noin ke 11:27 asti.",
+    "what_i_found": [
+     "Toimipisteessä näkyy samankaltainen varastoviite, mutta sitä ei luovuteta ilman vahvistusta. Kun kysyin uudelleen juuri äsken, heillä ei ollut uutta tietoa (toimipisteen viesti ke 10:21, toimipisteen vastaus nyt)",
+     "Asiakkaan mukaan sen järjestelmässä auto on yhä tässä toimipisteessä. Asiakas soittaa varastotiimilleen ja pyytää, ettemme korvaa autoa toisella (asiakkaan viesti ke 10:39)",
+     "Kuljettaja odottaa noin ke 11:27 asti, minkä jälkeen hän tarvitsee suunnitelman kotimatkaa varten. Hän ei ole vastannut uudelleen siihen, ottaisiko hän toisen keikan (kuljettajan viestit ke 10:57 ja nyt)",
+     "Aikaa on reilusti: viimeisin sallittu saapumisaika on ma 26.10. klo 16:00, ja ajomatka on vain 188 km, noin 3,5 h (tilauksen yleiskatsaus)",
+     "Yaralla on ollut viimeisten 12 kuukauden aikana 2 vahinkoilmoitusta ja 1 väliin jäänyt nouto, ja kyseessä on arvokas BMW (historia)",
+     "Livia Belmora asuu Helsingissä, on ajallaan 98 % ajoista, hänellä ei ole vahinkoilmoituksia ja hänet on hyväksytty poikkeuksellisen arvokkaiden autojen kuljetuksiin. Mara Bexford on varavaihtoehto, jolla on sama hyväksyntä (vaihtoehtoisten kuljettajien järjestys)"
+    ],
+    "suggestion": "Vapautetaan Yara ke 11:27 ja maksetaan hänelle epäonnistuneen noudon korvaus. Pidetään tilaus pidossa, kunnes toimipiste ja asiakas vahvistavat, mistä autosta on kyse ja kuka voi luovuttaa sen. Annetaan heille aikaa to 22.10. klo 12:00 asti. Jos vahvistus tulee siihen mennessä, varataan uusi nouto torstaiksi tai perjantaiksi Livia Belmoralle, joka on paikallinen ja hyväksytty arvokkaiden autojen kuljetuksiin. Jos mitään ei ole vahvistettu pe 23.10. klo 12:00 mennessä, pyydetään asiakasta valitsemaan uusi toimituspäivä tai perumaan tilaus. Samankaltaista varastoviitettä ei hyväksytä, ellei VIN-numeroa ja rekisterikilpeä ole vahvistettu.",
+    "if_approved": "Ilmoitan Yaralle, että hänet on vapautettu ja että hänen korvauksensa hoidetaan. Kysyn toimipisteeltä kahdesti päivässä auton sijaintia ja sitä, kuka voi valtuuttaa luovutuksen. Kun tiedot on vahvistettu, valmistelen ehdotuksen Livia Belmoran määräämisestä tehtävään ja uudesta noutoajasta. Ihmisen täytyy kertoa asiakkaalle, että nouto on keskeytetty, että tarvitsemme VIN-numeron, autoa säilyttävän toimipisteen ja luovutuksen yhteyshenkilön to 22.10. klo 12:00 mennessä ja että pe 23.10. klo 12:00 jälkeen toimitusta ma 26.10. ei voida enää taata."
+   },
+   "decidedNote": null
+  },
+  "claude": [
+   {
+    "role": "user",
+    "content": "Work on order CD-420593 (ord-00593). Start with get_order_overview."
+   },
+   {
+    "role": "assistant",
+    "content": [
+     {
+      "type": "tool_use",
+      "id": "toolu_01CWHSBSaZRG5xhmSAr7cYt4",
+      "name": "get_order_overview",
+      "input": {},
+      "caller": {
+       "type": "direct"
+      }
+     }
+    ]
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01CWHSBSaZRG5xhmSAr7cYt4",
+      "content": "{\"ref\":\"CD-420593\",\"status\":\"WAITING_FOR_PICKUP\",\"lane\":\"needs_you\",\"confidence\":25,\"car\":{\"make\":\"BMW\",\"model\":\"M4\",\"year\":2022,\"fuel\":\"petrol\",\"plate\":\"DEMO-FI-MRF24B\"},\"value_class\":\"high\",\"from\":{\"city\":\"Helsinki\",\"country\":\"FI\",\"name\":\"Velantora Helsinki\",\"kind\":\"DEALERSHIP\"},\"to\":{\"city\":\"Turku\",\"country\":\"FI\",\"name\":\"Private handoff\",\"kind\":\"PRIVATE_HOME\"},\"drive_km\":188,\"ferry\":null,\"pickup_slot\":{\"start\":\"Wed 21 Oct, 09:00\",\"end\":\"Wed 21 Oct, 11:00\"},\"customer_eta\":\"Mon 26 Oct, 11:00\",\"latest_arrival\":\"Mon 26 Oct, 16:00\",\"predicted_arrival\":\"Wed 21 Oct, 13:30\",\"buffer_hours\":123.5,\"driver\":{\"id\":\"drv-139\",\"name\":\"Yara Sivellin\"},\"driver_fee_eur\":134,\"reasons\":[{\"factor\":\"readiness\",\"risk\":0.35,\"text\":\"Open incident: empty pickup\",\"agent_can_handle\":false,\"source\":\"Incident @ 2026-10-21T07:12:00Z\"},{\"factor\":\"readiness\",\"risk\":0.3,\"text\":\"Agent proposal waiting for review: Ask the site and customer to reconcile the vehicle identity before another collection attempt.\",\"agent_can_handle\":false,\"source\":\"Agent proposal @ 2026-10-21T08:01:00Z\"},{\"factor\":\"driver\",\"risk\":0.2,\"text\":\"Yara Sivellin had 2 damage claim(s) in 12 months; this is a BMW\",\"agent_can_handle\":false,\"source\":\"Track record · Yara Sivellin (demo data)\"},{\"factor\":\"readiness\",\"risk\":0.15,\"text\":\"Pickup access or contact not confirmed, pickup within 36 h\",\"agent_can_handle\":true,\"source\":\"Pickup details @ 2026-10-19T05:12:00Z\"},{\"factor\":\"driver\",\"risk\":0.12,\"text\":\"Yara Sivellin missed a pickup in the last 12 months\",\"agent_can_handle\":false,\"source\":\"Track record · Yara Sivellin (demo data)\"},{\"factor\":\"driver\",\"risk\":0.07,\"text\":\"Yara Sivellin is on time in 85 % of deliveries\",\"agent_can_handle\":false,\"source\":\"Track record · Yara Sivellin (demo data)\"}]}"
+     }
+    ]
+   },
+   {
+    "role": "assistant",
+    "content": [
+     {
+      "type": "tool_use",
+      "id": "toolu_01Sz4Ffv17SsEztE23Tkf7NU",
+      "name": "get_messages",
+      "input": {},
+      "caller": {
+       "type": "direct"
+      }
+     }
+    ]
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01Sz4Ffv17SsEztE23Tkf7NU",
+      "content": "[{\"at\":\"Wed 21 Oct, 10:12\",\"from\":\"operator\",\"body\":\"Please stay at the site for a moment. Can the desk check the vehicle record and the yard before you leave?\"},{\"at\":\"Wed 21 Oct, 10:21\",\"from\":\"site_contact\",\"body\":\"The car is not in our release queue. I can see a similar stock reference, but I cannot hand it over without confirmation.\"},{\"at\":\"Wed 21 Oct, 10:30\",\"from\":\"operator\",\"body\":\"A similar stock reference is not proof of identity. Keep the pickup event unset; ask the customer which site physically holds this VIN.\"},{\"at\":\"Wed 21 Oct, 10:39\",\"from\":\"customer\",\"body\":\"Our system still lists this branch. I am calling the stock team now; please do not substitute a different car.\"},{\"at\":\"Wed 21 Oct, 10:48\",\"from\":\"operator\",\"body\":\"We have paused collection while the site and customer reconcile the record. I will update the driver when the actual location and release authority are confirmed.\"},{\"at\":\"Wed 21 Oct, 10:57\",\"from\":\"driver\",\"body\":\"I can wait another 30 minutes. After that I need a new plan for my travel back.\"}]"
+     }
+    ]
+   },
+   {
+    "role": "assistant",
+    "content": [
+     {
+      "type": "thinking",
+      "thinking": "",
+      "signature": "CAQSlQYKEAgTGAI4AUIIdGhpbmtpbmcSDIh2uQ6KEIfCTcSQwxoMq6EVlRiBYKDerBd1IjBRmn+CB/GrLKVfK66PbyqAbI8Y3+873oaTZA3syFQ3MUZXYgRYJ1E0ba279tJZ1NcqsgUf6utxr0+79dNnsz30LxtlyVaQy8MixCBhwK0El0raaeYcIHoulNgNd464Pjj/GdHt4UrDqiR22xApqJtm4hVrf2qU3VvV9l8RWQtRPAhgbC84fujhWDF+hb9O7iECxxmsSbouT0ncSV2LIhuKC61Q5c3KQBbzJSECI7upDTnjT3Rcl70yqmGhkeMEbJM1GLOs8e6qcslLUOjcX4zc3Zi0MzRt01kzst6YNrqJG/vhTk7rHPKJpLrgGnEv4NT4wRRwcxrDoB3sH7GKTYCHwp5wdHab61zPC1P14cZpNzQIyYJRlVkU8/zwKhiGMVaUySIt2jlsIAt9r9+CI55PL/Oka3QWUWSnBz6x7+WJ9z9LXT1REF5eJXb2WWB8ynQXPt0YDUIwftj+FZkpR9IalCvPlGUxUEXe6KmnVDeFnCMOk3OeVOgimceDSOdXm+VvIS3xjCHWnb3wsBR4Koi4ojElM8n7POSfF1+doWitpZX2NNFuskTpJtmv0radpOyUsfy+GnFyndjmktiJHYFkG8ZfgRMy/qJj3XJiahI6L4kqaT9mIOZZCZyIojwFYehpqTeHoqEeT3zY98+jUhMwh/lGXWrfNv68lc3qIVKF7vWWPQELDj0mN3Q4ZGI3fniBP86+Sjld0cK3BAhbguRkzNUSdzLKMOOStkxOrBrvrf+WCdcw9HWji5s/QE03G0LrJQubgVXOoY+xUATSfRL7uDWrV9qkCfwROjm138/BIeBupMH/wRkEouMAgM4TtLODz3jPnRpTqbjWmx8QVm4vOPs3aYkdt/eVzEdcQrBqnWY29cCviGOkHOQUJ7GmHqj3wgRxX5lA1LFrgZpWI5MesuOuhhC7Zfk5JJ6XDlvKBQMV7dHuEuRPmRLJUidJ+0JxA+C/HUH6ZWffRPB77gyv9GaT/0AYAQ=="
+     },
+     {
+      "type": "tool_use",
+      "id": "toolu_01EBXxWwq72pwnWwYUDE2NJ4",
+      "name": "contact_pickup_site",
+      "input": {
+       "question": "For BMW M4 2022, plate DEMO-FI-MRF24B (Bahn order CD-420593): does the similar stock reference you see carry this exact plate and VIN? Is the car physically on your yard, or was it moved to another branch? Who at your site can authorise release, and by when could you confirm?"
+      },
+      "caller": {
+       "type": "direct"
+      }
+     }
+    ]
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01EBXxWwq72pwnWwYUDE2NJ4",
+      "content": "{\"reply\":\"No update yet beyond our last message (Wed 21 Oct, 10:21): “The car is not in our release queue. I can see a similar stock reference, but I cannot hand it over without confirmation.”\"}"
+     }
+    ]
+   },
+   {
+    "role": "assistant",
+    "content": [
+     {
+      "type": "tool_use",
+      "id": "toolu_01Qk2ib65dDYF1966QrJZk3t",
+      "name": "ask_driver",
+      "input": {
+       "question": "Thanks for waiting. The site still cannot confirm the car. If we release you at 11:27, what are your travel plans back, and are you available for another job in the Helsinki area today or tomorrow?"
+      },
+      "caller": {
+       "type": "direct"
+      }
+     },
+     {
+      "type": "tool_use",
+      "id": "toolu_0181c7PRXQDZv7Af7E5iTVwD",
+      "name": "find_alternative_drivers",
+      "input": {},
+      "caller": {
+       "type": "direct"
+      }
+     }
+    ]
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01Qk2ib65dDYF1966QrJZk3t",
+      "content": "{\"reply\":\"Nothing new since my last message (Wed 21 Oct, 10:57): “I can wait another 30 minutes. After that I need a new plan for my travel back.”\"}"
+     },
+     {
+      "type": "tool_result",
+      "tool_use_id": "toolu_0181c7PRXQDZv7Af7E5iTVwD",
+      "content": "[{\"id\":\"drv-033\",\"name\":\"Livia Belmora\",\"homeCity\":\"Helsinki\",\"score\":97,\"why\":[\"0 km from pickup\",\"98 % on time\",\"222 deliveries / 12 mo\",\"no damage claims\",\"cleared for exceptional-value cars\"]},{\"id\":\"drv-00564\",\"name\":\"Noel Jarnwell\",\"homeCity\":\"Espoo\",\"score\":91,\"why\":[\"16 km from pickup\",\"95 % on time\",\"120 deliveries / 12 mo\",\"no damage claims\"]},{\"id\":\"drv-021\",\"name\":\"Mara Bexford\",\"homeCity\":\"Helsinki\",\"score\":90,\"why\":[\"0 km from pickup\",\"93 % on time\",\"279 deliveries / 12 mo\",\"no damage claims\",\"cleared for exceptional-value cars\"]}]"
+     }
+    ]
+   },
+   {
+    "role": "assistant",
+    "content": [
+     {
+      "type": "thinking",
+      "thinking": "",
+      "signature": "CAQS7AoKEAgTGAI4AUIIdGhpbmtpbmcSDPPh5flRR6kTlSgQShoMprXnqwjnwG4lBkpsIjAGh8d5lyvw2//AqiUG5nMdwN6NYOB7W+pEwE6BD4JW1G359eUvqQq/C+Jgr2VJUjUqiQr4nZ1Af47G29HaLGZnqkFrAy5OKrfbnWrNKk4Sqm1E1l4WTzeX55vhsmNNrQqfC6txo47e7qr7MH9VQoKWPDkFL8QO9y2CAVcbqa8m8Kl1+lNCkMB8yI2bJ2lZf7/443xPJ3tuAm9ONTCajAiKNxupxt6IrUSj5gH0W6IdlNSQvaiSyRzopaQuKicSyifz/8VKArAbi9Ry8GhveisDgLx+w+F7sNj3uLni9glcFtgZlo3qUtkrkwMioLTvMjU3Fyyg/LUiNu4Vf4MpRVocQaY37uTG2GJ2yuxjvBO17cJdBvyK+I1oruIsY952V1ZUSkDu81bAIi51wy4hpGEQrCaJytNdq7NX5n5Ff7rvr/SvcnBO6BhVcVgptvKsKEEmr5udalu8+3XvdOP3QDOxVgojB9hQFFztZzJ2zyhQkWBQbDXrRh4rWMkkNFc0NXxzy62TZd9hhVTaT8vvgTOlIAr5OlCkyDi4iTkuLzcZs8kmt3wnk4EXMYdKEddOuJTOBXfsQ9ZwxUbA8qwXBOVjgSspfke5H7+nPm7Lno21kFYeHW3j6COuz2MGQ8rbJlmzgPEa13BhHLszpDImGxjdGYiHQuf3cQd/G7I2gttOfdX+QIfuM1hmYStAeyYrR7jEEW7VpZiabpNqoAHnXEn70o1LSKkqjpOrWw+ZopteQ3KX/BCJTe5hjLl37v0HBPT0rfUisIuFMUKfLuuqtW76ozPnWoRw9f7zT1CEp2rCueZQNSgD0dpmbW8aPBabNaoGlvPHosNY9qfBkHsQ/DSPpLrGaVrQpegoPDZtWjwoQZ2EQkprtXHqKzBAboWDyIYtL8J9cRT610UOXWQcEqOufnXABzb6d6FKv3jEiQaYp6c/hiJoCAfb1UTNHPuNSzG5XdlID1aj7Cq02mMpp3sn9kmCJUEQw28mYqGnY7/t+Edhd+kqRR13mC12Rl+W18ETNQqwAElriMYpqIpmU8nV5rtZOBAw8CdQPbFB3odK262smHJq82SSZEpSTpYhrOASvrV04+cVSWy4gPbnu2ACnUpPmL8FL9R5Wg6TkvP44yX89bKXMD4AbVh6AcUCZw2byB2zaYvUwAKBZA1Bk/rt3M0+hpK661pLIdUXjL5i9CY6JM37e6gQEwgEc/SKljta1ZmpTvVjc1NGnT6vkwa0ffWR53mUDY9w99pcB2R96/R7fTasMmUdYwPSsd0OQPVDrDe9259wJke7BnRQPVw7p76B+o8Z7QPpYV6ghzhTv7JTupQoI7Uv9xtQ7//Ar4iPi9/fMnQ1BMRZmJWAlxL4VJaSebEybU1sLWv7KqhYP7Yv8XwLM9lELoPn42PNKrdlRlgq1YL5XV+q/FadbPu8JSbzSlYuYmgq4EvvaCOP8lRdvAYfUHkG9VPLtu9PFCQ1A5LWVd9426DzTtoUcx6uEHEaEgOaZ1ez7N3jHZpu1rhVg2k16IF8CFGIXUjAtZTpoWOAcrkF4GNrLSWJWEmFjXTeth4UrcZmnBr7Q7iXEE+7XSVZT+fbairwyms8EfKFvnb8t8H+NFQ0qdohyGH3LvqvEpvdLp76C4z7HHlZh/DpkPlpUlEVqI2mmATADm1sAAjqZoIdAStHJdmik/lEt0wkSwlHHipA8QD4hK8iK82UtdFNxqBnidWNMc4Jm+X8sk0bp31s1nx0eykdOYa17zeSHGL8fDxNPnoWVHlK1k23wRX9D0PbCm3WxRgB"
+     },
+     {
+      "type": "tool_use",
+      "id": "toolu_01CSnskrkn29sgmgzmS3ELP2",
+      "name": "propose_decision",
+      "input": {
+       "what_happened": "The driver reached Velantora Helsinki for the BMW M4 pickup, but the car is not in the site's release queue, so the site will not hand it over. The customer is checking with its stock team. The driver will wait only until about Wed 11:27.",
+       "what_i_found": [
+        "The site sees a similar stock reference but will not release it without confirmation. They had nothing new when I asked again just now (site message Wed 10:21, site reply now)",
+        "The customer says its system still lists this branch, is calling its stock team, and asks us not to substitute a different car (customer message Wed 10:39)",
+        "The driver will wait until about Wed 11:27 and then needs a plan to get home. They gave no new answer about taking another job (driver messages Wed 10:57 and now)",
+        "There is a lot of time left: the latest allowed arrival is Mon 26 Oct 16:00 and the drive is only 188 km, about 3.5 h (order overview)",
+        "Yara has had 2 damage claims and 1 missed pickup in the last 12 months, and this is a high-value BMW (track record)",
+        "Livia Belmora is based in Helsinki, 98 % on time, has no damage claims and is cleared for exceptional-value cars. Mara Bexford is a backup with the same clearance (alternative driver ranking)"
+       ],
+       "suggestion": "Release Yara at Wed 11:27 and pay her a failed-pickup fee. Keep the order on hold until the site and customer confirm which car it is and who can release it. Give them until Thu 22 Oct 12:00. If they confirm by then, book a new pickup for Thu or Fri with Livia Belmora, who is local and cleared for high-value cars. If nothing is confirmed by Fri 23 Oct 12:00, ask the customer to choose a new delivery date or cancel. Do not accept the similar stock reference unless the VIN and plate are confirmed.",
+       "if_approved": "I will tell Yara she is released and her fee will be handled. I will ask the site twice a day for the car's location and who can authorise release. Once that is confirmed, I will prepare a proposal to assign Livia Belmora with a new pickup slot. A person needs to tell the customer that collection is paused, that we need the VIN, the site holding the car and a release contact by Thu 22 Oct 12:00, and that after Fri 23 Oct 12:00 the Mon 26 Oct delivery can no longer be guaranteed.",
+       "changes": [
+        "Release driver Yara Sivellin from this pickup",
+        "Failed-pickup fee for Yara, amount for ops to set (her full fee is EUR 134)",
+        "Pickup moves from Wed 21 Oct to Thu or Fri once the car is confirmed",
+        "Planned new driver: Livia Belmora (needs approval when the pickup is rebooked)"
+       ],
+       "cost_eur": null,
+       "customer_must_be_told": true
+      },
+      "caller": {
+       "type": "direct"
+      }
+     }
+    ]
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01CSnskrkn29sgmgzmS3ELP2",
+      "content": "{\"ok\":true,\"note\":\"Sent to a person for approval.\"}"
+     }
+    ]
+   }
+  ]
  }
 }

@@ -1,0 +1,30 @@
+[
+  {
+    "id": "s1-queue",
+    "text": "Bahn moves twenty-five thousand used cars a year, with fifteen hundred freelance drivers and about fifty people in operations. Today, each of those people holds every delivery in their head. This is our control room. Of forty-one live orders in Finland and Estonia, eight need a person right now. The rest are handled by the agent or on track, and they stay out of the way."
+  },
+  {
+    "id": "s2-score",
+    "text": "Bahn told us they had never scored delivery risk before. That is where we started. Every order gets one number: our confidence that it delivers on time without a person. It is built from seven factors: readiness, schedule, route, car, driver, the driver market, and outside events like strikes. Each signal is a reason, with a weight and the record it came from. The engine is cheap and deterministic, so it can run on a million orders. The language model only works on the few it flags."
+  },
+  {
+    "id": "s3-agent",
+    "text": "Here, a BMW M4 pickup came up empty. Before anyone at Bahn looked, the agent read the messages, asked the driver and the pickup site, and ranked replacement drivers. Then it stopped, and handed over one decision, with every fact sourced. It never contacts a customer on its own. The message to the dealer is drafted for a person to send."
+  },
+  {
+    "id": "s4-driver",
+    "text": "Risk is not only the road. This Bentley's driver has two damage claims this year, and is not cleared for exceptional value cars. Expensive cars get a stricter bar. The agent ranks better matched drivers by distance, on time rate and track record."
+  },
+  {
+    "id": "s5-route",
+    "text": "Then the route. This BMW i4 goes from Tartu to Tampere. No ferry is booked, and the three thirty sailing has few car spaces left. The control room shows the arrival if nothing is done, and if you approve. Real OpenStreetMap routes, live weather, Finnish road data, and the car's energy use plan the charging stop on the way."
+  },
+  {
+    "id": "s6-approve",
+    "text": "One click approves, and the room says exactly what happens next. Every fact links back to its source record, so nobody has to trust the agent blindly."
+  },
+  {
+    "id": "s7-close",
+    "text": "Operations work in Finnish, so the whole room switches language. We built it with Claude Code. We made it read the brief and the data first, threw away a first tuning that flagged a third of all orders, and checked every agent trace against the dataset. Bahn's team now sees only what needs them, and for the first time, knows why."
+  }
+]
