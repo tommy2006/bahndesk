@@ -666,6 +666,8 @@ function openFromHash() {
 }
 window.addEventListener('hashchange', () => openFromHash());
 
+// Header height, so the order list can fill the rest of the window and scroll on its own.
+new ResizeObserver(() => document.documentElement.style.setProperty('--top-h', `${$('.top').offsetHeight}px`)).observe($('.top'));
 renderTop();
 $('#list').innerHTML = Array.from({ length: 5 }, () => '<li class="skel" style="height:96px"></li>').join('');
 renderDetail();
