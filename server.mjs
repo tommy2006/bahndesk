@@ -16,6 +16,7 @@ try {
 
 const { db, rowsFor, findRecord } = await import('./lib/data.mjs');
 const { analyseAll, analyseOrder, rankDrivers } = await import('./lib/engine.mjs');
+const { weeklyReport } = await import('./lib/report.mjs');
 const { live, refreshAll } = await import('./lib/live.mjs');
 const { runAgent, runs, publicRun, agentAvailable, decideOutcome, provider, agentModel } = await import('./lib/agent.mjs');
 const { strikes, savedRoute, coordsOf } = await import('./lib/external.mjs');
@@ -241,6 +242,7 @@ export async function handler(req, res) {
       translateSoon();
       return send(res, 200, { record: rec, keysFi, explained });
     }
+    if (p === '/api/report') return send(res, 200, { ...weeklyReport(analyseAll().orders.map(withDecisions)), decisions: Object.keys(decisions).filter((k) => !k.startsWith('group:')).length });
     if (p === '/api/i18n') return send(res, 200, { pending: pendingCount() });
     if (req.method === 'POST' && (m = p.match(/^\/api\/orders\/([\w-]+)\/agent$/))) {
       const body = await readBody(req);

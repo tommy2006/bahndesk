@@ -97,6 +97,16 @@ No invented operators or travel quotes: the snapshot's made-up ferry lines, airl
 
 Demo and live data are labelled in the UI. If live sources are unreachable the app uses the last saved fetch and says so.
 
+## Weekly report: caught vs missed
+
+The **Weekly report** button (or `/#report`) is for management. `lib/report.mjs` takes every problem the data records on an order (an incident, a car not found, a refused check-in, a cancellation, a late delivery, or a high/critical alert from Bahn's own system). It then asks:
+
+- **Warned in advance?** It re-runs the risk rules using only records dated *before* the problem, plus what was known at planning (route, crossings, driver track record). Live weather, traffic and countdowns are left out because they describe today. If those signals alone would have sent the order to a person or the agent, it was warned in advance, and the report shows how many hours ahead.
+- **Flagged when it happened?** Otherwise: was the order in front of a person or the agent once the problem was on record?
+- **Missed:** neither. Each miss comes with what would catch it next time.
+
+For week 43 (data up to Wed 21 Oct 12:00), 13 of 87 orders had a problem (15 %). 10 were caught: 2 in advance (median 26 h ahead) and 8 when they happened. 3 were missed: a late delivery and two cancellations. The report also shows today's load: how many orders need a person and how many the agent handles. It says plainly that orders raised without a recorded problem are open risks, not proven false alarms.
+
 ## Deploy to Vercel
 
 The same code runs as one Vercel function (`api/index.mjs` → `server.mjs`'s `handler`); `vercel.json` serves `public/` and rewrites `/api/*` to it.

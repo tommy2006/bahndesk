@@ -56,7 +56,7 @@ const T = {
   },
 };
 
-const state = { lang: localGet('lang') || 'en', tab: 'needs_you', data: null, sel: null, detail: null, showAll: false, busy: false, open: new Set() };
+const state = { lang: localGet('lang') || 'en', view: 'board', report: null, tab: 'needs_you', data: null, sel: null, detail: null, showAll: false, busy: false, open: new Set() };
 const $ = (s) => document.querySelector(s);
 const t = (k, vars = {}) => String(k.split('.').reduce((o, p) => o?.[p], T[state.lang]) ?? k).replace(/\{(\w+)\}/g, (_, v) => vars[v] ?? '');
 const L = (obj) => (obj && typeof obj === 'object' ? obj[state.lang] || obj.en : obj || '');
@@ -117,6 +117,8 @@ function renderTop() {
   document.querySelectorAll('[data-i18n]').forEach((el) => (el.textContent = t(el.dataset.i18n)));
   document.querySelectorAll('.lang button').forEach((b) => b.classList.toggle('on', b.dataset.lang === state.lang));
   document.documentElement.lang = state.lang;
+  $('#report-link').textContent = state.view === 'report' ? rt('back') : rt('link');
+  $('#report-link').classList.toggle('on', state.view === 'report');
   const l = state.data?.live;
   const el = $('#live');
   if (!l) return;
@@ -130,7 +132,7 @@ function renderQueue() {
   const { orders, groups } = state.data;
   const count = (lane) => orders.filter((o) => o.lane === lane).length;
   $('#tabs').innerHTML = ['needs_you', 'agent', 'clear', 'done'].map((lane) =>
-    `<button class="tab ${lane === state.tab ? 'on' : ''} ${lane === 'needs_you' ? 'primary' : ''}" data-tab="${lane}">${t(lane)}<b>${count(lane)}</b></button>`).join('');
+    `<button class="tab ${lane === state.tab && state.view === 'board' ? 'on' : ''} ${lane === 'needs_you' ? 'primary' : ''}" data-tab="${lane}">${t(lane)}<b>${count(lane)}</b></button>`).join('');
 
   const n = count(state.tab);
   $('#queue-title').textContent = state.tab === 'needs_you' ? (n === 1 ? t('title_needs_one') : t('title_needs', { n })) : t(`title_${state.tab}`, { n });
@@ -508,8 +510,9 @@ document.addEventListener('click', async (e) => {
   const nx = e.target.closest('.ap .next');
   if (nx && !el) { nx.classList.toggle('open'); return; }
   if (!el) return;
-  if (el.dataset.tab) { state.tab = el.dataset.tab; renderQueue(); return; }
-  if (el.dataset.lang) { state.lang = el.dataset.lang; localSet('lang', state.lang); renderTop(); renderQueue(); renderDetail(); return; }
+  if (el.hasAttribute('data-report')) { showReport(state.view !== 'report'); return; }
+  if (el.dataset.tab) { state.tab = el.dataset.tab; if (state.view === 'report') showReport(false); renderQueue(); return; }
+  if (el.dataset.lang) { state.lang = el.dataset.lang; localSet('lang', state.lang); renderTop(); renderQueue(); renderDetail(); renderReport(); return; }
   if (el.dataset.id) { openOrder(el.dataset.id); return; }
   if (el.dataset.src) { openSource(el.dataset.src); return; }
   if (el.hasAttribute('data-close')) { $('#source').hidden = true; return; }
@@ -559,10 +562,104 @@ document.addEventListener('toggle', (e) => {
   if (id) e.target.open ? state.open.add(id) : state.open.delete(id);
 }, true);
 
+// ---------- Weekly report (management) ----------
+const RT = {
+  en: {
+    link: 'Weekly report', back: 'Back to orders', title: 'Week {n}: caught vs missed', range: '{from} – {to} · data up to {asof}',
+    problems: 'Problems recorded', problems_sub: '{pct} % of {n} orders',
+    caught: 'Caught', caught_sub: '{early} warned in advance, {on} flagged when it happened',
+    missed: 'Missed', missed_sub: 'Nobody was shown these in time',
+    lead: 'Warning time', lead_sub: 'median, for those warned in advance', none: '—',
+    early: 'Warned in advance', on_time: 'Flagged when it happened', miss: 'Missed',
+    load: "Today's load", load_line: '{p} of {n} orders need a person ({pct} %). The agent handles {a}. {c} are on track or delivered.', load_extra: '{x} of the orders sent to a person have no recorded problem yet: open risks, not known false alarms. People have made {d} decisions here.',
+    missed_h: 'Missed: what to change', caught_h: 'Caught', earlier_h: 'Earlier weeks', method_h: 'How this is worked out',
+    c_order: 'Order', c_what: 'What happened', c_when: 'When', c_fix: 'What would catch it next time', c_how: 'How', c_first: 'First signal', c_week: 'Week', c_deliv: 'Delivered', c_prob: 'Problems',
+    ahead: '{h} ahead', by_person: 'to a person', by_agent: 'to the agent',
+    earlier_note: 'The snapshot keeps open problems. Problems from earlier weeks were mostly closed before it was taken, so those weeks show few.',
+    no_missed: 'Nothing was missed this week.',
+  },
+  fi: {
+    link: 'Viikkoraportti', back: 'Takaisin tilauksiin', title: 'Viikko {n}: havaitut ja ohi menneet', range: '{from} – {to} · tiedot {asof} asti',
+    problems: 'Kirjatut ongelmat', problems_sub: '{pct} % / {n} tilausta',
+    caught: 'Havaittu', caught_sub: '{early} varoitettu etukäteen, {on} nostettu tapahtuessa',
+    missed: 'Ohi mennyt', missed_sub: 'Näitä ei näytetty kenellekään ajoissa',
+    lead: 'Varoitusaika', lead_sub: 'mediaani, etukäteen varoitetuista', none: '—',
+    early: 'Varoitettu etukäteen', on_time: 'Nostettu tapahtuessa', miss: 'Ohi mennyt',
+    load: 'Tämän päivän kuorma', load_line: '{p}/{n} tilausta tarvitsee ihmistä ({pct} %). Agentti hoitaa {a}. {c} on aikataulussa tai toimitettu.', load_extra: '{x} ihmiselle nostetusta tilauksesta ei ole vielä kirjattua ongelmaa: avoimia riskejä, ei todettuja turhia hälytyksiä. Ihmiset ovat tehneet täällä {d} päätöstä.',
+    missed_h: 'Ohi menneet: mitä muuttaa', caught_h: 'Havaitut', earlier_h: 'Aiemmat viikot', method_h: 'Miten tämä lasketaan',
+    c_order: 'Tilaus', c_what: 'Mitä tapahtui', c_when: 'Milloin', c_fix: 'Mikä sen havaitsisi ensi kerralla', c_how: 'Miten', c_first: 'Ensimmäinen merkki', c_week: 'Viikko', c_deliv: 'Toimitettu', c_prob: 'Ongelmia',
+    ahead: '{h} etukäteen', by_person: 'ihmiselle', by_agent: 'agentille',
+    earlier_note: 'Tilannekuva sisältää avoimet ongelmat. Aiempien viikkojen ongelmat oli enimmäkseen suljettu ennen sitä, joten niitä näkyy vähän.',
+    no_missed: 'Tällä viikolla mikään ei mennyt ohi.',
+  },
+};
+const rt = (k, vars = {}) => String(RT[state.lang][k] ?? k).replace(/\{(\w+)\}/g, (_, v) => vars[v] ?? '');
+const day = (iso) => fmt(iso, { day: 'numeric', month: 'short' });
+
+async function showReport(on) {
+  state.view = on ? 'report' : 'board';
+  document.querySelector('.layout').hidden = on;
+  $('#report').hidden = !on;
+  renderTop();
+  if (state.data) renderQueue();
+  if (!on) { if (location.hash === '#report') history.replaceState(null, '', location.pathname); return; }
+  if (location.hash !== '#report') history.replaceState(null, '', '#report');
+  if (!state.report) {
+    $('#report').innerHTML = '<div class="rp"><div class="skel" style="height:120px"></div></div>';
+    try { state.report = await api('/api/report'); } catch (e) { $('#report').innerHTML = `<div class="rp"><p class="muted">${esc(e.message)}</p></div>`; return; }
+  }
+  renderReport();
+}
+
+function renderReport() {
+  const r = state.report;
+  if (!r || state.view !== 'report') return;
+  const w = r.week, q = r.queue;
+  const pct = (a, b) => (b ? Math.round((100 * a) / b) : 0);
+  const orderCell = (x) => `<a class="ref" href="#${esc(x.ref)}">${esc(x.ref)}</a><div class="sub">${esc(x.from)} → ${esc(x.to)}</div>`;
+  const what = (x) => `${esc(L(x.what))}${x.also?.length ? `<div class="sub">${x.also.map((a) => esc(L(a))).join(' · ')}</div>` : ''}`;
+  const srcBtn = (s) => (s?.table ? ` <button class="src" data-src="${s.table}/${encodeURIComponent(s.id || '')}">${t('source')}</button>` : '');
+  const seg = (n, cls, label) => (n ? `<span class="seg ${cls}" style="flex:${n}" title="${esc(label)}: ${n}"></span>` : '');
+  $('#report').innerHTML = `<div class="rp">
+    <h1 class="queue-title">${rt('title', { n: w.weekNo })}</h1>
+    <p class="queue-sub">${rt('range', { from: day(w.week + 'T12:00:00Z'), to: day(w.endDay + 'T12:00:00Z'), asof: fmt(r.asOf) })}</p>
+
+    <div class="tiles">
+      <div class="tile"><div class="k">${rt('problems')}</div><div class="v">${w.problems}</div><div class="s">${rt('problems_sub', { pct: pct(w.problems, r.scope), n: r.scope })}</div></div>
+      <div class="tile good"><div class="k">${rt('caught')}</div><div class="v">${w.caught}<small> / ${w.problems} · ${pct(w.caught, w.problems)} %</small></div><div class="s">${rt('caught_sub', { early: w.early, on: w.onTime })}</div></div>
+      <div class="tile bad"><div class="k">${rt('missed')}</div><div class="v">${w.missed}</div><div class="s">${rt('missed_sub')}</div></div>
+      <div class="tile"><div class="k">${rt('lead')}</div><div class="v">${w.medianLeadH != null ? fmtH(w.medianLeadH) : rt('none')}</div><div class="s">${rt('lead_sub')}</div></div>
+    </div>
+    <div class="split" role="img" aria-label="${esc(`${rt('early')} ${w.early}, ${rt('on_time')} ${w.onTime}, ${rt('miss')} ${w.missed}`)}">${seg(w.early, 'early', rt('early'))}${seg(w.onTime, 'ontime', rt('on_time'))}${seg(w.missed, 'missed', rt('miss'))}</div>
+    <div class="legend"><span><i class="early"></i>${rt('early')} ${w.early}</span><span><i class="ontime"></i>${rt('on_time')} ${w.onTime}</span><span><i class="missed"></i>${rt('miss')} ${w.missed}</span></div>
+
+    <p class="load"><b>${rt('load')}:</b> ${rt('load_line', { p: q.needsYou, n: q.orders, pct: pct(q.needsYou, q.orders), a: q.agent, c: q.clear })} ${rt('load_extra', { x: q.raisedWithoutProblem, d: r.decisions })}</p>
+
+    <h2 class="rp-h">${rt('missed_h')}</h2>
+    ${r.missed.length ? `<div class="rt-wrap"><table class="rt"><thead><tr><th>${rt('c_order')}</th><th>${rt('c_what')}</th><th>${rt('c_when')}</th><th>${rt('c_fix')}</th></tr></thead><tbody>
+      ${r.missed.map((x) => `<tr><td>${orderCell(x)}</td><td>${what(x)}${srcBtn(x.source)}</td><td>${fmt(x.at)}</td><td>${esc(L(x.fix) || '')}</td></tr>`).join('')}</tbody></table></div>` : `<p class="muted">${rt('no_missed')}</p>`}
+
+    <h2 class="rp-h">${rt('caught_h')}</h2>
+    <div class="rt-wrap"><table class="rt"><thead><tr><th>${rt('c_order')}</th><th>${rt('c_what')}</th><th>${rt('c_how')}</th><th>${rt('c_first')}</th></tr></thead><tbody>
+      ${r.caught.map((x) => `<tr><td>${orderCell(x)}</td><td>${what(x)}<div class="sub">${fmt(x.at)}</div></td>
+        <td><span class="pill ${x.outcome === 'early' ? 'early' : 'ontime'}">${x.outcome === 'early' ? rt('ahead', { h: fmtH(x.leadH) }) : rt('on_time')}</span><div class="sub">${rt(x.who === 'person' ? 'by_person' : 'by_agent')}</div></td>
+        <td>${esc(L(x.signal) || '')}${srcBtn(x.source)}</td></tr>`).join('')}</tbody></table></div>
+
+    <h2 class="rp-h">${rt('earlier_h')}</h2>
+    <div class="rt-wrap"><table class="rt narrow"><thead><tr><th>${rt('c_week')}</th><th>${rt('c_deliv')}</th><th>${rt('c_prob')}</th><th>${rt('caught')}</th><th>${rt('missed')}</th></tr></thead><tbody>
+      ${r.history.map((h) => `<tr><td>${h.weekNo} <span class="sub">${day(h.week + 'T12:00:00Z')}</span></td><td>${h.delivered}</td><td>${h.problems}</td><td>${h.caught}</td><td>${h.missed}</td></tr>`).join('')}</tbody></table></div>
+    <p class="muted small">${rt('earlier_note')}</p>
+
+    <details class="sec"><summary>${rt('method_h')}</summary><p class="muted">${esc(L(r.method))}</p></details>
+  </div>`;
+}
+
 // Links like /#CD-421105 open that order directly.
 function openFromHash() {
+  if (location.hash === '#report') { showReport(true); return true; }
   const o = state.data?.orders.find((x) => x.ref === decodeURIComponent(location.hash.slice(1)));
   if (!o) return false;
+  if (state.view === 'report') showReport(false);
   state.tab = o.lane;
   openOrder(o.id);
   return true;
