@@ -1,0 +1,2 @@
+ref,pickup_city,pickup_country,delivery_city,delivery_country,pickup_at,deliver_by,status,car,fuel,driver,driver_on_time_pct,driver_claims_12m,last_driver_contact,ferry_booked,pickup_confirmed,receiver_named,notes
+NO-1001,Helsinki,FI,Tampere,FI,2026-10-26 09:00,2026-10-26 17:00,planned,Toyota RAV4,hybrid,Aino Lehtovaara,96,0,,,yes,yes,

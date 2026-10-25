@@ -1,0 +1,11 @@
+ref,pickup_city,pickup_country,delivery_city,delivery_country,pickup_at,deliver_by,status,car,fuel,driver,driver_on_time_pct,driver_claims_12m,last_driver_contact,ferry_booked,pickup_confirmed,receiver_named,notes
+DE-2001,Hamburg,DE,Copenhagen,DK,2026-10-26 08:00,2026-10-26 18:00,planned,Volvo XC90,hybrid,Lena Hartwig,95,0,,,yes,yes,
+DE-2002,Munich,DE,Helsinki,FI,2026-10-26 07:00,2026-10-29 12:00,planned,BMW M4,petrol,Tobias Engler,91,0,,no,yes,yes,
+DE-2003,Berlin,DE,Aarhus,DK,2026-10-25 06:00,2026-10-25 20:00,picked_up,Audi Q7,diesel,Sven Albrecht,90,1,2026-10-25 05:33,,yes,yes,
+DE-2004,Frankfurt,DE,Cologne,DE,2026-10-25 09:33,2026-10-25 21:00,planned,Mercedes-Benz E 220,diesel,Jana Kessler,93,0,,,yes,yes,
+DE-2005,Stuttgart,DE,Hamburg,DE,2026-10-26 07:00,2026-10-26 20:00,planned,Porsche Taycan,electric,Felix Brandt,94,0,,,yes,yes,
+DE-2006,Düsseldorf,DE,Berlin,DE,2026-10-26 09:00,2026-10-26 13:00,planned,Volkswagen ID.4,electric,Mia Lorenz,92,0,,,yes,yes,
+DE-2007,Odense,DK,Copenhagen,DK,2026-10-27 09:00,2026-10-27 16:00,planned,Peugeot 3008,hybrid,Mads Kjeldsen,96,0,,,yes,yes,
+DE-2008,Leipzig,DE,Munich,DE,2026-10-27 08:00,2026-10-27 18:00,planned,Audi A4,petrol,Paul Neumann,97,0,,,yes,yes,
+DE-2009,Hamburg,DE,Aarhus,DK,2026-10-26 10:00,2026-10-26 19:00,planned,Tesla Model Y,electric,Nils Ottesen,90,0,,,yes,yes,"Customer site closed on Monday afternoon, deliver before 14:00"
+DE-2010,Cologne,DE,Antwerp,BE,2026-10-28 08:00,2026-10-28 17:00,planned,Ford Kuga,hybrid,,,,,,yes,yes,

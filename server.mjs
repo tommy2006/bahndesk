@@ -17,6 +17,8 @@ try {
 const { db, rowsFor, findRecord } = await import('./lib/data.mjs');
 const { analyseAll, analyseOrder, rankDrivers } = await import('./lib/engine.mjs');
 const { weeklyReport } = await import('./lib/report.mjs');
+const { scoreOrders, COLUMNS } = await import('./lib/score-file.mjs');
+const { SAMPLES, sampleList } = await import('./lib/samples.mjs');
 const { live, refreshAll } = await import('./lib/live.mjs');
 const { runAgent, runs, publicRun, agentAvailable, decideOutcome, provider, agentModel } = await import('./lib/agent.mjs');
 const { strikes, savedRoute, coordsOf } = await import('./lib/external.mjs');
@@ -212,7 +214,14 @@ const send = (res, code, body, type = 'application/json; charset=utf-8') => {
   res.writeHead(code, { 'Content-Type': type, 'Cache-Control': 'no-store' });
   res.end(typeof body === 'string' || Buffer.isBuffer(body) ? body : JSON.stringify(body));
 };
-const readBody = (req) => new Promise((ok) => { let b = ''; req.on('data', (c) => (b += c)); req.on('end', () => { try { ok(JSON.parse(b || '{}')); } catch { ok({}); } }); });
+const readBody = (req) => new Promise((ok) => {
+  // Vercel may have parsed the body already.
+  if (req.body && typeof req.body === 'object') return ok(req.body);
+  if (typeof req.body === 'string') { try { return ok(JSON.parse(req.body)); } catch { return ok({}); } }
+  let b = '';
+  req.on('data', (c) => { b += c; if (b.length > 5e6) req.destroy(); });
+  req.on('end', () => { try { ok(JSON.parse(b || '{}')); } catch { ok({}); } });
+});
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml', '.webp': 'image/webp', '.png': 'image/png' };
 
 // One request handler for both: the local server below and the Vercel function (api/index.mjs).
@@ -252,6 +261,18 @@ export async function handler(req, res) {
     }
     if (p === '/api/report') return send(res, 200, { ...weeklyReport(analyseAll().orders.map(withDecisions)), decisions: Object.keys(decisions).filter((k) => !k.startsWith('group:')).length });
     if (p === '/api/i18n') return send(res, 200, { pending: pendingCount() });
+    // Score a company's own order file (CSV or JSON). Nothing is stored.
+    if (req.method === 'POST' && p === '/api/score') {
+      const body = await readBody(req);
+      try { return send(res, 200, scoreOrders(body.text, body.filename || '')); }
+      catch (e) { return send(res, 400, { error: e.message }); }
+    }
+    if (p === '/api/score/columns') return send(res, 200, COLUMNS.map(([key, help, required]) => ({ key, help, required })));
+    if (p === '/api/samples') return send(res, 200, sampleList());
+    if ((m = p.match(/^\/api\/samples\/([\w.-]+)$/)) && SAMPLES[m[1]]) {
+      res.setHeader('Content-Disposition', `attachment; filename="${m[1]}"`);
+      return send(res, 200, SAMPLES[m[1]].build(Date.now()), m[1].endsWith('.json') ? 'application/json; charset=utf-8' : 'text/csv; charset=utf-8');
+    }
     if (req.method === 'POST' && (m = p.match(/^\/api\/orders\/([\w-]+)\/agent$/))) {
       const body = await readBody(req);
       try { return send(res, 200, await runAgent(m[1], body.message || null)); }

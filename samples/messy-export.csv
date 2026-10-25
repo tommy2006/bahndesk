@@ -1,0 +1,7 @@
+reference;from;from_country;to;to_country;pickup;deadline;status;vehicle;fuel;driver_name;last_contact;ferry;sales_rep;comments
+MX-3001;Helsinki;FI;Turku;FI;2026-10-26 09:00;2026-10-26 15:00;planned;Toyota Corolla;hybrid;Anna Virta;;;J. Mäki;
+MX-3002;Tampere;;Helsinki;FI;2026-10-26 10:00;2026-10-26 16:00;planned;Volvo V60;petrol;Ossi Laine;;;J. Mäki;country missing in export
+MX-3003;Lahti;FI;Kuopio;FI;next Tuesday;2026-10-28 18:00;planned;Mazda CX-5;petrol;Pia Nurmi;;;K. Salo;
+MX-3001;Espoo;FI;Tampere;FI;2026-10-27 08:00;2026-10-27 14:00;planned;Kia Niro;electric;Timo Kallio;;;K. Salo;duplicate reference
+MX-3005;Helsinki;FI;Kemi;FI;2026-10-27 07:00;2026-10-28 12:00;planned;Skoda Kodiaq;diesel;Juha Peltonen;;;J. Mäki;
+MX-3006;Tallinn;EE;Espoo;FI;2026-10-26 13:00;2026-10-26 20:00;planned;Hyundai Ioniq 5;electric;Rein Saar;;yes;K. Salo;papers not ready yet

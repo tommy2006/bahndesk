@@ -4,6 +4,7 @@ const T = {
     product: 'Control room', needs_you: 'Needs you', agent: 'Agent handling', clear: 'On track', done: 'Delivered',
     title_needs: '{n} orders need you', title_needs_one: '1 order needs you', title_agent: 'Agent is handling {n}', title_clear: '{n} on track', title_done: '{n} delivered',
     sub_needs: 'Most urgent first. The agent did the legwork; each one needs your call.', sub_agent: 'The agent is on these and will bring you anything it cannot settle.', sub_clear: 'Nothing to do. Shown for reference.', sub_done: 'Handed over.',
+    f_search: 'Search order, city, car, driver, customer', f_all_countries: 'All countries', f_all_fuels: 'Any fuel', f_ev: 'Electric', f_ice: 'Petrol / diesel', f_hybrid: 'Hybrid', s_urgent: '↕ Most urgent', s_conf: '↕ Lowest confidence', s_lta: '↕ Due soonest', s_value: '↕ Car value', s_ref: '↕ Order number', f_shown: '{n} of {total} shown', f_clear: 'Clear filters', f_none: 'No orders match these filters.',
     orders_as_of: 'Orders as of', live: 'Weather & roads live, updated {t}', offline: 'Weather & roads offline, last saved {t}',
     empty_needs: 'Nothing needs you right now', empty_needs_sub: 'The agent is handling {n} orders and will bring you anything it cannot settle.',
     empty_other: 'No orders here', pick: 'Pick an order', pick_sub: 'Orders that need a decision are on the left. Everything else is handled or on track.',
@@ -24,13 +25,14 @@ const T = {
     nothing: 'No open signals.', resolved: 'The agent settled this without a person.', change_ph: 'What should happen instead?', confirm_change: 'Send to agent', approve: 'Approve', change: 'Change',
     customer_draft: 'A customer message is drafted for you to send.',
     kind: { DEALERSHIP: 'Dealership', SOURCE_DEALER: 'Selling dealer', PRIVATE_HOME: 'Private seller', TRANSFER_YARD: 'Transfer yard', INDEPENDENT_STORAGE: 'Storage yard', THIRD_PARTY_BUSINESS: 'Business' },
-    country: { FI: 'Finland', EE: 'Estonia' },
+    country: { FI: 'Finland', EE: 'Estonia', DE: 'Germany', DK: 'Denmark' },
     step: { get_order_overview: 'Checked the order', get_messages: 'Read the messages', get_driver_record: "Checked the driver's record", get_live_conditions: 'Checked weather and roads', check_ferry_options: 'Checked ferries', find_alternative_drivers: 'Ranked other drivers', ask_driver: 'Asked the driver', contact_pickup_site: 'Asked the pickup site', propose_decision: 'Sent you a suggestion', resolve_without_person: 'Closed it without you' },
   },
   fi: {
     product: 'Ohjaamo', needs_you: 'Tarvitsee sinua', agent: 'Agentti hoitaa', clear: 'Aikataulussa', done: 'Toimitettu',
     title_needs: '{n} tilausta tarvitsee sinua', title_needs_one: '1 tilaus tarvitsee sinua', title_agent: 'Agentti hoitaa {n}', title_clear: '{n} aikataulussa', title_done: '{n} toimitettu',
     sub_needs: 'Kiireellisin ensin. Agentti teki selvitystyön; jokainen vaatii päätöksesi.', sub_agent: 'Agentti hoitaa nämä ja tuo sinulle vain sen, mitä se ei voi ratkaista.', sub_clear: 'Ei tehtävää. Näytetään tiedoksi.', sub_done: 'Luovutettu.',
+    f_search: 'Hae tilausta, kaupunkia, autoa, kuljettajaa, asiakasta', f_all_countries: 'Kaikki maat', f_all_fuels: 'Kaikki käyttövoimat', f_ev: 'Sähkö', f_ice: 'Bensiini / diesel', f_hybrid: 'Hybridi', s_urgent: '↕ Kiireellisin', s_conf: '↕ Pienin luottamus', s_lta: '↕ Eräpäivä ensin', s_value: '↕ Auton arvo', s_ref: '↕ Tilausnumero', f_shown: '{n}/{total} näkyvissä', f_clear: 'Tyhjennä suodattimet', f_none: 'Mikään tilaus ei vastaa suodattimia.',
     orders_as_of: 'Tilaukset hetkellä', live: 'Sää ja tiet reaaliajassa, päivitetty {t}', offline: 'Sää ja tiet eivät päivity, viimeksi tallennettu {t}',
     empty_needs: 'Mikään ei tarvitse sinua juuri nyt', empty_needs_sub: 'Agentti hoitaa {n} tilausta ja tuo sinulle vain sen, mitä se ei voi ratkaista.',
     empty_other: 'Ei tilauksia', pick: 'Valitse tilaus', pick_sub: 'Päätöstä vaativat tilaukset ovat vasemmalla. Kaikki muu on hoidossa.',
@@ -51,12 +53,12 @@ const T = {
     nothing: 'Ei avoimia signaaleja.', resolved: 'Agentti ratkaisi tämän ilman ihmistä.', change_ph: 'Mitä pitäisi tehdä?', confirm_change: 'Lähetä agentille', approve: 'Hyväksy', change: 'Muuta',
     customer_draft: 'Asiakasviesti on luonnosteltu sinun lähetettäväksesi.',
     kind: { DEALERSHIP: 'Jälleenmyyjä', SOURCE_DEALER: 'Myyvä jälleenmyyjä', PRIVATE_HOME: 'Yksityinen myyjä', TRANSFER_YARD: 'Siirtoterminaali', INDEPENDENT_STORAGE: 'Varastoalue', THIRD_PARTY_BUSINESS: 'Yritys' },
-    country: { FI: 'Suomi', EE: 'Viro' },
+    country: { FI: 'Suomi', EE: 'Viro', DE: 'Saksa', DK: 'Tanska' },
     step: { get_order_overview: 'Tarkisti tilauksen', get_messages: 'Luki viestit', get_driver_record: 'Tarkisti kuljettajan historian', get_live_conditions: 'Tarkisti sään ja tiet', check_ferry_options: 'Tarkisti lautat', find_alternative_drivers: 'Vertasi muita kuljettajia', ask_driver: 'Kysyi kuljettajalta', contact_pickup_site: 'Kysyi noutopaikalta', propose_decision: 'Lähetti sinulle ehdotuksen', resolve_without_person: 'Sulki ilman sinua' },
   },
 };
 
-const state = { lang: localGet('lang') || 'en', view: 'board', report: null, tab: 'needs_you', data: null, sel: null, detail: null, showAll: false, busy: false, open: new Set() };
+const state = { lang: localGet('lang') || 'en', view: 'board', report: null, filter: { q: '', country: '', fuel: '', sort: 'urgent' }, tab: 'needs_you', data: null, sel: null, detail: null, showAll: false, busy: false, open: new Set() };
 const $ = (s) => document.querySelector(s);
 const t = (k, vars = {}) => String(k.split('.').reduce((o, p) => o?.[p], T[state.lang]) ?? k).replace(/\{(\w+)\}/g, (_, v) => vars[v] ?? '');
 const L = (obj) => (obj && typeof obj === 'object' ? obj[state.lang] || obj.en : obj || '');
@@ -117,8 +119,11 @@ function renderTop() {
   document.querySelectorAll('[data-i18n]').forEach((el) => (el.textContent = t(el.dataset.i18n)));
   document.querySelectorAll('.lang button').forEach((b) => b.classList.toggle('on', b.dataset.lang === state.lang));
   document.documentElement.lang = state.lang;
+  renderFilterControls();
   $('#report-link').textContent = state.view === 'report' ? rt('back') : rt('link');
   $('#report-link').classList.toggle('on', state.view === 'report');
+  $('#upload-link').textContent = state.view === 'upload' ? rt('back') : ut('link');
+  $('#upload-link').classList.toggle('on', state.view === 'upload');
   const l = state.data?.live;
   const el = $('#live');
   if (!l) return;
@@ -128,6 +133,36 @@ function renderTop() {
   const liveAt = [l.weatherAt, l.trafficAt].filter(Boolean).sort().at(-1);
   el.innerHTML = `<b>${t('orders_as_of')}</b> ${esc(fmt(state.data.snapshotAt))} <span class="sep">·</span> <span class="dot"></span>${esc(t(on ? 'live' : 'offline', { t: fmt(liveAt, { hour: '2-digit', minute: '2-digit' }) }))}`;
   el.title = `Weather ${fmt(l.weatherAt)} · ${l.trafficCount} road notices · The order data is a snapshot; its clock is fixed.`;
+}
+
+// ---------- Filters and sort (left list) ----------
+const VALUE_RANK = { exceptional: 3, high: 2, standard: 1 };
+const fuelKind = (f) => (!f ? '' : /electric|bev|ev$/i.test(f) ? 'ev' : /hybrid|phev/i.test(f) ? 'hybrid' : 'ice');
+const filterActive = () => Boolean(state.filter.q || state.filter.country || state.filter.fuel);
+function renderFilterControls() {
+  const f = state.filter;
+  const opt = (v, label, cur) => `<option value="${v}" ${v === cur ? 'selected' : ''}>${esc(label)}</option>`;
+  $('#f-q').placeholder = t('f_search');
+  $('#f-q').setAttribute('aria-label', t('f_search'));
+  $('#f-country').innerHTML = opt('', t('f_all_countries'), f.country) + ['FI', 'EE', 'DE', 'DK'].map((c) => opt(c, t('country.' + c), f.country)).join('');
+  $('#f-fuel').innerHTML = opt('', t('f_all_fuels'), f.fuel) + [['ev', t('f_ev')], ['hybrid', t('f_hybrid')], ['ice', t('f_ice')]].map(([v, l]) => opt(v, l, f.fuel)).join('');
+  $('#f-sort').setAttribute('aria-label', 'Sort');
+  $('#f-sort').innerHTML = [['urgent', t('s_urgent')], ['conf', t('s_conf')], ['lta', t('s_lta')], ['value', t('s_value')], ['ref', t('s_ref')]].map(([v, l]) => opt(v, l, f.sort)).join('');
+}
+function filtered(list) {
+  const f = state.filter;
+  const q = f.q.trim().toLowerCase();
+  let out = list.filter((o) => (!f.country || o.from.country === f.country || o.to.country === f.country)
+    && (!f.fuel || fuelKind(o.vehicle?.fuel) === f.fuel)
+    && (!q || [o.ref, o.from.city, o.to.city, o.from.name, o.to.name, o.customer, o.driver?.name, o.vehicle?.make, o.vehicle?.model].some((x) => String(x || '').toLowerCase().includes(q))));
+  const by = {
+    conf: (a, b) => a.confidence - b.confidence,
+    lta: (a, b) => (a.lta || '9').localeCompare(b.lta || '9'),
+    value: (a, b) => (VALUE_RANK[b.value] || 0) - (VALUE_RANK[a.value] || 0) || a.confidence - b.confidence,
+    ref: (a, b) => a.ref.localeCompare(b.ref),
+  }[f.sort];
+  if (by) out = [...out].sort(by);
+  return out;
 }
 
 function renderQueue() {
@@ -149,7 +184,12 @@ function renderQueue() {
         <div class="actions"><button class="btn primary small" data-group="${g.id}" data-choice="approve">${t('reroute')}</button><button class="btn small" data-group="${g.id}" data-choice="change">${t('keep_warn')}</button></div>
       </div>`).join('');
 
-  const list = orders.filter((o) => o.lane === state.tab);
+  const inLane = orders.filter((o) => o.lane === state.tab);
+  const list = filtered(inLane);
+  const note = $('#f-note');
+  note.hidden = !filterActive();
+  if (filterActive()) note.innerHTML = `${t('f_shown', { n: list.length, total: inLane.length })} · <button class="linkish" data-clear-filters>${t('f_clear')}</button>`;
+  if (!list.length && inLane.length) { $('#list').innerHTML = `<li class="empty">${t('f_none')}</li>`; return; }
   if (!list.length) {
     $('#list').innerHTML = state.tab === 'needs_you'
       ? `<li class="empty"><h3>${t('empty_needs')}</h3>${t('empty_needs_sub', { n: count('agent') })}</li>`
@@ -160,8 +200,9 @@ function renderQueue() {
   $('#list').innerHTML = list.map((o, i) => {
     const needs = state.tab === 'needs_you';
     const action = needs ? L(o.decision?.text || o.whyYou?.text || o.headline) : L(o.agentWork?.[0] || o.headline) || t('nothing');
-    return `<li><button class="row ${o.id === state.sel ? 'sel' : ''} ${needs && i === 0 ? 'first' : ''}" data-id="${o.id}">
-      ${needs && i === 0 ? `<div class="row-flag">${t('next_up')}</div>` : ''}
+    const top = needs && i === 0 && !filterActive() && state.filter.sort === 'urgent';
+    return `<li><button class="row ${o.id === state.sel ? 'sel' : ''} ${top ? 'first' : ''}" data-id="${o.id}">
+      ${top ? `<div class="row-flag">${t('next_up')}</div>` : ''}
       <div class="row-top">
         <div class="route-line">${esc(o.from.city)} ${cc(o.from.country)}<span class="arrow">→</span>${esc(o.to.city)} ${cc(o.to.country)}</div>
         ${needs ? deadlineChip(o.deadline) : `<span class="conf ${confClass(o.confidence)}" title="${t('confidence')}">${o.confidence}%</span>`}
@@ -512,9 +553,14 @@ document.addEventListener('click', async (e) => {
   const nx = e.target.closest('.ap .next');
   if (nx && !el) { nx.classList.toggle('open'); return; }
   if (!el) return;
+  if (el.hasAttribute('data-clear-filters')) { state.filter = { q: '', country: '', fuel: '', sort: state.filter.sort }; $('#f-q').value = ''; renderFilterControls(); renderQueue(); return; }
   if (el.hasAttribute('data-report')) { showReport(state.view !== 'report'); return; }
-  if (el.dataset.tab) { state.tab = el.dataset.tab; if (state.view === 'report') showReport(false); renderQueue(); return; }
-  if (el.dataset.lang) { state.lang = el.dataset.lang; localSet('lang', state.lang); renderTop(); renderQueue(); renderDetail(); renderReport(); return; }
+  if (el.hasAttribute('data-upload')) { if (state.view === 'upload') setView('board'); else showUpload(); return; }
+  if (el.dataset.sample) { const name = el.dataset.sample; const res = await fetch(`/api/samples/${name}`); scoreFile(name, await res.text()); return; }
+  if (el.hasAttribute('data-export')) { exportScored(); return; }
+  if (el.hasAttribute('data-again')) { state.scored = null; state.scoreError = null; renderUpload(); return; }
+  if (el.dataset.tab) { state.tab = el.dataset.tab; if (state.view !== 'board') setView('board'); renderQueue(); return; }
+  if (el.dataset.lang) { state.lang = el.dataset.lang; localSet('lang', state.lang); renderTop(); renderQueue(); renderDetail(); renderReport(); renderUpload(); return; }
   if (el.dataset.id) { openOrder(el.dataset.id); return; }
   if (el.dataset.src) { openSource(el.dataset.src); return; }
   if (el.hasAttribute('data-close')) { $('#source').hidden = true; return; }
@@ -557,6 +603,13 @@ document.addEventListener('submit', async (e) => {
   runAgent(msg);
 });
 
+document.addEventListener('input', (e) => {
+  if (e.target.id === 'f-q') { state.filter.q = e.target.value; renderQueue(); }
+});
+document.addEventListener('change', (e) => {
+  const key = { 'f-country': 'country', 'f-fuel': 'fuel', 'f-sort': 'sort' }[e.target.id];
+  if (key) { state.filter[key] = e.target.value; renderQueue(); }
+});
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') $('#source').hidden = true; });
 // Remember which detail sections are open while the page re-renders.
 document.addEventListener('toggle', (e) => {
@@ -598,14 +651,20 @@ const RT = {
 const rt = (k, vars = {}) => String(RT[state.lang][k] ?? k).replace(/\{(\w+)\}/g, (_, v) => vars[v] ?? '');
 const day = (iso) => fmt(iso, { day: 'numeric', month: 'short' });
 
-async function showReport(on) {
-  state.view = on ? 'report' : 'board';
-  document.querySelector('.layout').hidden = on;
-  $('#report').hidden = !on;
+// Three views: the order board, the weekly report (#report) and file scoring (#upload).
+function setView(v) {
+  state.view = v;
+  document.querySelector('.layout').hidden = v !== 'board';
+  $('#report').hidden = v !== 'report';
+  $('#upload').hidden = v !== 'upload';
   renderTop();
   if (state.data) renderQueue();
-  if (!on) { if (location.hash === '#report') history.replaceState(null, '', location.pathname); return; }
-  if (location.hash !== '#report') history.replaceState(null, '', '#report');
+  if (v === 'board') { if (['#report', '#upload'].includes(location.hash)) history.replaceState(null, '', location.pathname); }
+  else if (location.hash !== `#${v}`) history.replaceState(null, '', `#${v}`);
+}
+async function showReport(on) {
+  setView(on ? 'report' : 'board');
+  if (!on) return;
   if (!state.report) {
     $('#report').innerHTML = '<div class="rp"><div class="skel" style="height:120px"></div></div>';
     try { state.report = await api('/api/report'); } catch (e) { $('#report').innerHTML = `<div class="rp"><p class="muted">${esc(e.message)}</p></div>`; return; }
@@ -656,12 +715,120 @@ function renderReport() {
   </div>`;
 }
 
+// ---------- Score your own file ----------
+const UT = {
+  en: {
+    link: 'Score a file', title: 'Score your own orders', sub: 'Upload a CSV or JSON export of orders. Each order gets the same score and lanes as the control room, with the reason and where it came from. Uploaded orders are scored against the real clock. Nothing is stored, booked or sent.',
+    drop: 'Drop a CSV or JSON file here, or', choose: 'choose a file', try: 'Or try a synthetic file:', download: 'download', template: 'Column template',
+    columns: 'Columns we read', required: 'required', scoring: 'Scoring {file}…',
+    orders: 'Orders', needs_you: 'Need a person', agent: 'Agent can handle', clear: 'On track', check_data: 'Check the data',
+    c_lane: 'Lane', c_order: 'Order', c_route: 'Route', c_score: 'Score', c_why: 'Main reason', all_reasons: 'All reasons ({n})', no_reasons: 'No risks found in the file or live data.',
+    export: 'Download results (CSV)', ignored: 'Columns not used: {cols}', scored_at: 'Scored {at} · live data {live}', h: 'h drive', ferry: 'ferry', again: 'Score another file',
+    lanes: { needs_you: 'Needs a person', agent: 'Agent', clear: 'On track', check_data: 'Check data' },
+  },
+  fi: {
+    link: 'Pisteytä tiedosto', title: 'Pisteytä omat tilauksesi', sub: 'Lataa tilauksista CSV- tai JSON-vienti. Jokainen tilaus saa saman pistemäärän ja kaistan kuin ohjaamossa, perusteluineen ja lähteineen. Ladatut tilaukset arvioidaan todellisella kellonajalla. Mitään ei tallenneta, varata eikä lähetetä.',
+    drop: 'Pudota CSV- tai JSON-tiedosto tähän, tai', choose: 'valitse tiedosto', try: 'Tai kokeile synteettistä tiedostoa:', download: 'lataa', template: 'Sarakepohja',
+    columns: 'Luettavat sarakkeet', required: 'pakollinen', scoring: 'Pisteytetään {file}…',
+    orders: 'Tilauksia', needs_you: 'Tarvitsee ihmistä', agent: 'Agentti hoitaa', clear: 'Aikataulussa', check_data: 'Tarkista tiedot',
+    c_lane: 'Kaista', c_order: 'Tilaus', c_route: 'Reitti', c_score: 'Pisteet', c_why: 'Pääsyy', all_reasons: 'Kaikki syyt ({n})', no_reasons: 'Tiedostosta tai reaaliaikadatasta ei löytynyt riskejä.',
+    export: 'Lataa tulokset (CSV)', ignored: 'Käyttämättömät sarakkeet: {cols}', scored_at: 'Pisteytetty {at} · reaaliaikadata {live}', h: 'h ajoa', ferry: 'lautta', again: 'Pisteytä toinen tiedosto',
+    lanes: { needs_you: 'Tarvitsee ihmistä', agent: 'Agentti', clear: 'Aikataulussa', check_data: 'Tarkista tiedot' },
+  },
+};
+const ut = (k, vars = {}) => String(k.split('.').reduce((o, p) => o?.[p], UT[state.lang]) ?? k).replace(/\{(\w+)\}/g, (_, v) => vars[v] ?? '');
+
+async function showUpload() {
+  setView('upload');
+  if (!state.samples) {
+    try { [state.samples, state.columns] = await Promise.all([api('/api/samples'), api('/api/score/columns')]); } catch { state.samples = []; state.columns = []; }
+  }
+  renderUpload();
+}
+
+async function scoreFile(filename, text) {
+  state.scoring = filename;
+  state.scored = null;
+  renderUpload();
+  try { state.scored = await api('/api/score', { filename, text }); state.scoreError = null; }
+  catch (e) { state.scoreError = e.message; }
+  state.scoring = null;
+  renderUpload();
+}
+
+function renderUpload() {
+  if (state.view !== 'upload') return;
+  const r = state.scored;
+  const samples = (state.samples || []).filter((s) => s.name !== 'template.csv');
+  const head = `<h1 class="queue-title">${ut('title')}</h1><p class="queue-sub">${ut('sub')}</p>`;
+  const picker = `<label class="drop" id="drop">
+      <input type="file" id="file" accept=".csv,.json,.txt,text/csv,application/json" hidden>
+      <span>${ut('drop')} <u>${ut('choose')}</u></span>
+    </label>
+    <div class="samples"><span class="muted">${ut('try')}</span>
+      ${samples.map((s) => `<span class="sample"><button class="btn small soft" data-sample="${esc(s.name)}">${esc(L(s.title))}</button> <a class="dl" href="/api/samples/${esc(s.name)}" download>${ut('download')}</a></span>`).join('')}
+      <a class="dl" href="/api/samples/template.csv" download>${ut('template')}</a>
+    </div>
+    <details class="sec cols"><summary>${ut('columns')}</summary><div class="sec-body"><dl class="kv">${(state.columns || []).map((c) => `<dt><code>${esc(c.key)}</code></dt><dd>${esc(c.help)}${c.required ? ` · <b>${ut('required')}</b>` : ''}</dd>`).join('')}</dl></div></details>`;
+  if (state.scoring) { $('#upload').innerHTML = `<div class="rp">${head}<p class="muted">${ut('scoring', { file: esc(state.scoring) })}</p><div class="skel" style="height:160px"></div></div>`; return; }
+  if (!r) { $('#upload').innerHTML = `<div class="rp">${head}${state.scoreError ? `<p class="err">${esc(state.scoreError)}</p>` : ''}${picker}</div>`; return; }
+  const s = r.summary;
+  const laneChip = (l) => `<span class="lane-chip ${l}">${ut('lanes.' + l)}</span>`;
+  const route = (o) => `${esc(o.from.city || '?')} ${o.from.country ? cc(o.from.country) : ''}<span class="arrow">→</span>${esc(o.to.city || '?')} ${o.to.country ? cc(o.to.country) : ''}
+    <div class="sub">${o.km ? `${o.km} km · ${o.driveH} ${ut('h')}` : ''}${o.ferry ? ` · ${ut('ferry')}` : ''}</div>`;
+  const srcName = (x) => (state.lang === 'fi' && x.source?.labelFi) || x.source?.label || '';
+  $('#upload').innerHTML = `<div class="rp">${head}
+    <div class="up-head"><b>${esc(r.file || '')}</b> <span class="muted">· ${ut('scored_at', { at: fmt(r.scoredAt), live: esc(r.live.status) })}</span>
+      <span class="spacer"></span><button class="btn small" data-export>${ut('export')}</button><button class="btn small soft" data-again>${ut('again')}</button></div>
+    <div class="tiles five">
+      <div class="tile"><div class="k">${ut('orders')}</div><div class="v">${s.orders}</div></div>
+      <div class="tile bad"><div class="k">${ut('needs_you')}</div><div class="v">${s.needsYou}</div></div>
+      <div class="tile"><div class="k">${ut('agent')}</div><div class="v">${s.agent}</div></div>
+      <div class="tile good"><div class="k">${ut('clear')}</div><div class="v">${s.clear}</div></div>
+      <div class="tile"><div class="k">${ut('check_data')}</div><div class="v">${s.checkData}</div></div>
+    </div>
+    ${r.ignoredColumns.length ? `<p class="muted small">${ut('ignored', { cols: esc(r.ignoredColumns.join(', ')) })}</p>` : ''}
+    <div class="rt-wrap"><table class="rt up"><thead><tr><th>${ut('c_lane')}</th><th>${ut('c_order')}</th><th>${ut('c_route')}</th><th>${ut('c_score')}</th><th>${ut('c_why')}</th></tr></thead><tbody>
+    ${r.orders.map((o) => `<tr class="${o.lane}"><td>${laneChip(o.lane)}</td>
+      <td><b>${esc(o.ref)}</b><div class="sub">${esc([o.car, o.driver].filter(Boolean).join(' · '))}</div></td>
+      <td>${route(o)}</td>
+      <td>${o.lane === 'check_data' ? '—' : `<span class="conf ${confClass(o.confidence)}">${o.confidence}%</span>`}</td>
+      <td>${o.problems.map((p) => `<div class="err small">${esc(L(p))}</div>`).join('')}${o.why ? esc(L(o.why)) : o.problems.length ? '' : `<span class="muted">${ut('no_reasons')}</span>`}
+        ${o.reasons.length ? `<details class="why-all"><summary>${ut('all_reasons', { n: o.reasons.length })}</summary><ul>${o.reasons.map((x) => `<li><span class="rk">${Math.round(x.r * 100)}%</span> ${esc(L(x.text))} <span class="src-tag">${esc(srcName(x))}</span>${x.agentCan ? ` <span class="tag">${t('agent_label')}</span>` : ''}</li>`).join('')}</ul></details>` : ''}</td></tr>`).join('')}
+    </tbody></table></div></div>`;
+}
+
+function exportScored() {
+  const r = state.scored;
+  if (!r) return;
+  const head = ['ref', 'lane', 'score_pct', 'main_reason', 'all_reasons', 'data_problems', 'km', 'predicted_arrival', 'deliver_by'];
+  const cell = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
+  const lines = r.orders.map((o) => [o.ref, o.lane, o.lane === 'check_data' ? '' : o.confidence, L(o.why), o.reasons.map((x) => `${L(x.text)} [${x.source?.label || ''}]`).join(' | '), o.problems.map(L).join(' | '), o.km, o.predicted, o.deliverBy].map(cell).join(','));
+  const blob = new Blob([[head.join(','), ...lines].join('\n')], { type: 'text/csv' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `${(r.file || 'orders').replace(/\.\w+$/, '')}-scored.csv`;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+async function readAndScore(file) {
+  if (!file) return;
+  if (file.size > 4e6) { state.scoreError = 'File is larger than 4 MB.'; renderUpload(); return; }
+  scoreFile(file.name, await file.text());
+}
+document.addEventListener('change', (e) => { if (e.target.id === 'file') readAndScore(e.target.files[0]); });
+document.addEventListener('dragover', (e) => { if (e.target.closest?.('#drop')) { e.preventDefault(); e.target.closest('#drop').classList.add('over'); } });
+document.addEventListener('dragleave', (e) => { e.target.closest?.('#drop')?.classList.remove('over'); });
+document.addEventListener('drop', (e) => { if (e.target.closest?.('#drop')) { e.preventDefault(); readAndScore(e.dataTransfer.files[0]); } });
+
 // Links like /#CD-421105 open that order directly.
 function openFromHash() {
   if (location.hash === '#report') { showReport(true); return true; }
+  if (location.hash === '#upload') { showUpload(); return true; }
   const o = state.data?.orders.find((x) => x.ref === decodeURIComponent(location.hash.slice(1)));
   if (!o) return false;
-  if (state.view === 'report') showReport(false);
+  if (state.view !== 'board') setView('board');
   state.tab = o.lane;
   openOrder(o.id);
   return true;

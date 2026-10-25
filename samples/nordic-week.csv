@@ -1,0 +1,13 @@
+ref,pickup_city,pickup_country,delivery_city,delivery_country,pickup_at,deliver_by,status,car,fuel,driver,driver_on_time_pct,driver_claims_12m,last_driver_contact,ferry_booked,pickup_confirmed,receiver_named,notes
+NO-1001,Helsinki,FI,Tampere,FI,2026-10-26 09:00,2026-10-26 17:00,planned,Toyota RAV4,hybrid,Aino Lehtovaara,96,0,,,yes,yes,
+NO-1002,Tallinn,EE,Helsinki,FI,2026-10-26 10:00,2026-10-26 19:00,planned,Skoda Octavia,petrol,Mart Kivistik,92,0,,no,yes,yes,
+NO-1003,Espoo,FI,Oulu,FI,2026-10-24 08:00,2026-10-25 20:00,in_transit,BMW X5,petrol,Joonas Rantasalo,88,1,2026-10-24 23:33,,yes,yes,
+NO-1004,Turku,FI,Kuopio,FI,2026-10-25 17:33,2026-10-26 18:00,planned,Volvo XC60,hybrid,,,,,,yes,yes,
+NO-1005,Helsinki,FI,Rovaniemi,FI,2026-10-27 08:00,2026-10-28 16:00,planned,Ford Ranger,diesel,Eero Paldanius,93,0,,,yes,yes,
+NO-1006,Tampere,FI,Tallinn,EE,2026-10-26 07:00,2026-10-26 14:30,planned,Skoda Enyaq,electric,Liisa Harjunpää,94,0,,yes,yes,yes,
+NO-1007,Oulu,FI,Helsinki,FI,2026-10-26 08:00,2026-10-26 13:00,planned,Audi A6,diesel,Ville Saarnio,90,0,,,yes,yes,
+NO-1008,Jyväskylä,FI,Helsinki,FI,2026-10-26 12:00,2026-10-27 12:00,planned,Mercedes-Benz C 300,petrol,Sanna Kettunen,91,0,,,yes,yes,Dealer says the second key is still with the previous owner
+NO-1009,Pori,FI,Turku,FI,2026-10-27 10:00,2026-10-27 18:00,planned,Volkswagen Golf,petrol,Mikko Aaltonen,97,0,,,yes,yes,
+NO-1010,Seinäjoki,FI,Helsinki,FI,2026-10-26 09:00,2026-10-27 12:00,planned,Porsche Macan,petrol,Kalle Vuorimaa,72,3,,,yes,yes,
+NO-1011,Tartu,EE,Pärnu,EE,2026-10-26 11:00,2026-10-26 18:00,planned,Kia Sportage,hybrid,Kadri Tamm,95,0,,,yes,yes,
+NO-1012,Kuopio,FI,Lahti,FI,2026-10-26 08:33,2026-10-27 16:00,planned,Nissan Leaf,electric,Petri Halonen,89,1,,,no,no,
