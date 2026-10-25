@@ -97,6 +97,59 @@ No invented operators or travel quotes: the snapshot's made-up ferry lines, airl
 
 Demo and live data are labelled in the UI. If live sources are unreachable the app uses the last saved fetch and says so.
 
+## Score your own order file
+
+The **Score a file** button (or `/#upload`) takes a CSV or JSON export of orders. Each order is scored with the same rules, thresholds and live data as the control room, and gets:
+- a lane: *needs a person*, *agent can handle*, *on track*, or *check the data*;
+- a score;
+- the main reason, and every reason with its source: "Your file, row 7, last_driver_contact", "OSRM route (saved)", "Fintraffic, live", "Bahn's answers".
+
+Uploaded orders are scored against the real clock. Nothing is stored, booked or sent, and results download as CSV.
+
+- **Columns:** `ref`, `pickup_city`, `pickup_country`, `delivery_city`, `delivery_country`, `pickup_at`, `deliver_by` are required. Optional: `status`, `car`, `fuel`, `driver`, `driver_on_time_pct`, `driver_claims_12m`, `last_driver_contact`, `ferry_booked`, `pickup_confirmed`, `receiver_named`, `notes`. Common aliases (`from`, `to`, `deadline`, `reference`…) and semicolon CSVs are accepted. The full list with help text is in `lib/score-file.mjs` and on the page.
+- **What it checks:**
+  - drive time with EU rest breaks, against the deadline;
+  - the real Helsinki–Tallinn timetable;
+  - Germany → Finland via Travemünde, and the strike notice;
+  - Bahn's silent-driver rule (6 h: agent asks; 12 h: person);
+  - no driver close to pickup, and a missed pickup;
+  - driver record;
+  - dealer and receiver confirmations;
+  - live weather and road notices on the route;
+  - bridges and ferries;
+  - winter tyres and EV range;
+  - risky words in notes ("keys", "papers", "damage"…).
+- **Data quality first:** missing fields, unknown cities, unreadable dates and duplicate references go to *check the data* instead of getting a made-up score.
+- **Synthetic files** (fictional orders, real cities and timetables) are under `samples/`, and fresh copies with dates relative to today are at `/api/samples/<name>`:
+  - `nordic-week.csv`: 12 Finland/Estonia orders;
+  - `germany-denmark.csv`: 10;
+  - `messy-export.csv`: semicolons, other column names, gaps, a duplicate and an unknown city;
+  - `orders.json`;
+  - `template.csv`.
+
+  `npm run samples` rewrites them.
+- **API:** `POST /api/score` with `{"filename": "orders.csv", "text": "<file contents>"}`.
+
+## MCP server: the same tools for any AI assistant
+
+`mcp/server.mjs` is a stdio MCP server with no extra dependencies. Bahn's own assistants or agents can call:
+- `score_orders`: a CSV/JSON file goes in; lanes, scores and sourced reasons come out;
+- `orders_needing_a_person`: the control room queue;
+- `explain_order`: every reason for one order;
+- `sample_order_file`: a synthetic file to try.
+
+All tools are read-only.
+
+```sh
+claude mcp add bahn -- node /path/to/bahndesk/mcp/server.mjs
+```
+
+Claude Desktop (`claude_desktop_config.json`):
+
+```json
+{ "mcpServers": { "bahn": { "command": "node", "args": ["/path/to/bahndesk/mcp/server.mjs"] } } }
+```
+
 ## Two clocks: the orders and the weather
 
 The top bar shows both: **Orders as of Sun 25 Oct, 12:00 · Weather & roads live, updated 11:46**.
