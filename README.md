@@ -116,7 +116,7 @@ The same code runs as one Vercel function (`api/index.mjs` → `server.mjs`'s `h
 3. **Settings → General → Node.js Version:** 22.x or newer (`node:sqlite` is needed).
 4. **Deploy**, then open `https://<project>.vercel.app/api/overview` to check it returns JSON.
 
-On Vercel, decisions, new agent runs and new translations are written to the function's `/tmp`. They last while that instance is warm and reset on a new deploy or cold start. Live data refreshes on the first request after 10 minutes instead of on a timer. Agent runs can take up to the 60 s function limit.
+On Vercel, decisions, new agent runs and new translations are written to the function's `/tmp`. They last while that instance is warm and reset on a new deploy or cold start. Live data refreshes on the first request after 10 minutes instead of on a timer; that request waits about 3 s for it. Agent runs can take up to the 60 s function limit.
 
 ## Running the agent ahead of time
 

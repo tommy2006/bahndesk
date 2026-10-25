@@ -217,12 +217,20 @@ const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; cha
 
 // One request handler for both: the local server below and the Vercel function (api/index.mjs).
 let lastRefresh = 0;
+let refreshing = null;
+// On Vercel there is no background timer, and work left running after the response is
+// frozen, so a request waits for the refresh (about 3 s, capped at 9 s) when live data is
+// older than 10 min. Concurrent requests share one refresh.
+async function freshLive() {
+  if (Date.now() - lastRefresh < 10 * 60e3) return;
+  refreshing ||= refreshAll().catch(() => {}).finally(() => { lastRefresh = Date.now(); refreshing = null; });
+  await Promise.race([refreshing, new Promise((r) => setTimeout(r, 9000))]);
+}
 export async function handler(req, res) {
   const url = new URL(req.url, 'http://x');
   // Vercel rewrites /api/* to /api/index?path=*; restore the original path.
   const p = url.pathname === '/api/index' && url.searchParams.has('path') ? `/api/${url.searchParams.get('path')}` : url.pathname;
-  // On Vercel there is no background timer: refresh live data when it is older than 10 min.
-  if (onVercel && Date.now() - lastRefresh > 10 * 60e3) { lastRefresh = Date.now(); refreshAll().catch(() => {}); }
+  if (onVercel && p.startsWith('/api/') && p !== '/api/i18n') await freshLive();
   try {
     if (p === '/api/overview') return send(res, 200, overview());
     let m;
