@@ -97,6 +97,17 @@ No invented operators or travel quotes: the snapshot's made-up ferry lines, airl
 
 Demo and live data are labelled in the UI. If live sources are unreachable the app uses the last saved fetch and says so.
 
+## Two clocks: the orders and the weather
+
+The top bar shows both: **Orders as of Sun 25 Oct, 12:00 · Weather & roads live, updated 11:46**.
+
+- **Orders:** Bahn's snapshot was taken on Wed 21 Oct 2026 at 12:00 (Helsinki). Deadlines, countdowns and "silent for 13 h" are measured against that fixed moment. If it ran in real time, every order would be days overdue.
+- **Demo day:** `lib/clock.mjs` moves every date forward 4 calendar days when the data loads, so the snapshot reads as the demo day. Local wall-clock times stay the same; Finland and Germany leave summer time that night, so a plain +96 h would be off by an hour. Dates written in text move too ("Thu 22 Oct" → "Mon 26 Oct", "ke 21.10." → "su 25.10.").
+- **Original files untouched:** the files in `data/bahn` are not changed. `SHIFT_DAYS = 0` shows the original snapshot.
+- **Saved outputs:** the saved agent proposals (`data/runs.json`) and Finnish cache were moved once to match. Rows keep their wall-clock times.
+- **Weather and roads** are fetched live.
+- **In production,** Bahn's live order feed replaces the snapshot and the order clock becomes "now".
+
 ## Weekly report: caught vs missed
 
 The **Weekly report** button (or `/#report`) is for management. `lib/report.mjs` takes every problem the data records on an order (an incident, a car not found, a refused check-in, a cancellation, a late delivery, or a high/critical alert from Bahn's own system). It then asks:
@@ -105,7 +116,7 @@ The **Weekly report** button (or `/#report`) is for management. `lib/report.mjs`
 - **Flagged when it happened?** Otherwise: was the order in front of a person or the agent once the problem was on record?
 - **Missed:** neither. Each miss comes with what would catch it next time.
 
-For week 43 (data up to Wed 21 Oct 12:00), 13 of 87 orders had a problem (15 %). 10 were caught: 2 in advance (median 26 h ahead) and 8 when they happened. 3 were missed: a late delivery and two cancellations. The report also shows today's load: how many orders need a person and how many the agent handles. It says plainly that orders raised without a recorded problem are open risks, not proven false alarms.
+For week 43 (data up to Sun 25 Oct 12:00), 13 of 87 orders had a problem (15 %). 10 were caught: 2 in advance (median 27 h ahead) and 8 when they happened. 3 were missed: a late delivery and two cancellations. The report also shows today's load: how many orders need a person and how many the agent handles. It says plainly that orders raised without a recorded problem are open risks, not proven false alarms.
 
 ## Deploy to Vercel
 

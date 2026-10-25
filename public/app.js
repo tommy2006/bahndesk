@@ -4,7 +4,7 @@ const T = {
     product: 'Control room', needs_you: 'Needs you', agent: 'Agent handling', clear: 'On track', done: 'Delivered',
     title_needs: '{n} orders need you', title_needs_one: '1 order needs you', title_agent: 'Agent is handling {n}', title_clear: '{n} on track', title_done: '{n} delivered',
     sub_needs: 'Most urgent first. The agent did the legwork; each one needs your call.', sub_agent: 'The agent is on these and will bring you anything it cannot settle.', sub_clear: 'Nothing to do. Shown for reference.', sub_done: 'Handed over.',
-    live: 'Live conditions', offline: 'Live data offline · last saved', snapshot: 'Clock',
+    orders_as_of: 'Orders as of', live: 'Weather & roads live, updated {t}', offline: 'Weather & roads offline, last saved {t}',
     empty_needs: 'Nothing needs you right now', empty_needs_sub: 'The agent is handling {n} orders and will bring you anything it cannot settle.',
     empty_other: 'No orders here', pick: 'Pick an order', pick_sub: 'Orders that need a decision are on the left. Everything else is handled or on track.',
     from: 'From', to: 'To', why_you: 'Why you need to look', decision: 'Your decision', agent_suggests: 'Agent suggests', what_next: 'If you approve:',
@@ -31,7 +31,7 @@ const T = {
     product: 'Ohjaamo', needs_you: 'Tarvitsee sinua', agent: 'Agentti hoitaa', clear: 'Aikataulussa', done: 'Toimitettu',
     title_needs: '{n} tilausta tarvitsee sinua', title_needs_one: '1 tilaus tarvitsee sinua', title_agent: 'Agentti hoitaa {n}', title_clear: '{n} aikataulussa', title_done: '{n} toimitettu',
     sub_needs: 'Kiireellisin ensin. Agentti teki selvitystyön; jokainen vaatii päätöksesi.', sub_agent: 'Agentti hoitaa nämä ja tuo sinulle vain sen, mitä se ei voi ratkaista.', sub_clear: 'Ei tehtävää. Näytetään tiedoksi.', sub_done: 'Luovutettu.',
-    live: 'Reaaliaikaiset olosuhteet', offline: 'Reaaliaikadata ei saatavilla · viimeisin tallennettu', snapshot: 'Kello',
+    orders_as_of: 'Tilaukset hetkellä', live: 'Sää ja tiet reaaliajassa, päivitetty {t}', offline: 'Sää ja tiet eivät päivity, viimeksi tallennettu {t}',
     empty_needs: 'Mikään ei tarvitse sinua juuri nyt', empty_needs_sub: 'Agentti hoitaa {n} tilausta ja tuo sinulle vain sen, mitä se ei voi ratkaista.',
     empty_other: 'Ei tilauksia', pick: 'Valitse tilaus', pick_sub: 'Päätöstä vaativat tilaukset ovat vasemmalla. Kaikki muu on hoidossa.',
     from: 'Mistä', to: 'Minne', why_you: 'Miksi sinun pitää katsoa', decision: 'Päätöksesi', agent_suggests: 'Agentti ehdottaa', what_next: 'Jos hyväksyt:',
@@ -124,8 +124,10 @@ function renderTop() {
   if (!l) return;
   const on = l.status === 'live' || l.status === 'partial';
   el.className = `live ${on ? 'on' : ''}`;
-  el.textContent = `${on ? t('live') : t('offline')} · ${t('snapshot')} ${fmt(state.data.snapshotAt, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}`;
-  el.title = `Weather ${fmt(l.weatherAt)} · Fintraffic ${l.trafficCount} notices · The order data is a snapshot; its clock is fixed.`;
+  // Two clocks: the order data is a snapshot (fixed time); weather and roads are fetched live.
+  const liveAt = [l.weatherAt, l.trafficAt].filter(Boolean).sort().at(-1);
+  el.innerHTML = `<b>${t('orders_as_of')}</b> ${esc(fmt(state.data.snapshotAt))} <span class="sep">·</span> <span class="dot"></span>${esc(t(on ? 'live' : 'offline', { t: fmt(liveAt, { hour: '2-digit', minute: '2-digit' }) }))}`;
+  el.title = `Weather ${fmt(l.weatherAt)} · ${l.trafficCount} road notices · The order data is a snapshot; its clock is fixed.`;
 }
 
 function renderQueue() {
