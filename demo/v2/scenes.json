@@ -1,0 +1,22 @@
+[
+  { "id": "s01-hook",
+    "text": "Yesterday we asked Bahn fourteen hard questions. What hurts most? Where do things go wrong? Their answers changed our product overnight. This is the Bahn control room, and today it's built around what Bahn actually told us. Out of a hundred live orders, fourteen need a person. Not hundreds. Tens, exactly the volume Bahn asked for. And they're sorted by the real deadline, so the most urgent one is always on top." },
+  { "id": "s02-silent",
+    "text": "Bahn's worst nightmare? A car they could deliver, that never arrives. A driver picks it up, goes silent, and messages days later. So that's now our number one signal. This BMW was picked up in Hamburg. No position, no message, for thirteen hours. We don't wait days. We flag it in hours, with one clear action: phone the driver now, and here's exactly what happens if they don't answer." },
+  { "id": "s03-gps",
+    "text": "And we listened on GPS too. Bahn said signal drops all the time in the German countryside. So a tracking gap alone barely moves the score. Silence plus no progress after pickup? That's when a person gets called. At six hours, the agent quietly checks in with the driver first, all by itself." },
+  { "id": "s04-soft",
+    "text": "Bahn told us the latest arrival time is soft. One late car isn't a crisis. So this Ferrari, forty-three minutes late, stays with the agent. It's this customer's first late car. But when the same dealer keeps getting late cars, that's lost trust, and it escalates to you." },
+  { "id": "s05-drivers",
+    "text": "Every Bahn driver is trained to drive any car. So we threw out our value-based driver tiers. This Bentley keeps its driver. No more swapping people just because the car is expensive. We score reliability instead: on-time rate, responsiveness, and the record." },
+  { "id": "s06-route",
+    "text": "Where does it hurt on the road? Bahn said Germany and Travemünde, and winter tyres. Now every route that touches Travemünde is watched automatically, with time for port check-in. The map shows risk, caution and opportunities along the way. And when the legal winter season starts, a winter tyre check switches on by itself." },
+  { "id": "s07-pickup",
+    "text": "Pickup sites? Bahn says the trouble is random, no repeat offenders. So we judge every order on its own evidence. When a dealer can't find the car, you don't just get wait. You get four real options: wait one more hour, release and reschedule, give the driver a nearby job, or cancel. Each one says exactly what happens next." },
+  { "id": "s08-evidence",
+    "text": "Every fact has a source, in plain words. No record codes. Just: who said it, when, and what to do. The agent reads, asks the driver and the site, and only then brings you one decision. It never contacts a customer on its own. Customer messages are drafted for a person to send." },
+  { "id": "s09-live",
+    "text": "It's live. Real accidents on the German autobahn, real weather, real Finnish road data, the Helsinki to Tallinn timetable. And one port strike becomes one grouped decision, not four separate alarms. For electric cars, winter range is clearly labelled as an estimate, because Bahn told us they don't have that data yet." },
+  { "id": "s10-close",
+    "text": "Ops can switch the whole room to Finnish in one click. Next up: the weekly caught versus missed report Bahn's management asked for. Bahn never had a risk assessor. Now they have one that listens. Fewer cars lost, fewer surprises, and every decision explained." }
+]
